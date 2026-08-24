@@ -1,0 +1,260 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --ink: #1C110E;
+    --paper: #FFFBF5;
+    --paper-2: #F7EFE4;
+    --paper-3: #EFE4D6;
+    --crimson: #8E1B1B;
+    --crimson-hover: #751515;
+    --ember: #C63A2E;
+    --glow: #E8A33D;
+    --muted: #6E5B52;
+    --hairline: #E7D9C9;
+    --wax-red: #A31D1D;
+  }
+
+  .dark {
+    --ink: #FAF3EC;
+    --paper: #120C0A;
+    --paper-2: #1C1412;
+    --paper-3: #271E1A;
+    --crimson: #C63A2E;
+    --crimson-hover: #E04E41;
+    --ember: #E8A33D;
+    --glow: #F5B853;
+    --muted: #BBA99D;
+    --hairline: #3D2D27;
+    --wax-red: #C63A2E;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-script {
+  font-family: 'Caveat', cursive;
+}
+
+.font-classic {
+  font-family: 'Lora', Georgia, serif;
+}
+
+.font-body {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Paper grain overlay texture */
+.paper-texture {
+  background-color: var(--paper-2);
+  background-image: radial-gradient(rgba(142, 27, 27, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.dark .paper-texture {
+  background-color: #191210;
+  background-image: radial-gradient(rgba(232, 163, 61, 0.06) 1px, transparent 0);
+}
+
+/* Warm candlelight glow */
+.candle-glow {
+  box-shadow: 0 10px 35px -5px rgba(232, 163, 61, 0.25), 0 4px 15px -2px rgba(142, 27, 27, 0.08);
+}
+
+.dark .candle-glow {
+  box-shadow: 0 10px 40px -5px rgba(232, 163, 61, 0.35), 0 0 50px rgba(232, 163, 61, 0.15);
+}
+
+.warm-shadow {
+  box-shadow: 0 8px 30px rgba(94, 40, 20, 0.08);
+}
+
+.dark .warm-shadow {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.warm-shadow-lg {
+  box-shadow: 0 14px 40px rgba(94, 40, 20, 0.14);
+}
+
+.dark .warm-shadow-lg {
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
+}
+
+/* Lined stationery paper style */
+.stationery-lines {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    #E7D9C9 28px
+  );
+  line-height: 28px;
+}
+
+.dark .stationery-lines {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    #382A24 28px
+  );
+}
+
+/* Washi tape decoration effect */
+.washi-tape {
+  position: relative;
+}
+.washi-tape::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 70px;
+  height: 20px;
+  background: rgba(238, 222, 202, 0.7);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border-left: 2px dashed rgba(200, 180, 160, 0.6);
+  border-right: 2px dashed rgba(200, 180, 160, 0.6);
+  z-index: 10;
+}
+
+.dark .washi-tape::before {
+  background: rgba(60, 45, 38, 0.85);
+  border-left: 2px dashed rgba(120, 95, 80, 0.6);
+  border-right: 2px dashed rgba(120, 95, 80, 0.6);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+/* ========================================================
+   COMPREHENSIVE DARK MODE SANCTUARY OVERRIDES
+   ======================================================== */
+
+.dark body {
+  background-color: #120C0A;
+  color: #FAF3EC;
+}
+
+/* Midnight Backgrounds */
+.dark .bg-\[\#FFFBF5\],
+.dark .bg-\[\#FFFBF5\]\/90,
+.dark .bg-\[\#FFFBF5\]\/80,
+.dark .bg-\[\#FFFBF5\]\/70,
+.dark .bg-\[\#FFFBF5\]\/60 {
+  background-color: #120C0A !important;
+}
+
+.dark .bg-\[\#F7EFE4\],
+.dark .bg-\[\#F7EFE4\]\/90,
+.dark .bg-\[\#F7EFE4\]\/80,
+.dark .bg-\[\#F7EFE4\]\/70,
+.dark .bg-\[\#F7EFE4\]\/60 {
+  background-color: #1B1310 !important;
+}
+
+.dark .bg-\[\#EFE4D6\] {
+  background-color: #241A17 !important;
+}
+
+.dark .bg-white {
+  background-color: #221815 !important;
+}
+
+.dark .bg-white\/90,
+.dark .bg-white\/80 {
+  background-color: #221815 !important;
+}
+
+/* Warm Parchment / Ink Text in Dark Mode */
+.dark .text-\[\#1C110E\] {
+  color: #FAF3EC !important;
+}
+
+.dark .text-\[\#6E5B52\] {
+  color: #B8A699 !important;
+}
+
+.dark .text-\[\#6E5B52\]\/80,
+.dark .text-\[\#6E5B52\]\/70 {
+  color: #9E8B7E !important;
+}
+
+/* Borders in Dark Mode */
+.dark .border-\[\#E7D9C9\],
+.dark .border-\[\#E7D9C9\]\/60,
+.dark .border-\[\#E7D9C9\]\/50,
+.dark .border-\[\#E7D9C9\]\/40,
+.dark .border-\[\#E7D9C9\]\/30,
+.dark .border-\[\#FFFBF5\] {
+  border-color: #382923 !important;
+}
+
+.dark .border-\[\#FFFBF5\] {
+  border-color: #120C0A !important;
+}
+
+.dark .divide-\[\#E7D9C9\] > * + * {
+  border-color: #382923 !important;
+}
+
+/* Form Controls & Inputs in Dark Mode */
+.dark input[type="text"],
+.dark input[type="password"],
+.dark input[type="date"],
+.dark input[type="datetime-local"],
+.dark input[type="number"],
+.dark textarea,
+.dark select {
+  background-color: #1C1310 !important;
+  color: #FAF3EC !important;
+  border-color: #3D2C25 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #7E6C62 !important;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #C63A2E !important;
+  box-shadow: 0 0 0 2px rgba(198, 58, 46, 0.25) !important;
+}
+
+/* Custom scrollbars with warm tones */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFBF5;
+}
+::-webkit-scrollbar-thumb {
+  background: #E7D9C9;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C63A2E;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #120C0A;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #382923;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #C63A2E;
+}
+
