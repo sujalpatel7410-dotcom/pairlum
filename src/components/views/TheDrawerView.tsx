@@ -3,26 +3,28 @@ import { usePairlum } from '../../context/PairlumContext';
 import { PageRail } from '../common/PageRail';
 import { PaperCard } from '../common/PaperCard';
 import { DrawerCategory, DrawerItem } from '../../types';
-import { 
-  Lock, 
-  Unlock, 
-  Mail, 
-  Clock, 
-  FileText, 
-  Ticket, 
-  ShieldCheck, 
-  Plus, 
-  Sparkles, 
-  KeyRound, 
-  Play, 
-  Pause, 
-  Eye, 
-  CheckCircle2, 
+import {
+  Lock,
+  Unlock,
+  Mail,
+  Clock,
+  FileText,
+  Ticket,
+  ShieldCheck,
+  Plus,
+  Sparkles,
+  KeyRound,
+  Play,
+  Pause,
+  Eye,
+  CheckCircle2,
   Calendar,
   X,
-  Heart
+  Heart,
+  UploadCloud
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
 
 export const TheDrawerView: React.FC = () => {
   const { 
@@ -58,6 +60,24 @@ export const TheDrawerView: React.FC = () => {
   const [capsuleUnlockDate, setCapsuleUnlockDate] = useState('25 December 2027 • 10:00 AM');
   const [selectedCapsuleMemories, setSelectedCapsuleMemories] = useState<string[]>(['mem-1', 'mem-2', 'mem-3', 'mem-4']);
 
+  // Attached photo (optional) for letters / capsules
+  const [letterPhotoUrl, setLetterPhotoUrl] = useState<string | undefined>(undefined);
+  const [capsulePhotoUrl, setCapsulePhotoUrl] = useState<string | undefined>(undefined);
+  const { upload: uploadLetterPhoto, isUploading: isUploadingLetterPhoto, progress: letterPhotoProgress } = useCloudinaryUpload();
+  const { upload: uploadCapsulePhoto, isUploading: isUploadingCapsulePhoto, progress: capsulePhotoProgress } = useCloudinaryUpload();
+
+  const handleLetterPhotoSelected = async (file: File | undefined) => {
+    if (!file) return;
+    const result = await uploadLetterPhoto(file);
+    if (result) setLetterPhotoUrl(result.secureUrl);
+  };
+
+  const handleCapsulePhotoSelected = async (file: File | undefined) => {
+    if (!file) return;
+    const result = await uploadCapsulePhoto(file);
+    if (result) setCapsulePhotoUrl(result.secureUrl);
+  };
+
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (unlockDrawerWithPin(pinInput)) {
@@ -78,9 +98,11 @@ export const TheDrawerView: React.FC = () => {
       authorName: currentUser === 'A' ? couple.nameA : couple.nameB,
       condition: letterType === 'open_when' ? openWhenCondition : undefined,
       isLocked: false,
-      unlockDate: '25 Dec 2026 • 08:00 PM'
+      unlockDate: '25 Dec 2026 • 08:00 PM',
+      photoUrl: letterPhotoUrl
     });
     setIsNewLetterOpen(false);
+    setLetterPhotoUrl(undefined);
   };
 
   const handleSaveCapsule = () => {
@@ -92,9 +114,11 @@ export const TheDrawerView: React.FC = () => {
       authorName: currentUser === 'A' ? couple.nameA : couple.nameB,
       unlockDate: capsuleUnlockDate,
       isLocked: true,
-      sealedMemoriesCount: selectedCapsuleMemories.length
+      sealedMemoriesCount: selectedCapsuleMemories.length,
+      photoUrl: capsulePhotoUrl
     });
     setIsTimeCapsuleWizardOpen(false);
+    setCapsulePhotoUrl(undefined);
     confetti({
       particleCount: 50,
       colors: ['#8E1B1B', '#C63A2E', '#E8A33D']
@@ -555,6 +579,13 @@ export const TheDrawerView: React.FC = () => {
                 </div>
               ) : (
                 <div className="p-6 rounded-2xl bg-[#FFFBF5] border border-[#E7D9C9] stationery-lines text-left">
+                  {selectedLockedEnvelope.photoUrl && (
+                    <img
+                      src={selectedLockedEnvelope.photoUrl}
+                      alt="Attached"
+                      className="w-full h-40 object-cover rounded-xl mb-4 border border-[#E7D9C9]"
+                    />
+                  )}
                   <p className="font-script text-2xl text-[#1C110E] leading-[28px]">
                     "{selectedLockedEnvelope.body}"
                   </p>
@@ -579,7 +610,7 @@ export const TheDrawerView: React.FC = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C110E]/70 backdrop-blur-xs animate-in fade-in duration-200">
             <div className="relative w-full max-w-2xl rounded-3xl bg-[#FFFBF5] border border-[#E7D9C9] p-6 sm:p-8 warm-shadow-lg space-y-6">
               <button
-                onClick={() => setIsNewLetterOpen(false)}
+                onClick={() => { setIsNewLetterOpen(false); setLetterPhotoUrl(undefined); }}
                 className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F7EFE4] flex items-center justify-center text-[#6E5B52] cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -639,6 +670,24 @@ export const TheDrawerView: React.FC = () => {
                     />
                   </div>
 
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1C110E] mb-2">Attach a photo (optional)</label>
+                    {letterPhotoUrl && (
+                      <img src={letterPhotoUrl} alt="Attached" className="w-full h-28 object-cover rounded-xl mb-2 border border-[#E7D9C9]" />
+                    )}
+                    <label className="w-full py-2.5 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] cursor-pointer flex items-center justify-center gap-1.5 hover:border-[#8E1B1B]">
+                      <UploadCloud className="w-3.5 h-3.5 text-[#8E1B1B]" />
+                      <span>{isUploadingLetterPhoto ? `Uploading... ${letterPhotoProgress}%` : (letterPhotoUrl ? 'Change photo' : 'Upload a photo')}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={isUploadingLetterPhoto}
+                        onChange={(e) => handleLetterPhotoSelected(e.target.files?.[0])}
+                      />
+                    </label>
+                  </div>
+
                   <button
                     onClick={handleSaveLetter}
                     className="w-full py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-sm cursor-pointer"
@@ -657,7 +706,7 @@ export const TheDrawerView: React.FC = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C110E]/70 backdrop-blur-xs animate-in fade-in duration-200">
             <div className="relative w-full max-w-2xl rounded-3xl bg-[#FFFBF5] border border-[#E7D9C9] p-6 sm:p-8 warm-shadow-lg space-y-6">
               <button
-                onClick={() => setIsTimeCapsuleWizardOpen(false)}
+                onClick={() => { setIsTimeCapsuleWizardOpen(false); setCapsulePhotoUrl(undefined); }}
                 className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F7EFE4] flex items-center justify-center text-[#6E5B52] cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -710,6 +759,24 @@ export const TheDrawerView: React.FC = () => {
                       </div>
                     ))}
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#1C110E] mb-2">Attach a photo (optional)</label>
+                  {capsulePhotoUrl && (
+                    <img src={capsulePhotoUrl} alt="Attached" className="w-full h-28 object-cover rounded-xl mb-2 border border-[#E7D9C9]" />
+                  )}
+                  <label className="w-full py-2.5 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] cursor-pointer flex items-center justify-center gap-1.5 hover:border-[#8E1B1B]">
+                    <UploadCloud className="w-3.5 h-3.5 text-[#8E1B1B]" />
+                    <span>{isUploadingCapsulePhoto ? `Uploading... ${capsulePhotoProgress}%` : (capsulePhotoUrl ? 'Change photo' : 'Upload a photo')}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={isUploadingCapsulePhoto}
+                      onChange={(e) => handleCapsulePhotoSelected(e.target.files?.[0])}
+                    />
+                  </label>
                 </div>
 
                 <button

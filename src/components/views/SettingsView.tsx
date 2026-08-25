@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { PageRail } from '../common/PageRail';
-import { 
-  Heart, 
-  Lock, 
-  Calendar, 
-  MapPin, 
-  Download, 
-  ShieldCheck, 
-  Flame, 
-  Music, 
+import {
+  Heart,
+  Lock,
+  Calendar,
+  MapPin,
+  Download,
+  ShieldCheck,
+  Flame,
+  Music,
   Save,
   RotateCcw,
   Sun,
   Moon,
   Sparkles,
-  Palette
+  Palette,
+  UploadCloud,
+  Image as ImageIcon
 } from 'lucide-react';
+import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
 
 export const SettingsView: React.FC = () => {
   const { 
@@ -43,6 +46,24 @@ export const SettingsView: React.FC = () => {
   const [startDate, setStartDate] = useState(couple.startDate || '2024-05-16');
   const [reunionDate, setReunionDate] = useState(couple.reunionDate || '2026-12-25T20:00:00');
   const [drawerPin, setDrawerPin] = useState(couple.drawerPin || '140224');
+
+  const { upload: uploadAvatarA, isUploading: isUploadingAvatarA, progress: progressAvatarA } = useCloudinaryUpload();
+  const { upload: uploadAvatarB, isUploading: isUploadingAvatarB, progress: progressAvatarB } = useCloudinaryUpload();
+  const { upload: uploadCover, isUploading: isUploadingCover, progress: progressCover } = useCloudinaryUpload();
+
+  const handleAvatarSelected = async (file: File | undefined, role: 'A' | 'B') => {
+    if (!file) return;
+    const result = role === 'A' ? await uploadAvatarA(file) : await uploadAvatarB(file);
+    if (!result) return;
+    updateCoupleProfile(role === 'A' ? { avatarA: result.secureUrl } : { avatarB: result.secureUrl });
+  };
+
+  const handleCoverSelected = async (file: File | undefined) => {
+    if (!file) return;
+    const result = await uploadCover(file);
+    if (!result) return;
+    updateCoupleProfile({ coverPhoto: result.secureUrl });
+  };
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
@@ -183,6 +204,61 @@ export const SettingsView: React.FC = () => {
                   placeholder="e.g. 9 hrs 15 min flight"
                   className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* Photos: Avatars & Cover */}
+          <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow space-y-4">
+            <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
+              <ImageIcon className="w-4 h-4 text-[#8E1B1B]" />
+              <span>Photos</span>
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="text-center">
+                <img src={couple.avatarA} alt={couple.nameA} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#E7D9C9]" />
+                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
+                  <UploadCloud className="w-3.5 h-3.5" />
+                  <span>{isUploadingAvatarA ? `Uploading... ${progressAvatarA}%` : `${couple.nameA}'s photo`}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={isUploadingAvatarA}
+                    onChange={(e) => handleAvatarSelected(e.target.files?.[0], 'A')}
+                  />
+                </label>
+              </div>
+
+              <div className="text-center">
+                <img src={couple.avatarB} alt={couple.nameB} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#E7D9C9]" />
+                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
+                  <UploadCloud className="w-3.5 h-3.5" />
+                  <span>{isUploadingAvatarB ? `Uploading... ${progressAvatarB}%` : `${couple.nameB}'s photo`}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={isUploadingAvatarB}
+                    onChange={(e) => handleAvatarSelected(e.target.files?.[0], 'B')}
+                  />
+                </label>
+              </div>
+
+              <div className="text-center">
+                <img src={couple.coverPhoto} alt="Cover" className="w-full h-20 rounded-xl object-cover mx-auto border border-[#E7D9C9]" />
+                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
+                  <UploadCloud className="w-3.5 h-3.5" />
+                  <span>{isUploadingCover ? `Uploading... ${progressCover}%` : 'Cover photo'}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={isUploadingCover}
+                    onChange={(e) => handleCoverSelected(e.target.files?.[0])}
+                  />
+                </label>
               </div>
             </div>
           </div>

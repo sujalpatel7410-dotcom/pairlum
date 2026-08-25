@@ -3,19 +3,21 @@ import { usePairlum } from '../../context/PairlumContext';
 import { PageRail } from '../common/PageRail';
 import { PaperCard } from '../common/PaperCard';
 import { Chapter, Memory } from '../../types';
-import { 
-  BookOpen, 
-  Plus, 
-  ChevronRight, 
-  ChevronLeft, 
-  Sparkles, 
-  Calendar, 
-  Check, 
+import {
+  BookOpen,
+  Plus,
+  ChevronRight,
+  ChevronLeft,
+  Sparkles,
+  Calendar,
+  Check,
   Heart,
   Bookmark,
   Layers,
-  Image as ImageIcon
+  Image as ImageIcon,
+  UploadCloud
 } from 'lucide-react';
+import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
 
 export const OurShelfView: React.FC = () => {
   const { 
@@ -42,6 +44,14 @@ export const OurShelfView: React.FC = () => {
   const [newTheme, setNewTheme] = useState('Home & Everyday');
   const [newSpineColor, setNewSpineColor] = useState('#8E1B1B');
   const [selectedMemoryIds, setSelectedMemoryIds] = useState<string[]>(['mem-1', 'mem-2', 'mem-3', 'mem-4']);
+
+  const { upload: uploadCover, isUploading: isUploadingCover, progress: coverProgress } = useCloudinaryUpload();
+
+  const handleCoverSelected = async (file: File | undefined) => {
+    if (!file) return;
+    const result = await uploadCover(file);
+    if (result) setNewCover(result.secureUrl);
+  };
 
   const activeChapter = safeChapters.find(c => c.id === activeChapterId) || safeChapters[0];
   const chapterMemories = safeMemories.filter(m => activeChapter?.memoryIds?.includes(m.id) || m.chapterId === activeChapter?.id);
@@ -193,6 +203,21 @@ export const OurShelfView: React.FC = () => {
                     placeholder="The Window"
                     className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#E7D9C9] text-sm font-medium"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Cover Photo</label>
+                  <label className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5 hover:border-[#8E1B1B]">
+                    <UploadCloud className="w-3.5 h-3.5 text-[#8E1B1B]" />
+                    <span>{isUploadingCover ? `Uploading... ${coverProgress}%` : 'Upload cover photo'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={isUploadingCover}
+                      onChange={(e) => handleCoverSelected(e.target.files?.[0])}
+                    />
+                  </label>
                 </div>
 
                 <div>

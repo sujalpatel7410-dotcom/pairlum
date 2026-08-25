@@ -239,11 +239,20 @@ export const MemoryLightboxModal: React.FC = () => {
               {/* Left Column: Polaroid Media */}
               <div className="lg:col-span-7 space-y-4">
                 <div className="p-3.5 bg-white rounded-2xl border border-[#E7D9C9] warm-shadow-lg">
-                  {mem.imageUrl ? (
+                  {mem.kind === 'video' && mem.videoUrl ? (
+                    <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-black">
+                      <video
+                        src={mem.videoUrl}
+                        poster={mem.imageUrl}
+                        controls
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : mem.imageUrl ? (
                     <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
-                      <img 
-                        src={mem.imageUrl} 
-                        alt={mem.title} 
+                      <img
+                        src={mem.imageUrl}
+                        alt={mem.title}
                         className="w-full h-full object-cover"
                       />
                       {mem.kind === 'video' && (
