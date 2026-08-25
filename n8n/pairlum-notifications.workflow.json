@@ -1,0 +1,91 @@
+{
+  "name": "Pairlum - Partner Notifications",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pairlum-events",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Pairlum Event Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "pairlum-events"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1b2c3d4-0002-4000-8000-000000000001",
+              "name": "toEmail",
+              "value": "={{ $json.body.partnerEmail }}",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0002-4000-8000-000000000002",
+              "name": "subject",
+              "value": "={{ ({ memory_added: `💌 ${$json.body.actorName} added a new memory`, drawer_item_added: `🔒 ${$json.body.actorName} left something in The Drawer`, door_opened: `🚪 The Door has been opened` })[$json.body.eventType] || 'A new moment on Pairlum' }}",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-0002-4000-8000-000000000003",
+              "name": "bodyHtml",
+              "value": "=<div style=\"font-family:Georgia,serif;color:#3a2a1a;line-height:1.6\"><p>{{ $json.body.actorName }} just added something new in your Pairlum space:</p><p style=\"font-size:18px\"><strong>{{ $json.body.title }}</strong></p>{{ $json.body.subtitle ? '<p>' + $json.body.subtitle + '</p>' : '' }}<p><a href=\"{{ $json.body.appUrl || 'https://pairlum.app' }}\" style=\"color:#8E1B1B\">Open Pairlum →</a></p></div>",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0003-4000-8000-000000000001",
+      "name": "Format Notification",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "notifications@pairlum.app",
+        "toEmail": "={{ $json.toEmail }}",
+        "subject": "={{ $json.subject }}",
+        "html": "={{ $json.bodyHtml }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0004-4000-8000-000000000001",
+      "name": "Email Partner",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [680, 300],
+      "credentials": {
+        "smtp": {
+          "id": "REPLACE_WITH_YOUR_SMTP_CREDENTIAL_ID",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Pairlum Event Webhook": {
+      "main": [
+        [
+          { "node": "Format Notification", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Format Notification": {
+      "main": [
+        [
+          { "node": "Email Partner", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

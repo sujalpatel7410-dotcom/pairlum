@@ -27,6 +27,7 @@ import {
   INITIAL_DAILY_PROMPTS
 } from '../data/mockData';
 import confetti from 'canvas-confetti';
+import { sendN8nEvent } from '../lib/n8n';
 
 interface PairlumContextType {
   currentView: AppView;
@@ -300,6 +301,15 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }));
 
     showToast(`Saved to your story — ${currentUser === 'A' ? couple.nameB : couple.nameA} will see it in The Window.`);
+
+    sendN8nEvent({
+      eventType: 'memory_added',
+      coupleId: couple.id,
+      actorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      partnerEmail: currentUser === 'A' ? couple.emailB : couple.emailA,
+      title: newMemData.title,
+      subtitle: newMemData.location,
+    });
   };
 
   const deleteMemory = (id: string) => {
@@ -383,6 +393,15 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     setDrawerItems(prev => [newItem, ...prev]);
     showToast(itemData.isLocked ? 'Sealed in The Drawer until unlock date' : 'Added to The Drawer');
+
+    sendN8nEvent({
+      eventType: 'drawer_item_added',
+      coupleId: couple.id,
+      actorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      partnerEmail: currentUser === 'A' ? couple.emailB : couple.emailA,
+      title: itemData.title,
+      subtitle: itemData.isLocked ? `Sealed until ${itemData.unlockDate || 'a future date'}` : undefined,
+    });
   };
 
   const unlockDrawerWithPin = (enteredPin: string) => {
@@ -418,6 +437,15 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       spread: 120,
       origin: { y: 0.6 },
       colors: ['#E8A33D', '#8E1B1B', '#C63A2E', '#FFFBF5']
+    });
+
+    sendN8nEvent({
+      eventType: 'door_opened',
+      coupleId: couple.id,
+      actorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      partnerEmail: currentUser === 'A' ? couple.emailB : couple.emailA,
+      title: couple.reunionTitle,
+      subtitle: doorState.finalMessage,
     });
   };
 
