@@ -23,6 +23,8 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { PaperCard } from '../common/PaperCard';
+import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
+import { cloudinaryVideoThumbnail } from '../../lib/cloudinary';
 
 export const AddMemoryModal: React.FC = () => {
   const { 
@@ -48,7 +50,31 @@ export const AddMemoryModal: React.FC = () => {
   const [location, setLocation] = useState('Goa, India');
   const [chapterId, setChapterId] = useState(chapters[0]?.id || '');
   const [imageUrl, setImageUrl] = useState('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=80');
-  
+  const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined);
+
+  // Cloudinary upload
+  const { upload, isUploading, progress: uploadPercent, error: uploadError } = useCloudinaryUpload();
+
+  const handleFileSelected = async (file: File | undefined, isVideo: boolean) => {
+    if (!file) return;
+    const localPreview = URL.createObjectURL(file);
+    if (isVideo) {
+      setImageUrl(localPreview);
+    } else {
+      setImageUrl(localPreview);
+    }
+
+    const result = await upload(file);
+    if (!result) return;
+
+    if (isVideo) {
+      setVideoUrl(result.secureUrl);
+      setImageUrl(cloudinaryVideoThumbnail(result.secureUrl));
+    } else {
+      setImageUrl(result.secureUrl);
+    }
+  };
+
   // Voice Recording state
   const [isRecording, setIsRecording] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
@@ -65,6 +91,7 @@ export const AddMemoryModal: React.FC = () => {
       setUploadProgress(0);
       setIsRecording(false);
       setRecordingSeconds(0);
+      setVideoUrl(undefined);
     }
   }, [isAddMemoryModalOpen, addMemoryModalInitialKind]);
 
@@ -110,6 +137,7 @@ export const AddMemoryModal: React.FC = () => {
             authorName,
             kind: selectedKind,
             imageUrl: (selectedKind === 'note' ? undefined : imageUrl),
+            videoUrl: selectedKind === 'video' ? videoUrl : undefined,
             audioDuration: selectedKind === 'voice' ? recordedDuration : undefined,
             videoDuration: selectedKind === 'video' ? '0:24' : undefined,
             date,
@@ -253,10 +281,26 @@ export const AddMemoryModal: React.FC = () => {
 
                   <div className="md:col-span-5 space-y-4">
                     <h3 className="font-display text-2xl text-[#1C110E]">Photo options</h3>
-                    
+
+                    <label className="w-full py-3 px-4 rounded-full bg-[#FFFBF5] border border-[#8E1B1B] text-[#8E1B1B] hover:bg-[#8E1B1B]/10 text-sm font-medium transition-all cursor-pointer flex items-center justify-center gap-2">
+                      <UploadCloud className="w-4 h-4" />
+                      <span>{isUploading ? `Uploading... ${uploadPercent}%` : 'Upload your own photo'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={isUploading}
+                        onChange={(e) => handleFileSelected(e.target.files?.[0], false)}
+                      />
+                    </label>
+                    {uploadError && (
+                      <p className="text-xs text-[#8E1B1B]">{uploadError}</p>
+                    )}
+
                     <button
                       onClick={() => setStep('details')}
-                      className="w-full py-3 px-4 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-medium transition-all shadow-sm cursor-pointer"
+                      disabled={isUploading}
+                      className="w-full py-3 px-4 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-medium transition-all shadow-sm cursor-pointer disabled:opacity-50"
                     >
                       Use This Photo
                     </button>
@@ -393,34 +437,50 @@ export const AddMemoryModal: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                   <div className="md:col-span-7">
                     <div className="relative rounded-2xl overflow-hidden border border-[#E7D9C9] warm-shadow aspect-4/3 bg-black">
-                      <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80" alt="Video" className="w-full h-full object-cover opacity-80" />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-14 h-14 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center shadow-lg">
-                          <Play className="w-6 h-6 fill-white ml-0.5" />
-                        </div>
-                      </div>
-                      <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white text-xs">
-                        <span>00:00</span>
-                        <div className="flex-1 mx-3 h-1 bg-white/30 rounded-full overflow-hidden">
-                          <div className="w-1/3 h-full bg-[#8E1B1B]" />
-                        </div>
-                        <span>00:24</span>
-                      </div>
+                      {videoUrl ? (
+                        <video src={videoUrl} poster={imageUrl} controls className="w-full h-full object-cover" />
+                      ) : (
+                        <>
+                          <img src={imageUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80"} alt="Video" className="w-full h-full object-cover opacity-80" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-14 h-14 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center shadow-lg">
+                              <Play className="w-6 h-6 fill-white ml-0.5" />
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
                   <div className="md:col-span-5 space-y-4">
                     <h3 className="font-display text-2xl text-[#1C110E]">Video options</h3>
+
+                    <label className="w-full py-3 px-4 rounded-full bg-[#FFFBF5] border border-[#8E1B1B] text-[#8E1B1B] hover:bg-[#8E1B1B]/10 text-sm font-medium transition-all cursor-pointer flex items-center justify-center gap-2">
+                      <UploadCloud className="w-4 h-4" />
+                      <span>{isUploading ? `Uploading... ${uploadPercent}%` : 'Upload your own video'}</span>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        className="hidden"
+                        disabled={isUploading}
+                        onChange={(e) => handleFileSelected(e.target.files?.[0], true)}
+                      />
+                    </label>
+                    {uploadError && (
+                      <p className="text-xs text-[#8E1B1B]">{uploadError}</p>
+                    )}
+
                     <button
                       onClick={() => setStep('details')}
-                      className="w-full py-3 px-4 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-medium transition-all shadow-sm cursor-pointer"
+                      disabled={isUploading || !videoUrl}
+                      className="w-full py-3 px-4 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-medium transition-all shadow-sm cursor-pointer disabled:opacity-50"
                     >
-                      Use This Video (0:24)
+                      Use This Video
                     </button>
                     <div className="text-xs text-[#6E5B52] space-y-2 pt-2 border-t border-[#E7D9C9]">
-                      <p className="flex items-center gap-2">✓ Trim start / end</p>
-                      <p className="flex items-center gap-2">✓ Choose cover frame</p>
-                      <p className="flex items-center gap-2">✓ High quality audio</p>
+                      <p className="flex items-center gap-2">✓ Uploaded to Cloudinary</p>
+                      <p className="flex items-center gap-2">✓ Auto cover frame</p>
+                      <p className="flex items-center gap-2">✓ High quality streaming</p>
                     </div>
                   </div>
                 </div>

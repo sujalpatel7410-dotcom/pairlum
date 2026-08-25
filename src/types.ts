@@ -94,6 +94,7 @@ export interface Memory {
   authorName: string;
   kind: MemoryKind;
   imageUrl?: string;
+  videoUrl?: string;
   audioDuration?: string;
   videoDuration?: string;
   date: string;
