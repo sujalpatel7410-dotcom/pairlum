@@ -250,14 +250,25 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const answerDailyPrompt = (promptId: string, role: UserRole, answer: string) => {
+    let question = '';
     setDailyPrompts(prev => prev.map(p => {
       if (p.id !== promptId) return p;
+      question = p.question;
       return {
         ...p,
         answerA: role === 'A' ? answer : p.answerA,
         answerB: role === 'B' ? answer : p.answerB
       };
     }));
+
+    sendN8nEvent({
+      eventType: 'daily_prompt_answered',
+      coupleId: couple.id,
+      actorName: role === 'A' ? couple.nameA : couple.nameB,
+      partnerEmail: role === 'A' ? couple.emailB : couple.emailA,
+      title: question || "Today's question",
+      subtitle: 'Answer yours to reveal both sides',
+    });
   };
 
   const addMemory = (newMemData: Omit<Memory, 'id' | 'reactions' | 'replies'>) => {
@@ -383,6 +394,15 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     setChapters(prev => [...prev, newChapter]);
     showToast('Chapter created on Our Shelf');
+
+    sendN8nEvent({
+      eventType: 'chapter_added',
+      coupleId: couple.id,
+      actorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      partnerEmail: currentUser === 'A' ? couple.emailB : couple.emailA,
+      title: chapterData.title,
+      subtitle: chapterData.subtitle,
+    });
   };
 
   const addDrawerItem = (itemData: Omit<DrawerItem, 'id' | 'createdAt'>) => {
@@ -417,7 +437,24 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const toggleReunionStop = (id: string) => {
-    setReunionPlan(prev => prev.map(item => item.id === id ? { ...item, completed: !item.completed } : item));
+    let justCompleted: ReunionStop | undefined;
+    setReunionPlan(prev => prev.map(item => {
+      if (item.id !== id) return item;
+      const completed = !item.completed;
+      if (completed) justCompleted = item;
+      return { ...item, completed };
+    }));
+
+    if (justCompleted) {
+      sendN8nEvent({
+        eventType: 'reunion_stop_completed',
+        coupleId: couple.id,
+        actorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+        partnerEmail: currentUser === 'A' ? couple.emailB : couple.emailA,
+        title: justCompleted.title,
+        subtitle: 'One step closer to your reunion',
+      });
+    }
   };
 
   const addReunionStop = (stopData: Omit<ReunionStop, 'id' | 'completed'>) => {
@@ -460,11 +497,29 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     setParallelMoments(prev => [newMoment, ...prev]);
     showToast('Parallel moment captured together!');
+
+    sendN8nEvent({
+      eventType: 'parallel_moment_added',
+      coupleId: couple.id,
+      actorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      partnerEmail: currentUser === 'A' ? couple.emailB : couple.emailA,
+      title: `${momentA?.title || 'A moment'} & ${momentB?.title || 'a moment'}`,
+      subtitle: 'A parallel moment was captured across the distance',
+    });
   };
 
   const addGoal = (goalData: Omit<SharedGoal, 'id'>) => {
     setGoals(prev => [...prev, { ...goalData, id: `g-${Date.now()}` }]);
     showToast('Shared goal added');
+
+    sendN8nEvent({
+      eventType: 'goal_added',
+      coupleId: couple.id,
+      actorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      partnerEmail: currentUser === 'A' ? couple.emailB : couple.emailA,
+      title: goalData.title,
+      subtitle: goalData.description,
+    });
   };
 
   const addPromise = (text: string) => {
@@ -476,6 +531,14 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     setPromises(prev => [newPromise, ...prev]);
     showToast('Promise sealed');
+
+    sendN8nEvent({
+      eventType: 'promise_added',
+      coupleId: couple.id,
+      actorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      partnerEmail: currentUser === 'A' ? couple.emailB : couple.emailA,
+      title: text,
+    });
   };
 
   const openAddMemoryModal = (defaultKind: MemoryKind = 'photo') => {

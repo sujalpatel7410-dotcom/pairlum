@@ -28,7 +28,7 @@
             {
               "id": "a1b2c3d4-0002-4000-8000-000000000002",
               "name": "subject",
-              "value": "={{ ({ memory_added: `💌 ${$json.body.actorName} added a new memory`, drawer_item_added: `🔒 ${$json.body.actorName} left something in The Drawer`, door_opened: `🚪 The Door has been opened` })[$json.body.eventType] || 'A new moment on Pairlum' }}",
+              "value": "={{ ({ memory_added: `💌 ${$json.body.actorName} added a new memory`, drawer_item_added: `🔒 ${$json.body.actorName} left something in The Drawer`, door_opened: `🚪 The Door has been opened`, chapter_added: `📖 ${$json.body.actorName} started a new chapter`, reunion_stop_completed: `🧳 ${$json.body.actorName} checked off a reunion step`, goal_added: `🎯 ${$json.body.actorName} added a shared goal`, promise_added: `🤝 ${$json.body.actorName} sealed a promise`, parallel_moment_added: `🌙 A parallel moment was captured together`, daily_prompt_answered: `✨ ${$json.body.actorName} answered today's question` })[$json.body.eventType] || 'A new moment on Pairlum' }}",
               "type": "string"
             },
             {

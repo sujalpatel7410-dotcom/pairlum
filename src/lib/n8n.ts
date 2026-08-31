@@ -2,7 +2,16 @@
 // reminders, etc.) can run outside the client. No-op if the webhook isn't configured,
 // and never throws — a notification failing should never block the UI action it's tied to.
 
-export type N8nEventType = 'memory_added' | 'drawer_item_added' | 'door_opened';
+export type N8nEventType =
+  | 'memory_added'
+  | 'drawer_item_added'
+  | 'door_opened'
+  | 'chapter_added'
+  | 'reunion_stop_completed'
+  | 'goal_added'
+  | 'promise_added'
+  | 'parallel_moment_added'
+  | 'daily_prompt_answered';
 
 export interface N8nEventPayload {
   eventType: N8nEventType;
