@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
+import { useAuth } from '../../context/AuthContext';
 import { PageRail } from '../common/PageRail';
 import {
   Heart,
@@ -17,22 +18,35 @@ import {
   Sparkles,
   Palette,
   UploadCloud,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Copy,
+  Check,
+  LogOut
 } from 'lucide-react';
 import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
 
 export const SettingsView: React.FC = () => {
-  const { 
-    couple, 
-    updateCoupleProfile, 
-    showToast, 
-    isCandlelit, 
+  const {
+    couple,
+    updateCoupleProfile,
+    showToast,
+    isCandlelit,
     toggleCandlelight,
     themeMode,
     setThemeMode,
     isDarkMode,
     toggleDarkMode
   } = usePairlum();
+  const { signOut } = useAuth();
+  const [codeCopied, setCodeCopied] = useState(false);
+
+  const handleCopyInviteCode = () => {
+    navigator.clipboard.writeText(couple.inviteCode).then(() => {
+      setCodeCopied(true);
+      showToast('Invite code copied');
+      setTimeout(() => setCodeCopied(false), 2000);
+    });
+  };
 
   const [nameA, setNameA] = useState(couple.nameA);
   const [nameB, setNameB] = useState(couple.nameB);
@@ -205,6 +219,48 @@ export const SettingsView: React.FC = () => {
                   className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
                 />
               </div>
+            </div>
+          </div>
+
+          {/* Pairing & Account */}
+          <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow space-y-4">
+            <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
+              <Heart className="w-4 h-4 text-[#8E1B1B]" />
+              <span>Invite Your Partner</span>
+            </h3>
+            {couple.isPartnerJoined ? (
+              <p className="text-xs text-[#6E5B52]">
+                {couple.nameB || 'Your partner'} has already joined this space.
+              </p>
+            ) : (
+              <div>
+                <p className="text-xs text-[#6E5B52] mb-2">
+                  Share this code so your partner can join your shared space.
+                </p>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 px-3 py-2 rounded-xl bg-white border border-[#E7D9C9] text-sm font-mono tracking-wider text-[#1C110E]">
+                    {couple.inviteCode}
+                  </code>
+                  <button
+                    type="button"
+                    onClick={handleCopyInviteCode}
+                    className="px-3 py-2 rounded-xl bg-[#8E1B1B] text-white text-xs font-medium flex items-center gap-1.5 hover:bg-[#7A1717] cursor-pointer"
+                  >
+                    {codeCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{codeCopied ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+              </div>
+            )}
+            <div className="pt-2 border-t border-[#E7D9C9]/60">
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="text-xs font-medium text-[#8E1B1B] flex items-center gap-1.5 hover:underline cursor-pointer"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign out</span>
+              </button>
             </div>
           </div>
 

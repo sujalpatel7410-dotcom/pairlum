@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
+import { useAuth } from '../../context/AuthContext';
 import { AppView } from '../../types';
 import { 
-  Heart, 
-  Sparkles, 
-  UserCheck, 
-  Settings as SettingsIcon, 
+  Heart,
+  Sparkles,
+  Settings as SettingsIcon,
   Lock, 
   CreditCard, 
   ShieldCheck, 
@@ -36,18 +36,18 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
   onToggleMobileSim,
   isMobileSim = false
 }) => {
-  const { 
-    currentView, 
-    setCurrentView, 
-    currentUser, 
-    setCurrentUser, 
-    couple, 
+  const {
+    currentView,
+    setCurrentView,
+    currentUser,
+    couple,
     openAddMemoryModal,
     isDarkMode,
     toggleDarkMode,
     themeMode,
     setThemeMode
   } = usePairlum();
+  const { signOut } = useAuth();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const currentPartnerName = currentUser === 'A' ? couple.nameA : couple.nameB;
@@ -73,16 +73,10 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
             </span>
           </button>
 
-          {/* Perspective switcher badge */}
+          {/* Signed-in-as badge */}
           <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#6E5B52]">
             <span className="w-2 h-2 rounded-full bg-[#E8A33D] animate-pulse" />
-            <span>Viewing as <strong className="text-[#8E1B1B]">{currentPartnerName}</strong></span>
-            <button
-              onClick={() => setCurrentUser(currentUser === 'A' ? 'B' : 'A')}
-              className="ml-1 text-[11px] underline text-[#8E1B1B] hover:text-[#C63A2E] font-medium"
-            >
-              Switch to {otherPartnerName}
-            </button>
+            <span>Signed in as <strong className="text-[#8E1B1B]">{currentPartnerName}</strong></span>
           </div>
         </div>
 
@@ -200,17 +194,6 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
 
                 <div className="py-1">
                   <button
-                    onClick={() => setCurrentUser(currentUser === 'A' ? 'B' : 'A')}
-                    className="w-full px-4 py-2 text-left text-xs text-[#1C110E] hover:bg-[#F7EFE4] flex items-center justify-between cursor-pointer"
-                  >
-                    <span className="flex items-center gap-2">
-                      <UserCheck className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                      <span>Switch to {otherPartnerName} ({currentUser === 'A' ? 'B' : 'A'})</span>
-                    </span>
-                    <span className="text-[10px] uppercase font-bold text-[#8E1B1B] bg-[#8E1B1B]/10 px-1.5 py-0.5 rounded">Toggle</span>
-                  </button>
-
-                  <button
                     onClick={() => setCurrentView('settings')}
                     className="w-full px-4 py-2 text-left text-xs text-[#1C110E] hover:bg-[#F7EFE4] flex items-center justify-between cursor-pointer"
                   >
@@ -276,11 +259,11 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
 
                 <div className="border-t border-[#E7D9C9]/60 pt-1 mt-1">
                   <button
-                    onClick={() => setCurrentView('login')}
+                    onClick={() => signOut()}
                     className="w-full px-4 py-2 text-left text-xs text-[#8E1B1B] hover:bg-[#8E1B1B]/5 flex items-center gap-2 cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5" />
-                    <span>Sign Out / Switch Account</span>
+                    <span>Sign Out</span>
                   </button>
                 </div>
               </div>
