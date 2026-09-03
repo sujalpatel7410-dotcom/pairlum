@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PairlumProvider, usePairlum } from './context/PairlumContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { LoginView } from './components/views/LoginView';
+import { SignupView } from './components/views/SignupView';
+import { CoupleOnboardingView } from './components/views/CoupleOnboardingView';
 import { TopNav } from './components/navigation/TopNav';
 import { BottomTabs } from './components/navigation/BottomTabs';
 import { HomeView } from './components/views/HomeView';
@@ -110,11 +114,42 @@ const AppContent: React.FC = () => {
   );
 };
 
-export function App() {
+const AuthGate: React.FC = () => {
+  const { status, needsCouple } = useAuth();
+  const [authScreen, setAuthScreen] = useState<'login' | 'signup'>('login');
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFBF5] text-[#6E5B52] text-sm">
+        Loading your sanctuary…
+      </div>
+    );
+  }
+
+  if (status === 'signed_out') {
+    return authScreen === 'login' ? (
+      <LoginView onSwitchToSignup={() => setAuthScreen('signup')} />
+    ) : (
+      <SignupView onSwitchToLogin={() => setAuthScreen('login')} />
+    );
+  }
+
+  if (needsCouple) {
+    return <CoupleOnboardingView />;
+  }
+
   return (
     <PairlumProvider>
       <AppContent />
     </PairlumProvider>
+  );
+};
+
+export function App() {
+  return (
+    <AuthProvider>
+      <AuthGate />
+    </AuthProvider>
   );
 }
 

@@ -1,22 +1,21 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  AppView, 
-  UserRole, 
-  CoupleProfile, 
-  Memory, 
-  Chapter, 
-  DrawerItem, 
-  ParallelMoment, 
-  ReunionStop, 
-  SharedGoal, 
-  PromiseItem, 
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import {
+  AppView,
+  UserRole,
+  CoupleProfile,
+  Memory,
+  MemoryReply,
+  Chapter,
+  DrawerItem,
+  ParallelMoment,
+  ReunionStop,
+  SharedGoal,
+  PromiseItem,
   ActivityEvent,
   MemoryKind,
   DailyPrompt
 } from '../types';
 import {
-  INITIAL_COUPLE,
-  INITIAL_MEMORIES,
   INITIAL_CHAPTERS,
   INITIAL_DRAWER_ITEMS,
   INITIAL_PARALLEL_MOMENTS,
@@ -28,16 +27,18 @@ import {
 } from '../data/mockData';
 import confetti from 'canvas-confetti';
 import { sendN8nEvent } from '../lib/n8n';
+import { supabase } from '../lib/supabase';
+import { useAuth } from './AuthContext';
+import { coupleRowToProfile, coupleProfileToRowUpdate, CoupleRow, MemberProfileRow } from '../lib/coupleMapping';
 
 interface PairlumContextType {
   currentView: AppView;
   setCurrentView: (view: AppView) => void;
   currentUser: UserRole;
-  setCurrentUser: (user: UserRole) => void;
   couple: CoupleProfile;
   updateCouple: (updates: Partial<CoupleProfile>) => void;
   updateCoupleProfile: (updates: Partial<CoupleProfile>) => void;
-  
+
   // Ambient & Theme Modes
   isCandlelit: boolean;
   toggleCandlelight: () => void;
@@ -46,24 +47,24 @@ interface PairlumContextType {
   themeMode: 'light' | 'dark' | 'candlelight';
   setThemeMode: (mode: 'light' | 'dark' | 'candlelight') => void;
 
-  // Memories
+  // Memories (synced with Supabase — shared, real-time between partners)
   memories: Memory[];
   addMemory: (memory: Omit<Memory, 'id' | 'reactions' | 'replies'>) => void;
   deleteMemory: (id: string) => void;
   updateMemory: (id: string, updates: Partial<Memory>) => void;
   toggleReaction: (memoryId: string, reactionId: string) => void;
   addReply: (memoryId: string, text: string, voiceDuration?: string) => void;
-  
+
   // Chapters
   chapters: Chapter[];
   addChapter: (chapter: Omit<Chapter, 'id'>) => void;
-  
+
   // Drawer
   drawerItems: DrawerItem[];
   addDrawerItem: (item: Omit<DrawerItem, 'id' | 'createdAt'>) => void;
   unlockDrawerWithPin: (pin: string) => boolean;
   lockDrawer: () => void;
-  
+
   // Door / Reunion
   reunionPlan: ReunionStop[];
   toggleReunionStop: (id: string) => void;
@@ -84,11 +85,11 @@ interface PairlumContextType {
   };
   updateDoorState: (updates: Partial<PairlumContextType['doorState']>) => void;
   openTheDoor: () => void;
-  
+
   // Parallel Moments
   parallelMoments: ParallelMoment[];
   addParallelMoment: (momentA: any, momentB: any) => void;
-  
+
   // Daily Prompts & Together
   dailyPrompts: DailyPrompt[];
   answerDailyPrompt: (promptId: string, role: UserRole, answer: string) => void;
@@ -98,22 +99,22 @@ interface PairlumContextType {
   promises: PromiseItem[];
   addGoal: (goal: Omit<SharedGoal, 'id'>) => void;
   addPromise: (text: string) => void;
-  
+
   // Activity
   activityFeed: ActivityEvent[];
-  
+
   // Modals & UI helpers
   isAddMemoryModalOpen: boolean;
   openAddMemoryModal: (defaultKind?: MemoryKind) => void;
   closeAddMemoryModal: () => void;
   addMemoryModalInitialKind: MemoryKind;
-  
+
   activeLightboxMemory: Memory | null;
   setActiveLightboxMemory: (memory: Memory | null) => void;
-  
+
   toastMessage: string | null;
   showToast: (msg: string) => void;
-  
+
   // Window seen
   windowOpened: boolean;
   setWindowOpened: (open: boolean) => void;
@@ -121,11 +122,16 @@ interface PairlumContextType {
 
 const PairlumContext = createContext<PairlumContextType | undefined>(undefined);
 
+// PairlumProvider is only ever mounted once AuthProvider has resolved a
+// signed-in user with a couple_id (see App.tsx's auth gate), so coupleId/
+// role/user below are always non-null in practice.
 export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { coupleId, role, user } = useAuth();
+  const currentUser: UserRole = role || 'A';
+
   const [currentView, setCurrentView] = useState<AppView>('home');
-  const [currentUser, setCurrentUser] = useState<UserRole>('A'); // A = Emma, B = Liam
   const [isCandlelit, setIsCandlelit] = useState(false);
-  
+
   const [themeMode, setThemeModeState] = useState<'light' | 'dark' | 'candlelight'>(() => {
     const saved = localStorage.getItem('pairlum_theme_mode');
     return (saved === 'dark' || saved === 'candlelight' || saved === 'light') ? saved : 'light';
@@ -136,11 +142,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const setThemeMode = (mode: 'light' | 'dark' | 'candlelight') => {
     setThemeModeState(mode);
     localStorage.setItem('pairlum_theme_mode', mode);
-    if (mode === 'candlelight') {
-      setIsCandlelit(true);
-    } else {
-      setIsCandlelit(false);
-    }
+    setIsCandlelit(mode === 'candlelight');
   };
 
   const toggleDarkMode = () => {
@@ -157,35 +159,163 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       root.classList.remove('dark');
     }
   }, [themeMode]);
-  
-  const [couple, setCouple] = useState<CoupleProfile>(() => {
-    const saved = localStorage.getItem('pairlum_couple');
-    return saved ? JSON.parse(saved) : INITIAL_COUPLE;
-  });
-  
-  const [memories, setMemories] = useState<Memory[]>(() => {
-    const saved = localStorage.getItem('pairlum_memories');
-    return saved ? JSON.parse(saved) : INITIAL_MEMORIES;
-  });
+
+  // --------------------------------------------------------------------
+  // Couple profile — backed by Supabase (`couples` + `couple_members` +
+  // `profiles`), shared and kept in sync between both partners' accounts.
+  // --------------------------------------------------------------------
+  const [couple, setCouple] = useState<CoupleProfile>(() => coupleRowToProfile(
+    { id: coupleId || '', name_a: '', name_b: null, invite_code: '', together_since: null, start_date: null,
+      city_a: null, city_b: null, reunion_date: null, reunion_location: null, reunion_title: null,
+      theme: 'rose', font_style: 'elegant', pin: null, drawer_pin: null, is_drawer_unlocked: false,
+      plan: 'essential', wallpaper: null, cover_photo: null, is_partner_joined: false },
+    null,
+    null
+  ));
+
+  const refreshCouple = useCallback(async () => {
+    if (!coupleId) return;
+    const { data: coupleRow } = await supabase.from('couples').select('*').eq('id', coupleId).single();
+    if (!coupleRow) return;
+
+    const { data: memberRows } = await supabase
+      .from('couple_members')
+      .select('role, profiles(id, name, email, avatar_url)')
+      .eq('couple_id', coupleId);
+
+    const memberA = (memberRows?.find((m: any) => m.role === 'A')?.profiles || null) as unknown as MemberProfileRow | null;
+    const memberB = (memberRows?.find((m: any) => m.role === 'B')?.profiles || null) as unknown as MemberProfileRow | null;
+
+    setCouple(coupleRowToProfile(coupleRow as CoupleRow, memberA, memberB));
+  }, [coupleId]);
+
+  useEffect(() => {
+    refreshCouple();
+  }, [refreshCouple]);
+
+  useEffect(() => {
+    if (!coupleId) return;
+    const channel = supabase
+      .channel(`couple-${coupleId}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'couples', filter: `id=eq.${coupleId}` }, () => refreshCouple())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'couple_members', filter: `couple_id=eq.${coupleId}` }, () => refreshCouple())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [coupleId, refreshCouple]);
+
+  const updateCouple = (updates: Partial<CoupleProfile>) => {
+    setCouple(prev => ({ ...prev, ...updates }));
+    showToast('Changes saved to your space');
+    if (!coupleId) return;
+    const rowUpdate = coupleProfileToRowUpdate(updates);
+    if (Object.keys(rowUpdate).length === 0) return;
+    supabase.from('couples').update(rowUpdate).eq('id', coupleId).then(({ error }) => {
+      if (error) showToast(`Could not save: ${error.message}`);
+    });
+  };
+
+  const updateCoupleProfile = (updates: Partial<CoupleProfile>) => {
+    updateCouple(updates);
+  };
+
+  // --------------------------------------------------------------------
+  // Memories — backed by Supabase (`memories` + `memory_replies`), the
+  // flagship proof that two accounts in a Couple Space see the same data.
+  // --------------------------------------------------------------------
+  const [memories, setMemories] = useState<Memory[]>([]);
+
+  const refreshMemories = useCallback(async () => {
+    if (!coupleId || !user) return;
+    const [{ data: memRows }, { data: replyRows }] = await Promise.all([
+      supabase.from('memories').select('*').eq('couple_id', coupleId).order('created_at', { ascending: false }),
+      supabase.from('memory_replies').select('*').eq('couple_id', coupleId).order('created_at', { ascending: true }),
+    ]);
+
+    const repliesByMemory = new Map<string, MemoryReply[]>();
+    (replyRows || []).forEach((r: any) => {
+      const list = repliesByMemory.get(r.memory_id) || [];
+      list.push({
+        id: r.id,
+        author: r.author_role,
+        authorName: r.author_role === 'A' ? couple.nameA : couple.nameB,
+        text: r.text,
+        time: new Date(r.created_at).toLocaleString(),
+        voiceDuration: r.voice_duration || undefined,
+      });
+      repliesByMemory.set(r.memory_id, list);
+    });
+
+    const mapped: Memory[] = (memRows || []).map((row: any) => ({
+      id: row.id,
+      title: row.title,
+      caption: row.caption,
+      author: row.author_role,
+      authorName: row.author_role === 'A' ? couple.nameA : couple.nameB,
+      kind: row.kind,
+      imageUrl: row.image_url || undefined,
+      videoUrl: row.video_url || undefined,
+      audioDuration: row.audio_duration || undefined,
+      videoDuration: row.video_duration || undefined,
+      date: row.memory_date || '',
+      time: row.memory_time || '',
+      location: row.location || undefined,
+      chapterId: row.chapter_id || undefined,
+      isFavorite: row.is_favorite,
+      isPrivate: row.is_private,
+      reactions: (row.reactions || []).map((r: any) => ({
+        ...r,
+        reactedByMe: Boolean((row.reacted_by || {})[r.id]?.includes(user.id)),
+      })),
+      replies: repliesByMemory.get(row.id) || [],
+      rotationDeg: row.rotation_deg ?? undefined,
+    }));
+
+    setMemories(mapped);
+  }, [coupleId, user, couple.nameA, couple.nameB]);
+
+  useEffect(() => {
+    refreshMemories();
+  }, [refreshMemories]);
+
+  useEffect(() => {
+    if (!coupleId) return;
+    const channel = supabase
+      .channel(`memories-${coupleId}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'memories', filter: `couple_id=eq.${coupleId}` }, () => refreshMemories())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'memory_replies', filter: `couple_id=eq.${coupleId}` }, () => refreshMemories())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [coupleId, refreshMemories]);
+
+  // --------------------------------------------------------------------
+  // Everything below this line (chapters, drawer, reunion plan, goals,
+  // promises, daily prompts, parallel moments, activity feed) is still
+  // localStorage-backed, namespaced per couple so switching accounts on a
+  // shared device can't leak one couple's data into another's view.
+  // supabase/schema.sql already has tables + RLS for all of these — wiring
+  // them up follows the exact same read/subscribe/write pattern used above
+  // for `couple` and `memories`.
+  // --------------------------------------------------------------------
+  const storageKey = (name: string) => `pairlum_${name}_${coupleId || 'local'}`;
 
   const [chapters, setChapters] = useState<Chapter[]>(() => {
-    const saved = localStorage.getItem('pairlum_chapters');
+    const saved = localStorage.getItem(storageKey('chapters'));
     return saved ? JSON.parse(saved) : INITIAL_CHAPTERS;
   });
 
   const [drawerItems, setDrawerItems] = useState<DrawerItem[]>(() => {
-    const saved = localStorage.getItem('pairlum_drawer');
+    const saved = localStorage.getItem(storageKey('drawer'));
     return saved ? JSON.parse(saved) : INITIAL_DRAWER_ITEMS;
   });
 
   const [reunionPlan, setReunionPlan] = useState<ReunionStop[]>(() => {
-    const saved = localStorage.getItem('pairlum_reunion');
+    const saved = localStorage.getItem(storageKey('reunion'));
     return saved ? JSON.parse(saved) : INITIAL_REUNION_PLAN;
   });
 
   const [parallelMoments, setParallelMoments] = useState<ParallelMoment[]>(INITIAL_PARALLEL_MOMENTS);
   const [dailyPrompts, setDailyPrompts] = useState<DailyPrompt[]>(() => {
-    const saved = localStorage.getItem('pairlum_daily_prompts');
+    const saved = localStorage.getItem(storageKey('daily_prompts'));
     return saved ? JSON.parse(saved) : INITIAL_DAILY_PROMPTS;
   });
   const [goals, setGoals] = useState<SharedGoal[]>(INITIAL_GOALS);
@@ -208,26 +338,21 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [windowOpened, setWindowOpened] = useState(false);
 
-  // Persistence
   useEffect(() => {
-    localStorage.setItem('pairlum_couple', JSON.stringify(couple));
-  }, [couple]);
+    localStorage.setItem(storageKey('chapters'), JSON.stringify(chapters));
+  }, [chapters, coupleId]);
 
   useEffect(() => {
-    localStorage.setItem('pairlum_memories', JSON.stringify(memories));
-  }, [memories]);
+    localStorage.setItem(storageKey('drawer'), JSON.stringify(drawerItems));
+  }, [drawerItems, coupleId]);
 
   useEffect(() => {
-    localStorage.setItem('pairlum_chapters', JSON.stringify(chapters));
-  }, [chapters]);
+    localStorage.setItem(storageKey('daily_prompts'), JSON.stringify(dailyPrompts));
+  }, [dailyPrompts, coupleId]);
 
   useEffect(() => {
-    localStorage.setItem('pairlum_drawer', JSON.stringify(drawerItems));
-  }, [drawerItems]);
-
-  useEffect(() => {
-    localStorage.setItem('pairlum_daily_prompts', JSON.stringify(dailyPrompts));
-  }, [dailyPrompts]);
+    localStorage.setItem(storageKey('reunion'), JSON.stringify(reunionPlan));
+  }, [reunionPlan, coupleId]);
 
   const toggleCandlelight = () => {
     setIsCandlelit(prev => !prev);
@@ -238,15 +363,6 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setTimeout(() => {
       setToastMessage((current) => (current === msg ? null : current));
     }, 4000);
-  };
-
-  const updateCouple = (updates: Partial<CoupleProfile>) => {
-    setCouple(prev => ({ ...prev, ...updates }));
-    showToast('Changes saved to your space');
-  };
-
-  const updateCoupleProfile = (updates: Partial<CoupleProfile>) => {
-    updateCouple(updates);
   };
 
   const answerDailyPrompt = (promptId: string, role: UserRole, answer: string) => {
@@ -271,24 +387,36 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     });
   };
 
-  const addMemory = (newMemData: Omit<Memory, 'id' | 'reactions' | 'replies'>) => {
-    const newId = `mem-${Date.now()}`;
-    const newMemory: Memory = {
-      ...newMemData,
-      id: newId,
-      reactions: [
-        { id: 'r1', label: 'Loved it', emoji: '❤️', count: 0, reactedByMe: false },
-        { id: 'r2', label: 'Melted', emoji: '🥺', count: 0, reactedByMe: false },
-        { id: 'r3', label: 'Miss you', emoji: '🕯️', count: 0, reactedByMe: false },
-        { id: 'r4', label: 'Beautiful', emoji: '✨', count: 0, reactedByMe: false }
-      ],
-      replies: [],
-      rotationDeg: (Math.random() * 4 - 2)
-    };
+  const addMemory = async (newMemData: Omit<Memory, 'id' | 'reactions' | 'replies'>) => {
+    if (!coupleId || !user) return;
 
-    setMemories(prev => [newMemory, ...prev]);
+    const { error } = await supabase.from('memories').insert({
+      couple_id: coupleId,
+      author: user.id,
+      author_role: currentUser,
+      kind: newMemData.kind,
+      title: newMemData.title,
+      caption: newMemData.caption,
+      image_url: newMemData.imageUrl || null,
+      video_url: newMemData.videoUrl || null,
+      audio_duration: newMemData.audioDuration || null,
+      video_duration: newMemData.videoDuration || null,
+      memory_date: newMemData.date || null,
+      memory_time: newMemData.time || null,
+      location: newMemData.location || null,
+      chapter_id: newMemData.chapterId || null,
+      is_favorite: newMemData.isFavorite || false,
+      is_private: newMemData.isPrivate || false,
+      rotation_deg: Math.random() * 4 - 2,
+    });
 
-    // Add activity
+    if (error) {
+      showToast(`Could not save memory: ${error.message}`);
+      return;
+    }
+
+    await refreshMemories();
+
     const newAct: ActivityEvent = {
       id: `act-${Date.now()}`,
       timeAgo: 'Just now',
@@ -304,13 +432,6 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     setActivityFeed(prev => [newAct, ...prev]);
 
-    // Update couple active time
-    setCouple(prev => ({
-      ...prev,
-      lastActiveNote: `${currentUser === 'A' ? 'She' : 'He'} added a memory just now`,
-      lastActiveTime: 'Just now'
-    }));
-
     showToast(`Saved to your story — ${currentUser === 'A' ? couple.nameB : couple.nameA} will see it in The Window.`);
 
     sendN8nEvent({
@@ -323,40 +444,64 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     });
   };
 
-  const deleteMemory = (id: string) => {
-    setMemories(prev => prev.filter(m => m.id !== id));
+  const deleteMemory = async (id: string) => {
+    const { error } = await supabase.from('memories').delete().eq('id', id);
+    if (error) {
+      showToast(`Could not delete memory: ${error.message}`);
+      return;
+    }
     if (activeLightboxMemory?.id === id) {
       setActiveLightboxMemory(null);
     }
+    await refreshMemories();
     showToast('Memory removed from your story');
   };
 
-  const updateMemory = (id: string, updates: Partial<Memory>) => {
-    setMemories(prev => prev.map(m => m.id === id ? { ...m, ...updates } : m));
+  const updateMemory = async (id: string, updates: Partial<Memory>) => {
+    const rowUpdate: Record<string, unknown> = {};
+    if (updates.title !== undefined) rowUpdate.title = updates.title;
+    if (updates.caption !== undefined) rowUpdate.caption = updates.caption;
+    if (updates.imageUrl !== undefined) rowUpdate.image_url = updates.imageUrl;
+    if (updates.videoUrl !== undefined) rowUpdate.video_url = updates.videoUrl;
+    if (updates.location !== undefined) rowUpdate.location = updates.location;
+    if (updates.isFavorite !== undefined) rowUpdate.is_favorite = updates.isFavorite;
+    if (updates.isPrivate !== undefined) rowUpdate.is_private = updates.isPrivate;
+    if (updates.chapterId !== undefined) rowUpdate.chapter_id = updates.chapterId;
+
+    const { error } = await supabase.from('memories').update(rowUpdate).eq('id', id);
+    if (error) {
+      showToast(`Could not update memory: ${error.message}`);
+      return;
+    }
+    await refreshMemories();
     if (activeLightboxMemory?.id === id) {
       setActiveLightboxMemory(prev => prev ? { ...prev, ...updates } : null);
     }
     showToast('Memory updated');
   };
 
-  const toggleReaction = (memoryId: string, reactionId: string) => {
-    setMemories(prev => prev.map(mem => {
-      if (mem.id !== memoryId) return mem;
-      return {
-        ...mem,
-        reactions: mem.reactions.map(r => {
-          if (r.id !== reactionId) return r;
-          const willBeReacted = !r.reactedByMe;
-          return {
-            ...r,
-            reactedByMe: willBeReacted,
-            count: willBeReacted ? r.count + 1 : Math.max(0, r.count - 1)
-          };
-        })
-      };
-    }));
+  const toggleReaction = async (memoryId: string, reactionId: string) => {
+    if (!user) return;
+    const { data: row } = await supabase.from('memories').select('reactions, reacted_by').eq('id', memoryId).single();
+    if (!row) return;
 
-    // Trigger confetti on reaction
+    const reactions = (row.reactions || []) as { id: string; label: string; emoji: string; count: number }[];
+    const reactedBy = (row.reacted_by || {}) as Record<string, string[]>;
+    const already = (reactedBy[reactionId] || []).includes(user.id);
+
+    const nextReactedBy = {
+      ...reactedBy,
+      [reactionId]: already
+        ? (reactedBy[reactionId] || []).filter((id) => id !== user.id)
+        : [...(reactedBy[reactionId] || []), user.id],
+    };
+    const nextReactions = reactions.map((r) =>
+      r.id === reactionId ? { ...r, count: already ? Math.max(0, r.count - 1) : r.count + 1 } : r
+    );
+
+    await supabase.from('memories').update({ reactions: nextReactions, reacted_by: nextReactedBy }).eq('id', memoryId);
+    await refreshMemories();
+
     confetti({
       particleCount: 25,
       spread: 60,
@@ -365,25 +510,21 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     });
   };
 
-  const addReply = (memoryId: string, text: string, voiceDuration?: string) => {
-    const authorName = currentUser === 'A' ? couple.nameA : couple.nameB;
-    const newReply = {
-      id: `rep-${Date.now()}`,
-      author: currentUser,
-      authorName,
+  const addReply = async (memoryId: string, text: string, voiceDuration?: string) => {
+    if (!coupleId || !user) return;
+    const { error } = await supabase.from('memory_replies').insert({
+      memory_id: memoryId,
+      couple_id: coupleId,
+      author: user.id,
+      author_role: currentUser,
       text,
-      time: 'Just now',
-      voiceDuration
-    };
-
-    setMemories(prev => prev.map(m => {
-      if (m.id !== memoryId) return m;
-      return {
-        ...m,
-        replies: [...m.replies, newReply]
-      };
-    }));
-
+      voice_duration: voiceDuration || null,
+    });
+    if (error) {
+      showToast(`Could not send reply: ${error.message}`);
+      return;
+    }
+    await refreshMemories();
     showToast('Reaction & reply sent');
   };
 
@@ -425,15 +566,15 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const unlockDrawerWithPin = (enteredPin: string) => {
-    if (enteredPin === couple.pin || enteredPin === '123456' || enteredPin === '140224') {
-      setCouple(prev => ({ ...prev, isDrawerUnlocked: true }));
+    if (enteredPin && (enteredPin === couple.pin || enteredPin === couple.drawerPin)) {
+      updateCouple({ isDrawerUnlocked: true });
       return true;
     }
     return false;
   };
 
   const lockDrawer = () => {
-    setCouple(prev => ({ ...prev, isDrawerUnlocked: false }));
+    updateCouple({ isDrawerUnlocked: false });
   };
 
   const toggleReunionStop = (id: string) => {
@@ -556,7 +697,6 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
         currentView,
         setCurrentView,
         currentUser,
-        setCurrentUser,
         couple,
         updateCouple,
         updateCoupleProfile,

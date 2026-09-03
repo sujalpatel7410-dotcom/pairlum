@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
+import { useAuth } from '../../context/AuthContext';
 import { PageRail } from '../common/PageRail';
 import {
   Heart,
@@ -17,22 +18,25 @@ import {
   Sparkles,
   Palette,
   UploadCloud,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Copy,
+  LogOut
 } from 'lucide-react';
 import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
 
 export const SettingsView: React.FC = () => {
-  const { 
-    couple, 
-    updateCoupleProfile, 
-    showToast, 
-    isCandlelit, 
+  const {
+    couple,
+    updateCoupleProfile,
+    showToast,
+    isCandlelit,
     toggleCandlelight,
     themeMode,
     setThemeMode,
     isDarkMode,
     toggleDarkMode
   } = usePairlum();
+  const { signOut } = useAuth();
 
   const [nameA, setNameA] = useState(couple.nameA);
   const [nameB, setNameB] = useState(couple.nameB);
@@ -111,17 +115,47 @@ export const SettingsView: React.FC = () => {
         <div className="p-4 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-3 text-xs">
           <span className="font-bold text-[#8E1B1B] uppercase tracking-wider block">Privacy Guarantee</span>
           <p className="text-[#6E5B52]">
-            Pairlum is an end-to-end private sanctuary. No social feeds, no public profiles, no ads. Just you two.
+            Pairlum is a private sanctuary. No social feeds, no public profiles, no ads. Just you two.
           </p>
         </div>
 
-        <div className="pt-3">
+        {!couple.isPartnerJoined && (
+          <div className="p-4 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-3 text-xs">
+            <span className="font-bold text-[#8E1B1B] uppercase tracking-wider block">Invite Your Partner</span>
+            <p className="text-[#6E5B52]">Share this code so they can join your Couple Space.</p>
+            <div className="flex items-center gap-2">
+              <span className="flex-1 text-center font-mono text-lg tracking-widest bg-white border border-[#E7D9C9] rounded-lg py-2">
+                {couple.inviteCode}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(couple.inviteCode);
+                  showToast('Invite code copied');
+                }}
+                className="p-2.5 rounded-lg bg-white border border-[#E7D9C9] hover:border-[#8E1B1B] cursor-pointer"
+                title="Copy invite code"
+              >
+                <Copy className="w-3.5 h-3.5 text-[#8E1B1B]" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="pt-3 space-y-2">
           <button
             onClick={handleExportArchive}
             className="w-full py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-semibold text-[#1C110E] hover:border-[#8E1B1B] flex items-center justify-center gap-2 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5 text-[#8E1B1B]" />
             <span>Export Memory Archive</span>
+          </button>
+          <button
+            onClick={signOut}
+            className="w-full py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-semibold text-[#8E1B1B] hover:border-[#8E1B1B] flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <LogOut className="w-3.5 h-3.5 text-[#8E1B1B]" />
+            <span>Sign Out</span>
           </button>
         </div>
       </PageRail>
