@@ -1,6 +1,4 @@
 {
   "name": "Pairlum",
-  "description": "A private, warm candlelight digital sanctuary for couples to preserve their love story — memories, letters, time-locked capsules, chapters, and reunions.",
-  "requestFramePermissions": ["camera", "microphone"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "description": "A private, warm candlelight digital sanctuary for couples to preserve their love story — memories, letters, time-locked capsules, chapters, and reunions."
 }
