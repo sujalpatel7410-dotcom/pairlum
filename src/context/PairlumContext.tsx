@@ -18,6 +18,7 @@ import confetti from 'canvas-confetti';
 import { sendN8nEvent } from '../lib/n8n';
 import { supabase } from '../lib/supabase';
 import { useAuth } from './AuthContext';
+import { getTodayDateKey, pickQuestionForDate } from '../lib/dailyPrompts';
 
 // ---------------------------------------------------------------------------
 // Row <-> app-type mapping. The DB uses snake_case columns; jsonb columns
@@ -282,6 +283,7 @@ interface PairlumContextType {
   addParallelMoment: (momentA: any, momentB: any) => void;
 
   dailyPrompts: DailyPrompt[];
+  todayPrompt: DailyPrompt | null;
   answerDailyPrompt: (promptId: string, role: UserRole, answer: string) => void;
 
   goals: SharedGoal[];
@@ -414,6 +416,24 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setActivityFeed((activityRes.data ?? []).map(mapActivity));
       setDailyPrompts((promptsRes.data ?? []).map(mapDailyPrompt));
       setDataLoading(false);
+
+      // Seed today's daily prompt if nobody has asked it yet. Keyed by UTC date
+      // with a unique (couple_id, date) constraint, so if both partners' clients
+      // race to do this, the loser's insert just fails and its realtime INSERT
+      // event (fired for the winner) fills in the row locally instead.
+      const today = getTodayDateKey();
+      const hasToday = (promptsRes.data ?? []).some((row: any) => row.date === today);
+      if (!hasToday) {
+        supabase.from('daily_prompts').insert({
+          couple_id: coupleId,
+          date: today,
+          question: pickQuestionForDate(today)
+        }).select().single().then(({ data }) => {
+          if (!cancelled && data) {
+            setDailyPrompts((prev) => upsertById(prev, mapDailyPrompt(data)));
+          }
+        });
+      }
     };
 
     loadAll();
@@ -457,6 +477,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       supabase.removeChannel(channel);
     };
   }, [coupleId]);
+
+  const todayPrompt = dailyPrompts.find((p) => p.date === getTodayDateKey()) ?? null;
 
   const partnerEmail = couple ? (currentUser === 'A' ? couple.emailB : couple.emailA) : '';
   const actorName = couple ? (currentUser === 'A' ? couple.nameA : couple.nameB) : '';
@@ -821,7 +843,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
         reunionPlan, toggleReunionStop, addReunionStop,
         doorState, updateDoorState, openTheDoor,
         parallelMoments, addParallelMoment,
-        dailyPrompts, answerDailyPrompt,
+        dailyPrompts, todayPrompt, answerDailyPrompt,
         goals, promises, addGoal, addPromise,
         activityFeed,
         isAddMemoryModalOpen, openAddMemoryModal, closeAddMemoryModal, addMemoryModalInitialKind,

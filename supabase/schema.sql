@@ -220,7 +220,8 @@ create table if not exists daily_prompts (
   question text not null default '',
   answer_a text default '',
   answer_b text default '',
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  unique (couple_id, date)
 );
 
 do $$

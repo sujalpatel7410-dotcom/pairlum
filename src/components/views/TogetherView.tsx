@@ -21,11 +21,11 @@ import {
 import confetti from 'canvas-confetti';
 
 export const TogetherView: React.FC = () => {
-  const { 
-    currentUser, 
-    couple, 
+  const {
+    currentUser,
+    couple,
     showToast,
-    dailyPrompts,
+    todayPrompt,
     answerDailyPrompt
   } = usePairlum();
 
@@ -36,19 +36,9 @@ export const TogetherView: React.FC = () => {
 
   const moods: Array<'Warm' | 'Cozy' | 'Missing you' | 'In love' | 'Tired'> = ['Warm', 'Cozy', 'Missing you', 'In love', 'Tired'];
 
-  const currentPrompt = (dailyPrompts && dailyPrompts.length > 0) 
-    ? dailyPrompts[0] 
-    : {
-        id: 'dp-default',
-        date: 'Today',
-        question: 'What is one tiny thing about us that you felt grateful for today?',
-        answerA: 'The sweet voice note you sent this morning.',
-        answerB: 'How we always look at the sunset together across time zones.'
-      };
-
   const handleSaveAnswer = () => {
-    if (!dailyAnswerInput.trim()) return;
-    answerDailyPrompt(currentPrompt.id, currentUser, dailyAnswerInput);
+    if (!dailyAnswerInput.trim() || !todayPrompt) return;
+    answerDailyPrompt(todayPrompt.id, currentUser, dailyAnswerInput);
     setDailyAnswerInput('');
     confetti({ particleCount: 30 });
     showToast('Your answer was added to today’s parchment ♡');
@@ -168,13 +158,17 @@ export const TogetherView: React.FC = () => {
 
         {/* Daily Question of the Day (Screenshot 21) */}
         <div className="p-6 sm:p-8 rounded-3xl bg-[#FFFBF5] border border-[#E7D9C9] warm-shadow-lg stationery-lines space-y-6">
+          {!todayPrompt ? (
+            <p className="text-xs text-[#6E5B52]">Preparing today's question…</p>
+          ) : (
+          <>
           <div className="flex items-center justify-between border-b border-[#E7D9C9] pb-4">
             <div>
               <span className="text-[10px] uppercase font-mono tracking-widest text-[#8E1B1B] font-bold">
-                DAILY QUESTION • {currentPrompt.date}
+                DAILY QUESTION • {todayPrompt.date}
               </span>
               <h3 className="font-display text-2xl sm:text-3xl text-[#1C110E] font-medium mt-1">
-                "{currentPrompt.question}"
+                "{todayPrompt.question}"
               </h3>
             </div>
             <Sparkles className="w-5 h-5 text-[#8E1B1B]" />
@@ -182,7 +176,7 @@ export const TogetherView: React.FC = () => {
 
           {/* Answers Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
+
             {/* Emma's Answer */}
             <div className="p-5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-2 relative">
               <div className="flex items-center justify-between text-xs">
@@ -190,7 +184,7 @@ export const TogetherView: React.FC = () => {
                 <span className="text-[10px] text-[#6E5B52]">Today</span>
               </div>
               <p className="font-script text-xl text-[#1C110E] leading-snug">
-                "{currentPrompt.answerA}"
+                {todayPrompt.answerA ? `"${todayPrompt.answerA}"` : 'Not answered yet.'}
               </p>
               <div className="w-5 h-5 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center text-[10px] absolute bottom-3 right-3 font-serif">
                 ♡
@@ -204,7 +198,7 @@ export const TogetherView: React.FC = () => {
                 <span className="text-[10px] text-[#6E5B52]">Today</span>
               </div>
               <p className="font-script text-xl text-[#1C110E] leading-snug">
-                "{currentPrompt.answerB}"
+                {todayPrompt.answerB ? `"${todayPrompt.answerB}"` : 'Not answered yet.'}
               </p>
               <div className="w-5 h-5 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center text-[10px] absolute bottom-3 right-3 font-serif">
                 ♡
@@ -230,6 +224,8 @@ export const TogetherView: React.FC = () => {
               <Send className="w-3.5 h-3.5" />
             </button>
           </div>
+          </>
+          )}
         </div>
 
         {/* Micro-Rituals & Nightly Check-in */}
