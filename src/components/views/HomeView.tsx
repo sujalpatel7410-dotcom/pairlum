@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
-import { 
-  Heart, 
-  Plus, 
-  Image as ImageIcon, 
-  BookOpen, 
-  MapPin, 
-  Lock, 
-  Calendar, 
-  Sparkles, 
-  Play, 
-  Pause, 
-  Eye, 
-  Mic, 
-  Video, 
-  FileText, 
+import {
+  Heart,
+  Plus,
+  Image as ImageIcon,
+  BookOpen,
+  MapPin,
+  Lock,
+  Calendar,
+  Sparkles,
+  Play,
+  Pause,
+  Eye,
+  Mic,
+  Video,
+  FileText,
   ArrowRight,
   Flame,
   CheckCircle2,
@@ -23,13 +23,13 @@ import {
 import { PaperCard, HandNote } from '../common/PaperCard';
 
 export const HomeView: React.FC = () => {
-  const { 
-    currentView, 
-    setCurrentView, 
-    currentUser, 
-    couple, 
-    memories, 
-    openAddMemoryModal, 
+  const {
+    currentView,
+    setCurrentView,
+    currentUser,
+    couple,
+    memories,
+    openAddMemoryModal,
     setActiveLightboxMemory,
     windowOpened,
     setWindowOpened
@@ -59,11 +59,11 @@ export const HomeView: React.FC = () => {
 
   return (
     <div className="space-y-12 max-w-6xl mx-auto pb-20">
-      
+
       {/* 1. HERO SECTION (Screenshot 20) */}
       <section className="relative pt-6 sm:pt-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
+
           {/* Left Hero Content */}
           <div className="lg:col-span-6 space-y-5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] text-xs font-semibold">
@@ -110,7 +110,7 @@ export const HomeView: React.FC = () => {
                 <Heart className="w-4 h-4 text-[#8E1B1B] fill-[#8E1B1B]" />
                 <span>Together since <strong className="text-[#1C110E]">May 2024</strong></span>
               </div>
-              <div 
+              <div
                 onClick={() => setCurrentView('door')}
                 className="flex items-center gap-1.5 bg-[#8E1B1B]/10 text-[#8E1B1B] px-3 py-1.5 rounded-full border border-[#8E1B1B]/20 cursor-pointer hover:bg-[#8E1B1B]/20 transition-colors"
               >
@@ -124,9 +124,9 @@ export const HomeView: React.FC = () => {
           <div className="lg:col-span-6">
             <div className="relative p-3 bg-white rounded-3xl border border-[#E7D9C9] warm-shadow-lg rotate-[1deg] hover:rotate-0 transition-transform duration-300">
               <div className="relative rounded-2xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
-                <img 
-                  src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1000&q=80" 
-                  alt="Couple by candle window" 
+                <img
+                  src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1000&q=80"
+                  alt="Couple by candle window"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -145,7 +145,7 @@ export const HomeView: React.FC = () => {
       <section className="pt-4">
         <PaperCard hasTape elevated className="p-6 sm:p-8 bg-gradient-to-br from-[#F7EFE4] to-[#FFFBF5]">
           <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
-            
+
             {/* Left Notice */}
             <div className="space-y-3 max-w-md">
               <span className="text-[11px] font-bold text-[#8E1B1B] uppercase tracking-widest flex items-center gap-1.5">
@@ -163,9 +163,9 @@ export const HomeView: React.FC = () => {
               </p>
 
               <div className="flex items-center gap-3 pt-2">
-                <img 
-                  src={currentUser === 'A' ? (couple.avatarB || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80') : (couple.avatarA || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80')} 
-                  alt={otherPartnerName} 
+                <img
+                  src={currentUser === 'A' ? (couple.avatarB || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80') : (couple.avatarA || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80')}
+                  alt={otherPartnerName}
                   className="w-9 h-9 rounded-full object-cover border border-[#E7D9C9]"
                 />
                 <div>
@@ -205,7 +205,7 @@ export const HomeView: React.FC = () => {
 
             {/* Right Window Memory Card Preview */}
             <div className="w-full lg:w-96 flex-shrink-0">
-              <div 
+              <div
                 onClick={() => {
                   if (windowOpened) setActiveLightboxMemory(windowMemory);
                   else setWindowOpened(true);
@@ -216,9 +216,9 @@ export const HomeView: React.FC = () => {
                 `}
               >
                 <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
-                  <img 
-                    src={windowMemory.imageUrl || 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80'} 
-                    alt="Window memory" 
+                  <img
+                    src={windowMemory.imageUrl || 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80'}
+                    alt="Window memory"
                     className={`w-full h-full object-cover transition-all duration-700 ${!windowOpened ? 'blur-md brightness-90' : 'blur-none'}`}
                   />
                   {!windowOpened && (
@@ -347,7 +347,7 @@ export const HomeView: React.FC = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          
+
           {/* Card: Our Wall */}
           <div
             id="card-our-wall"
@@ -512,25 +512,7 @@ export const HomeView: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. FOOTER SUMMARY (Screenshot 20) */}
-      <footer className="pt-10 text-center border-t border-[#E7D9C9]/60">
-        <div className="w-8 h-8 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] mx-auto flex items-center justify-center mb-3">
-          <Heart className="w-4 h-4 fill-[#8E1B1B]" />
-        </div>
-        <p className="font-script text-2xl text-[#1C110E]">
-          Your love story is yours to write.
-        </p>
-        <p className="text-xs text-[#6E5B52] mt-1">
-          We're here for every little moment.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-6 text-xs text-[#6E5B52]">
-          <button onClick={() => setCurrentView('legal')} className="hover:text-[#8E1B1B] cursor-pointer">Privacy Policy</button>
-          <button onClick={() => setCurrentView('legal')} className="hover:text-[#8E1B1B] cursor-pointer">Terms of Service</button>
-          <button onClick={() => setCurrentView('pricing')} className="hover:text-[#8E1B1B] cursor-pointer">Membership</button>
-          <button onClick={() => setCurrentView('settings')} className="hover:text-[#8E1B1B] cursor-pointer">Settings</button>
-        </div>
-        <p className="text-[11px] text-[#6E5B52]/60 mt-4">© 2026 Pairlum. All rights reserved. Made for love.</p>
-      </footer>
+
 
     </div>
   );
