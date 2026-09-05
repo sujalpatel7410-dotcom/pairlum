@@ -91,7 +91,7 @@ const AppContent: React.FC = () => {
       )}
 
       {/* Ambient footer candle watermark */}
-      <footer className="py-6 border-t border-[#E7D9C9]/50 text-center text-xs text-[#6E5B52] space-y-1">
+      <footer className="py-6 border-t border-[#E7D9C9]/50 text-center text-xs text-[#6E5B52] space-y-2">
         <div className="flex items-center justify-center gap-2">
           <Flame className="w-3.5 h-3.5 text-[#8E1B1B]" />
           <span className="font-display font-medium text-[#1C110E]">Pairlum</span>
@@ -101,6 +101,15 @@ const AppContent: React.FC = () => {
         <p className="text-[11px] text-[#6E5B52]/70 font-mono">
           Encrypted & private to your coordinates
         </p>
+        <div className="flex items-center justify-center gap-3 pt-1 flex-wrap">
+          <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#8E1B1B]/70 hover:text-[#8E1B1B] underline underline-offset-2 transition-colors">Privacy Policy</a>
+          <span className="text-[#E7D9C9]">·</span>
+          <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#8E1B1B]/70 hover:text-[#8E1B1B] underline underline-offset-2 transition-colors">Terms</a>
+          <span className="text-[#E7D9C9]">·</span>
+          <a href="/cookies.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#8E1B1B]/70 hover:text-[#8E1B1B] underline underline-offset-2 transition-colors">Cookies</a>
+          <span className="text-[#E7D9C9]">·</span>
+          <a href="mailto:privacy@pairlum.com" className="text-[11px] text-[#8E1B1B]/70 hover:text-[#8E1B1B] underline underline-offset-2 transition-colors">privacy@pairlum.com</a>
+        </div>
       </footer>
 
     </div>

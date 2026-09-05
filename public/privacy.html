@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Privacy Policy — Pairlum</title>
+    <meta name="description"
+        content="How Pairlum collects, uses, shares, retains and protects personal data, and the privacy choices and rights available to you.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Privacy Policy — Pairlum">
+    <meta property="og:description" content="Privacy is part of the product, not an optional add-on.">
+    <meta property="og:type" content="website">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='12' cy='16' r='8' fill='none' stroke='%238E2F52' stroke-width='2'/><circle cx='20' cy='16' r='8' fill='none' stroke='%238E2F52' stroke-width='2'/></svg>">
+
+    <style>
+        :root {
+            --paper: #F2F0F6;
+            --sheet: #FFFFFF;
+            --ink: #251F33;
+            --ink-2: #5A5270;
+            --ink-3: #847BA0;
+            --rule: #DDD8E7;
+            --accent: #8E2F52;
+            --accent-soft: #F7E9EF;
+            --flag: #7A5A00;
+            --flag-bg: #FCF2D8;
+            --flag-rule: #D9BE6A;
+            --read: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+            --ui: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto
+            }
+
+            * {
+                transition: none !important
+            }
+        }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: var(--read);
+            font-size: 17px;
+            line-height: 1.75;
+        }
+
+        a {
+            color: var(--accent);
+            text-underline-offset: 3px;
+            text-decoration-thickness: 1px
+        }
+
+        a:hover {
+            background: var(--accent-soft)
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+            border-radius: 2px
+        }
+
+        /* ---------- top bar ---------- */
+        .bar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 24px;
+            background: rgba(242, 240, 246, .92);
+            backdrop-filter: saturate(1.4) blur(8px);
+            border-bottom: 1px solid var(--rule);
+            font-family: var(--ui);
+        }
+
+        .mark {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--ink);
+            text-decoration: none;
+            font-weight: 650;
+            letter-spacing: .01em
+        }
+
+        .mark:hover {
+            background: none
+        }
+
+        .mark svg {
+            display: block
+        }
+
+        .bar .where {
+            font-size: 13px;
+            color: var(--ink-2);
+            border-left: 1px solid var(--rule);
+            padding-left: 14px
+        }
+
+        .bar .dates {
+            margin-left: auto;
+            font-size: 12.5px;
+            color: var(--ink-3);
+            text-align: right;
+            line-height: 1.45
+        }
+
+        @media (max-width:640px) {
+            .bar .dates {
+                display: none
+            }
+        }
+
+        /* ---------- shell ---------- */
+        .shell {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 24px 96px;
+            display: grid;
+            grid-template-columns: 236px minmax(0, 1fr);
+            gap: 56px;
+            align-items: start;
+        }
+
+        @media (max-width:940px) {
+            .shell {
+                grid-template-columns: 1fr;
+                gap: 0;
+                padding-bottom: 64px
+            }
+        }
+
+        /* ---------- contents rail ---------- */
+        .toc {
+            position: sticky;
+            top: 76px;
+            padding-top: 44px;
+            font-family: var(--ui);
+            max-height: calc(100vh - 96px);
+            display: flex;
+            flex-direction: column
+        }
+
+        .toc h2 {
+            font-family: var(--ui);
+            font-size: 12.5px;
+            font-weight: 650;
+            color: var(--ink-2);
+            margin: 0 0 10px;
+            letter-spacing: .02em
+        }
+
+        .toc input {
+            width: 100%;
+            font: inherit;
+            font-size: 13px;
+            padding: 7px 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--rule);
+            border-radius: 7px;
+            background: var(--sheet);
+            color: var(--ink);
+        }
+
+        .toc input::placeholder {
+            color: var(--ink-3)
+        }
+
+        .toc nav {
+            overflow-y: auto;
+            padding-right: 6px
+        }
+
+        .toc ol {
+            list-style: none;
+            margin: 0;
+            padding: 0
+        }
+
+        .toc li {
+            margin: 0 0 1px
+        }
+
+        .toc a {
+            display: grid;
+            grid-template-columns: 22px 1fr;
+            gap: 6px;
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--ink-2);
+            text-decoration: none;
+            padding: 5px 8px;
+            border-radius: 6px;
+        }
+
+        .toc a span {
+            color: var(--ink-3);
+            font-variant-numeric: tabular-nums
+        }
+
+        .toc a:hover {
+            background: var(--sheet);
+            color: var(--ink)
+        }
+
+        .toc a[aria-current="true"] {
+            background: var(--sheet);
+            color: var(--accent);
+            box-shadow: inset 2px 0 0 var(--accent)
+        }
+
+        .toc a[aria-current="true"] span {
+            color: var(--accent)
+        }
+
+        .toc li.hide {
+            display: none
+        }
+
+        /* mobile contents */
+        .toc-m {
+            display: none;
+            font-family: var(--ui);
+            margin: 20px 0 4px;
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            background: var(--sheet)
+        }
+
+        .toc-m summary {
+            cursor: pointer;
+            padding: 13px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ink)
+        }
+
+        .toc-m ol {
+            list-style: none;
+            margin: 0;
+            padding: 0 8px 12px;
+            max-height: 60vh;
+            overflow-y: auto
+        }
+
+        .toc-m a {
+            display: grid;
+            grid-template-columns: 24px 1fr;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--ink-2);
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 6px
+        }
+
+        .toc-m a span {
+            color: var(--ink-3)
+        }
+
+        @media (max-width:940px) {
+            .toc {
+                display: none
+            }
+
+            .toc-m {
+                display: block
+            }
+        }
+
+        /* ---------- reading sheet ---------- */
+        main {
+            padding-top: 44px;
+            min-width: 0
+        }
+
+        .opening {
+            margin: 0 0 40px
+        }
+
+        .opening blockquote {
+            margin: 0;
+            font-size: clamp(23px, 3.4vw, 33px);
+            line-height: 1.35;
+            letter-spacing: -.012em;
+            max-width: 22ch;
+            text-wrap: balance;
+        }
+
+        .opening blockquote .two {
+            color: var(--accent)
+        }
+
+        .opening .lede {
+            margin: 22px 0 0;
+            max-width: 64ch;
+            color: var(--ink-2);
+            font-size: 17px;
+        }
+
+        .opening .stamp {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 22px;
+            margin-top: 26px;
+            padding-top: 16px;
+            border-top: 1px solid var(--rule);
+            font-family: var(--ui);
+            font-size: 12.5px;
+            color: var(--ink-3);
+        }
+
+        .opening .stamp b {
+            font-weight: 600;
+            color: var(--ink-2)
+        }
+
+        .sheet {
+            background: var(--sheet);
+            border: 1px solid var(--rule);
+            border-radius: 14px;
+            padding: 8px 40px 44px;
+        }
+
+        @media (max-width:640px) {
+            .sheet {
+                padding: 4px 20px 32px;
+                border-radius: 12px
+            }
+        }
+
+        section {
+            padding-top: 34px;
+            scroll-margin-top: 80px
+        }
+
+        section+section {
+            border-top: 1px solid var(--rule)
+        }
+
+        h2 {
+            font-family: var(--read);
+            font-size: 21px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin: 0 0 12px;
+            letter-spacing: -.005em;
+            position: relative;
+        }
+
+        h2 .n {
+            font-family: var(--ui);
+            font-size: 12px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: .02em;
+            display: inline-block;
+            margin-right: 9px;
+        }
+
+        h2 .n:hover {
+            background: var(--accent-soft);
+            border-radius: 4px
+        }
+
+        @media (min-width:1000px) {
+            h2 .n {
+                position: absolute;
+                left: -42px;
+                top: .45em;
+                margin: 0;
+                text-align: right;
+                width: 30px
+            }
+        }
+
+        p {
+            margin: 0 0 14px;
+            max-width: 66ch
+        }
+
+        p:last-child {
+            margin-bottom: 0
+        }
+
+        ul.plain {
+            margin: 0 0 14px;
+            padding: 0;
+            list-style: none;
+            max-width: 66ch
+        }
+
+        ul.plain li {
+            position: relative;
+            padding-left: 22px;
+            margin-bottom: 9px;
+        }
+
+        ul.plain li::before {
+            content: "";
+            position: absolute;
+            left: 2px;
+            top: .72em;
+            width: 9px;
+            height: 9px;
+            border: 1.5px solid var(--accent);
+            border-radius: 50%;
+            opacity: .55;
+        }
+
+        ul.plain li:last-child {
+            margin-bottom: 0
+        }
+
+        .fill {
+            background: var(--flag-bg);
+            color: var(--flag);
+            border-bottom: 1.5px dashed var(--flag-rule);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-family: var(--ui);
+            font-size: .86em;
+        }
+
+        .aside {
+            margin: 18px 0 0;
+            padding: 14px 18px;
+            background: var(--paper);
+            border-radius: 10px;
+            font-size: 15.5px;
+            color: var(--ink-2);
+            max-width: 66ch;
+        }
+
+        .aside p {
+            margin: 0;
+            max-width: none
+        }
+
+        .aside p+p {
+            margin-top: 10px
+        }
+
+        code.mail {
+            font-family: var(--ui);
+            font-size: .92em
+        }
+
+        /* ---------- footer ---------- */
+        footer {
+            margin-top: 40px;
+            padding-top: 28px;
+            border-top: 1px solid var(--rule);
+            font-family: var(--ui);
+            font-size: 13.5px;
+            color: var(--ink-2);
+        }
+
+        footer h2 {
+            font-family: var(--ui);
+            font-size: 13px;
+            font-weight: 650;
+            color: var(--ink-2);
+            margin: 0 0 12px
+        }
+
+        footer ul {
+            list-style: none;
+            margin: 0 0 22px;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 20px
+        }
+
+        footer .fine {
+            color: var(--ink-3);
+            font-size: 12.5px;
+            max-width: 70ch;
+            line-height: 1.6
+        }
+
+        .top {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 15;
+            font-family: var(--ui);
+            font-size: 12.5px;
+            text-decoration: none;
+            background: var(--sheet);
+            color: var(--ink-2);
+            border: 1px solid var(--rule);
+            border-radius: 999px;
+            padding: 9px 15px;
+            box-shadow: 0 2px 10px rgba(37, 31, 51, .09);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .18s ease;
+        }
+
+        .top.on {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .top:hover {
+            background: var(--sheet);
+            color: var(--accent)
+        }
+
+        /* ---------- print ---------- */
+        @media print {
+            body {
+                background: #fff;
+                font-size: 11pt
+            }
+
+            .bar,
+            .toc,
+            .toc-m,
+            .top {
+                display: none !important
+            }
+
+            .shell {
+                display: block;
+                max-width: none;
+                padding: 0
+            }
+
+            main {
+                padding-top: 0
+            }
+
+            .sheet {
+                border: 0;
+                padding: 0;
+                border-radius: 0
+            }
+
+            section {
+                break-inside: auto;
+                padding-top: 18pt
+            }
+
+            h2 {
+                break-after: avoid
+            }
+
+            a {
+                color: #000;
+                text-decoration: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bar">
+        <a class="mark" href="/">
+            <svg width="30" height="18" viewBox="0 0 30 18" aria-hidden="true">
+                <circle cx="11" cy="9" r="7.2" fill="none" stroke="#8E2F52" stroke-width="1.6" />
+                <circle cx="19" cy="9" r="7.2" fill="none" stroke="#8E2F52" stroke-width="1.6" opacity=".55" />
+            </svg>
+            Pairlum
+        </a>
+        <span class="where">Privacy Policy</span>
+        <span class="dates">Last updated 26 August 2026<br>Effective 4 September 2026</span>
+    </div>
+
+    <div class="shell">
+
+        <aside class="toc">
+            <h2>Contents</h2>
+            <label for="tocfilter" class="sr"
+                style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Filter
+                contents</label>
+            <input id="tocfilter" type="search" placeholder="Find a section" autocomplete="off">
+            <nav aria-label="Sections of this policy">
+                <ol id="toclist"></ol>
+            </nav>
+        </aside>
+
+        <main>
+
+            <div class="opening">
+                <blockquote>
+                    Your memories stay yours. A private relationship is <span class="two">not</span> an advertising
+                    product.
+                </blockquote>
+                <p class="lede">Pairlum is built around private relationships, memories and experiences shared between
+                    two people. Privacy is part of the product, not an optional add-on. This Policy explains what
+                    personal data Pairlum collects, why it is used, how it may be shared, how long it may be kept, and
+                    the choices and rights available to you.</p>
+                <div class="stamp">
+                    <span><b>Document</b> D1 — Privacy Policy</span>
+                    <span><b>Last updated</b> 26 August 2026</span>
+                    <span><b>Effective</b> 4 September 2026</span>
+                </div>
+            </div>
+
+            <details class="toc-m">
+                <summary>Contents — 34 sections</summary>
+                <ol id="toclist-m"></ol>
+            </details>
+
+            <div class="sheet">
+
+                <section id="s1">
+                    <h2><a class="n" href="#s1">1</a>Scope of this Privacy Policy</h2>
+                    <p>This Policy applies to pairlum.com, Pairlum accounts and Couple Spaces, Memories, Letters and
+                        Open When experiences, Chapters, Time Capsules, Parallel Moments, reactions and partner
+                        activity, Pairlum Book creation and fulfilment, free public tools, customer support, payment and
+                        membership administration, and other Pairlum features that link to this Policy.</p>
+                    <p>Third-party services that Pairlum does not control have their own privacy policies, and those
+                        policies apply to them.</p>
+                    <p>In this Policy, "Pairlum", "we", "us" and "our" mean <span class="fill">[Legal name of the entity
+                            operating Pairlum]</span>, <span class="fill">[Legal / business address]</span>, India.</p>
+                </section>
+
+                <section id="s2">
+                    <h2><a class="n" href="#s2">2</a>Pairlum is for adults</h2>
+                    <p>Pairlum V1 is intended only for people aged 18 or older. By creating an account you confirm that
+                        you are at least 18. If Pairlum learns that an ineligible minor has created an account, Pairlum
+                        may restrict or delete that account and its data as required by law.</p>
+                </section>
+
+                <section id="s3">
+                    <h2><a class="n" href="#s3">3</a>The privacy principle behind Pairlum</h2>
+                    <p>Pairlum is designed around these principles:</p>
+                    <ul class="plain">
+                        <li>A private relationship is not a public social network.</li>
+                        <li>Private memories are private by default.</li>
+                        <li>You keep ownership of the content you create.</li>
+                        <li>Pairlum does not sell private relationship content or intimate relationship information to
+                            advertisers.</li>
+                        <li>Private memories are not used to train AI models by default.</li>
+                        <li>Only data reasonably necessary to operate and improve the service should be collected.</li>
+                        <li>One partner should not automatically be able to erase everything belonging to the other.
+                        </li>
+                        <li>Marketing use of private Couple content requires separate permission.</li>
+                        <li>You should be able to understand, access, correct, export and delete eligible data, subject
+                            to law and to the rights of the other person in your Couple Space.</li>
+                    </ul>
+                </section>
+
+                <section id="s4">
+                    <h2><a class="n" href="#s4">4</a>Information we collect — account information</h2>
+                    <p>When you create or manage a Pairlum account, Pairlum may collect your name, email address,
+                        authentication and account identifiers, your 18+ confirmation, an optional profile image, your
+                        account settings, security, login and session information, and the dates your account was
+                        created or changed.</p>
+                    <p>Government ID should not be routinely required, unless it is needed for a specific legal,
+                        security or fraud reason.</p>
+                </section>
+
+                <section id="s5">
+                    <h2><a class="n" href="#s5">5</a>Couple Space and relationship information</h2>
+                    <p>You may choose to provide your partner's name or email so an invitation can be sent, a
+                        relationship start or anniversary date, a Couple Space name, an optional cover image, Chapters,
+                        milestones, long-distance status where relevant, and other relationship information you add
+                        voluntarily.</p>
+                    <p>Pairlum should not require unnecessary sensitive details simply to use the service.</p>
+                </section>
+
+                <section id="s6">
+                    <h2><a class="n" href="#s6">6</a>Private Content you create</h2>
+                    <p>Pairlum may process photos, videos, voice recordings, notes, captions, Memories, Letters, Open
+                        When and other locked content, Time Capsules, Chapters, reactions, Parallel Moments, reunion
+                        experiences, dates and locations you add, Book selections and layouts, and other relationship
+                        content you intentionally add. This Policy calls all of it <b>Private Content</b>.</p>
+                    <p>Private Content is not public by default.</p>
+                </section>
+
+                <section id="s7">
+                    <h2><a class="n" href="#s7">7</a>Information your partner may provide about you</h2>
+                    <p>A connected partner may upload content that relates to you, invite you, write you a Letter,
+                        create shared Memories or contribute to shared objects. Once you join a Couple Space,
+                        information may be available to the other partner according to the rules of each feature.</p>
+                    <p>Joining Pairlum does not give Pairlum advertising rights over that content.</p>
+                </section>
+
+                <section id="s8">
+                    <h2><a class="n" href="#s8">8</a>Device, technical and usage information</h2>
+                    <p>Pairlum may receive limited browser, device, operating system, IP, network, session, app version,
+                        referral, error, feature event, upload, performance and security information.</p>
+                    <p>Analytics should measure whether features work, rather than the substance of a relationship. For
+                        example, Pairlum may record that a memory was created without sending the private photograph or
+                        caption to analytics.</p>
+                </section>
+
+                <section id="s9">
+                    <h2><a class="n" href="#s9">9</a>Location and photo metadata</h2>
+                    <p>Media files can contain capture dates, device information and GPS metadata. Pairlum may extract
+                        useful metadata to organise a Memory, remove unnecessary metadata from optimised viewing copies
+                        to reduce accidental disclosure, and preserve the private original where appropriate.</p>
+                    <p>You should be able to control whether a location is visibly attached to a Memory.</p>
+                </section>
+
+                <section id="s10">
+                    <h2><a class="n" href="#s10">10</a>Payment information</h2>
+                    <p>Payments may be processed by an external payment provider. Pairlum may keep the order and payment
+                        ID, amount, currency, status, date, cohort and refund state, together with the limited method
+                        information the processor gives us.</p>
+                    <p>Pairlum does not intend to store full card numbers, CVV codes, UPI PINs or banking passwords.</p>
+                </section>
+
+                <section id="s11">
+                    <h2><a class="n" href="#s11">11</a>Pairlum Book information</h2>
+                    <p>When an eligible Couple chooses to create a Book, Pairlum may process Book eligibility, the
+                        memories and media you select, layout and cover choices, proof approval, print-quality status,
+                        the recipient, shipping and phone details needed for delivery, and courier, production and
+                        delivery information.</p>
+                    <p>A shipping address should be collected when it is needed for fulfilment, not unnecessarily at
+                        signup.</p>
+                </section>
+
+                <section id="s12">
+                    <h2><a class="n" href="#s12">12</a>Customer support and feedback</h2>
+                    <p>Support and feedback may include your contact information, support tickets, screenshots you
+                        choose to send, technical details and our communications with you. Founding Couples may also
+                        volunteer product feedback.</p>
+                    <p>Giving feedback does not transfer ownership of your Private Content to Pairlum.</p>
+                </section>
+
+                <section id="s13">
+                    <h2><a class="n" href="#s13">13</a>Why Pairlum uses personal data</h2>
+                    <p>Pairlum may process personal data to:</p>
+                    <ul class="plain">
+                        <li>Provide Pairlum and the features you ask for.</li>
+                        <li>Protect accounts, prevent fraud and abuse, and maintain the integrity of the system.</li>
+                        <li>Operate payments, refunds, membership, and Book eligibility and fulfilment.</li>
+                        <li>Send verification, invitation, reset, security, payment, service and Book messages.</li>
+                        <li>Improve onboarding, reliability, feature adoption and performance.</li>
+                        <li>Meet valid legal, accounting, security and dispute obligations.</li>
+                    </ul>
+                    <p>The lawful basis that applies depends on the circumstances and on applicable law.</p>
+                </section>
+
+                <section id="s14">
+                    <h2><a class="n" href="#s14">14</a>Your content remains yours</h2>
+                    <p>You keep ownership of the content you create and upload, subject to any rights other people
+                        independently hold. Pairlum receives only a limited, non-exclusive permission to host, store,
+                        back up, technically reproduce, create thumbnails and previews, transcode, display to authorised
+                        users, transmit, generate approved Book layouts, and reproduce approved content in a Book, as
+                        necessary to provide the service.</p>
+                    <p>This is not a general right to sell your memories or to advertise with them.</p>
+                </section>
+
+                <section id="s15">
+                    <h2><a class="n" href="#s15">15</a>AI and your private memories</h2>
+                    <p>Pairlum may offer optional AI-assisted features such as organisation, Book layout suggestions,
+                        duplicate detection or question generation.</p>
+                    <p>Your private photos, videos, voice recordings, letters, notes, capsules and relationship content
+                        are not used as a general AI training dataset by default. If a feature you ask for sends Private
+                        Content to an AI service, Pairlum should explain that processing. Any future use for model
+                        training that goes beyond providing a feature you requested requires a separate, appropriate
+                        permission process.</p>
+                </section>
+
+                <section id="s16">
+                    <h2><a class="n" href="#s16">16</a>Pairlum does not sell your private relationship</h2>
+                    <p>Pairlum does not sell Private Content or intimate relationship information to advertisers, and
+                        does not intend to build advertising profiles based on private letters, photos, conflicts,
+                        inferred relationship quality or similarly intimate information.</p>
+                    <p>Pairlum's business model is intended to be based on products and services provided to couples.
+                    </p>
+                </section>
+
+                <section id="s17">
+                    <h2><a class="n" href="#s17">17</a>When we share information</h2>
+                    <p>Private Content is not disclosed publicly by default. Pairlum may share information:</p>
+                    <ul class="plain">
+                        <li>With your connected partner, according to the rules of each feature.</li>
+                        <li>With service providers that are necessary to operate the product.</li>
+                        <li>Where a valid legal or safety obligation applies.</li>
+                        <li>In a business reorganisation, subject to law and to appropriate protections.</li>
+                        <li>With your separate permission, for testimonials or marketing.</li>
+                    </ul>
+                    <p>Founding status on its own is not marketing consent.</p>
+                </section>
+
+                <section id="s18">
+                    <h2><a class="n" href="#s18">18</a>Public profiles and social discovery</h2>
+                    <p>Pairlum V1 is not designed as a public social network. By default it does not provide public
+                        Couple profiles, public memory feeds, public follower lists, publicly searchable couples or
+                        relationship-popularity scores.</p>
+                    <p>If an optional sharing feature is added in future, it should clearly identify the intended
+                        audience before anything is shared.</p>
+                </section>
+
+                <section id="s19">
+                    <h2><a class="n" href="#s19">19</a>Storage and international processing</h2>
+                    <p>Pairlum and its service providers may process and store information in India or in other
+                        countries, using distributed cloud infrastructure. Cross-border processing should be handled in
+                        accordance with applicable Indian law and with any restrictions or safeguards that apply.</p>
+                    <p>Final processors, subprocessors and data locations: <span class="fill">[To be confirmed and
+                            published]</span></p>
+                </section>
+
+                <section id="s20">
+                    <h2><a class="n" href="#s20">20</a>How we protect information</h2>
+                    <p>Pairlum uses safeguards designed to protect information. These may include authenticated access,
+                        authorisation checks, private object storage, short-lived signed media access, encryption in
+                        transit and at rest where supported, Row Level Security, multi-factor authentication for
+                        administrators, limited permissions, audit logging, monitoring, backups and restricted
+                        production access.</p>
+                    <p>No service can promise 100% security, and Pairlum does not claim end-to-end encryption unless it
+                        has actually been implemented and communicated.</p>
+                </section>
+
+                <section id="s21">
+                    <h2><a class="n" href="#s21">21</a>Pairlum administrator access</h2>
+                    <p>Ordinary administration should not involve casually browsing Couple content. Admin tools should
+                        mainly expose account, membership, payment, storage, upload, Book and support metadata.</p>
+                    <p>Authorised access to Private Content for a legitimate support, safety, security or legal reason
+                        should be restricted, limited to that purpose, and audited wherever this is technically
+                        practical.</p>
+                </section>
+
+                <section id="s22">
+                    <h2><a class="n" href="#s22">22</a>How long we retain information</h2>
+                    <p>Pairlum keeps personal data only for as long as reasonably necessary for the purpose it was
+                        collected for, and for legal obligations, security and disputes.</p>
+                    <ul class="plain">
+                        <li>Data for an active account may be kept while it is needed to operate the service.</li>
+                        <li>Eligible deleted content is intended to spend 30 days in Recently Deleted before
+                            permanent-deletion processing.</li>
+                        <li>Backups may retain deleted data temporarily, until those backups expire.</li>
+                        <li>Payment and legal records, and Book production records, may require longer lawful retention.
+                        </li>
+                    </ul>
+                    <p>Exact production retention schedules: <span class="fill">[To be finalised and published]</span>
+                    </p>
+                </section>
+
+                <section id="s23">
+                    <h2><a class="n" href="#s23">23</a>Deleting a Couple Space is different from deleting an individual
+                        account</h2>
+                    <p>Pairlum treats an individual account and a shared Couple Space as two different things. Deleting
+                        one person's account does not automatically mean that the whole shared Couple Space, or all of
+                        the content belonging to the other partner, is erased.</p>
+                    <p>What is deleted depends on who created or contributed the content, whether it is shared, the
+                        rights of the other user, legal obligations and backup processes. The product should clearly
+                        explain the consequences before any destructive action.</p>
+                </section>
+
+                <section id="s24">
+                    <h2><a class="n" href="#s24">24</a>Separation or leaving a Couple Space</h2>
+                    <p>Pairlum recognises that relationships can change or end. Where the feature is available, you may
+                        leave a Couple Space, export eligible data, delete your individual account or remove eligible
+                        content, and ask support for help with shared-data issues.</p>
+                    <p>Pairlum should not use streaks, guilt notifications or manipulative mechanics to pressure anyone
+                        into staying in a relationship or a Couple Space.</p>
+                </section>
+
+                <section id="s25">
+                    <h2><a class="n" href="#s25">25</a>Your privacy choices and rights</h2>
+                    <p>Subject to applicable law and to other people's rights, you may:</p>
+                    <ul class="plain">
+                        <li>Ask for access to, and information about, your personal data.</li>
+                        <li>Correct information that is inaccurate.</li>
+                        <li>Delete eligible data or your account.</li>
+                        <li>Withdraw consent where consent applies.</li>
+                        <li>Use or request the export feature.</li>
+                        <li>Raise a grievance.</li>
+                        <li>Exercise nomination rights where and when they apply.</li>
+                    </ul>
+                    <p>Requests may need secure identity verification, and may be limited where the law or another
+                        person's rights require it.</p>
+                </section>
+
+                <section id="s26">
+                    <h2><a class="n" href="#s26">26</a>How to make a privacy request</h2>
+                    <p>Write to <a href="mailto:privacy@pairlum.com"><code class="mail">privacy@pairlum.com</code></a>,
+                        or use the controls available in your account.</p>
+                    <p>Please include enough information for us to identify the account and understand the request.
+                        Pairlum may verify your identity before acting, and will respond within the timelines required
+                        by applicable law.</p>
+                </section>
+
+                <section id="s27">
+                    <h2><a class="n" href="#s27">27</a>Grievances</h2>
+                    <p>Privacy grievances may be sent to the designated grievance contact: <span class="fill">[Name /
+                            designation]</span>, <span class="fill">[Email]</span>, <span class="fill">[Address]</span>.
+                    </p>
+                    <p>Pairlum maintains a grievance mechanism. Where applicable, you may approach the relevant
+                        authority after using Pairlum's grievance mechanism.</p>
+                </section>
+
+                <section id="s28">
+                    <h2><a class="n" href="#s28">28</a>Cookies and similar technologies</h2>
+                    <p>Pairlum may use cookies, local storage, and session, authentication and analytics technologies.
+                        Essential technologies support authentication, security, sessions and preferences. Analytics may
+                        measure website and product usage and reliability. Marketing technologies may be added later.
+                    </p>
+                    <p>Where consent or other legal requirements apply, Pairlum should provide appropriate controls for
+                        non-essential tracking, and must not label advertising trackers as essential. Full detail is in
+                        the <a href="/cookies.html">Cookie &amp; Tracking Notice</a>.</p>
+                </section>
+
+                <section id="s29">
+                    <h2><a class="n" href="#s29">29</a>Free public tools</h2>
+                    <p>Free tools such as Couple Questions, Date Ideas and Love Messages may process the inputs needed
+                        to generate a result. Pairlum should avoid keeping unnecessarily intimate inputs where long-term
+                        storage is not needed.</p>
+                    <p>If you choose to save a result into Pairlum, it may then become part of your Pairlum data.</p>
+                </section>
+
+                <section id="s30">
+                    <h2><a class="n" href="#s30">30</a>Email communications</h2>
+                    <p>Pairlum may send essential verification, invitation, security, reset, payment, membership,
+                        capsule, letter and Book messages.</p>
+                    <p>Marketing messages should offer an appropriate way to opt out. Opting out of marketing does not
+                        stop necessary transactional and security messages.</p>
+                </section>
+
+                <section id="s31">
+                    <h2><a class="n" href="#s31">31</a>Security incidents and data breaches</h2>
+                    <p>Pairlum maintains an internal process to investigate, contain and document suspected security
+                        incidents, work out which systems and data are affected, reduce ongoing risk, and provide the
+                        authority and user notifications required under applicable law.</p>
+                </section>
+
+                <section id="s32">
+                    <h2><a class="n" href="#s32">32</a>Changes to this Privacy Policy</h2>
+                    <p>Pairlum may update this Policy as products, providers, laws and privacy practices change. The
+                        "Last updated" date at the top identifies the current version.</p>
+                    <p>Material changes may be notified on the website, in your account or by email. Where fresh consent
+                        is required, quietly updating this page is not a substitute for asking.</p>
+                </section>
+
+                <section id="s33">
+                    <h2><a class="n" href="#s33">33</a>Contact Pairlum</h2>
+                    <ul class="plain">
+                        <li>General — <a href="mailto:hello@pairlum.com"><code class="mail">hello@pairlum.com</code></a>
+                        </li>
+                        <li>Support — <a href="mailto:support@pairlum.com"><code
+                                    class="mail">support@pairlum.com</code></a></li>
+                        <li>Privacy — <a href="mailto:privacy@pairlum.com"><code
+                                    class="mail">privacy@pairlum.com</code></a></li>
+                        <li>Legal — <a href="mailto:legal@pairlum.com"><code class="mail">legal@pairlum.com</code></a>
+                        </li>
+                    </ul>
+                    <p>Operator, address and grievance details: <span class="fill">[To be finalised]</span></p>
+                </section>
+
+                <section id="s34">
+                    <h2><a class="n" href="#s34">34</a>Pairlum's privacy commitment</h2>
+                    <p>The standard Pairlum holds itself to is this. Your memories remain yours. A private relationship
+                        is not an advertising product. Private Content is not AI training material by default. And
+                        privacy has to be built into the architecture, rather than added only as legal text.</p>
+                </section>
+
+            </div>
+
+            <footer>
+                <h2>Related documents</h2>
+                <ul>
+                    <li><a href="/terms.html">Terms of Service</a></li>
+                    <li><a href="/refunds.html">Cancellation &amp; Refund Policy</a></li>
+                    <li><a href="/cookies.html">Cookie &amp; Tracking Notice</a></li>
+                    <li><a href="/acceptable-use.html">Acceptable Use Policy</a></li>
+                    <li><a href="/data-and-deletion.html">Data Export, Account &amp; Deletion Policy</a></li>
+                </ul>
+                <p class="fine">Pairlum — D1 Privacy Policy. Last updated 26 August 2026. Effective 4 September 2026.
+                    This Policy sits alongside the Terms of Service; where a specific product document applies, read
+                    them together.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <a class="top" href="#" id="totop">Back to top</a>
+
+    <script>
+        (function () {
+            var sections = Array.prototype.slice.call(document.querySelectorAll('main section'));
+            var list = document.getElementById('toclist');
+            var listM = document.getElementById('toclist-m');
+
+            sections.forEach(function (sec) {
+                var h = sec.querySelector('h2');
+                var num = h.querySelector('.n').textContent;
+                var text = h.textContent.replace(/^\s*\d+\s*/, '').trim();
+                ['d', 'm'].forEach(function (kind) {
+                    var target = kind === 'd' ? list : listM;
+                    if (!target) return;
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.href = '#' + sec.id;
+                    a.innerHTML = '<span>' + num + '</span>' + text;
+                    li.appendChild(a);
+                    target.appendChild(li);
+                });
+            });
+
+            // filter the contents rail
+            var filter = document.getElementById('tocfilter');
+            if (filter) {
+                filter.addEventListener('input', function () {
+                    var q = filter.value.trim().toLowerCase();
+                    Array.prototype.forEach.call(list.children, function (li) {
+                        li.classList.toggle('hide', q !== '' && li.textContent.toLowerCase().indexOf(q) === -1);
+                    });
+                });
+            }
+
+            // highlight the section being read
+            var links = {};
+            Array.prototype.forEach.call(list.querySelectorAll('a'), function (a) {
+                links[a.getAttribute('href').slice(1)] = a;
+            });
+            if ('IntersectionObserver' in window) {
+                var current = null;
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (!e.isIntersecting) return;
+                        if (current) current.removeAttribute('aria-current');
+                        current = links[e.target.id];
+                        if (current) {
+                            current.setAttribute('aria-current', 'true');
+                            var nav = current.closest('nav');
+                            var top = current.offsetTop, h = nav.clientHeight;
+                            if (top < nav.scrollTop || top > nav.scrollTop + h - 40) nav.scrollTop = top - h / 2;
+                        }
+                    });
+                }, { rootMargin: '-80px 0px -70% 0px' });
+                sections.forEach(function (s) { io.observe(s); });
+            }
+
+            // close the mobile contents after a jump
+            var det = document.querySelector('.toc-m');
+            if (det) det.addEventListener('click', function (e) { if (e.target.tagName === 'A') det.open = false; });
+
+            // back to top
+            var top = document.getElementById('totop');
+            window.addEventListener('scroll', function () {
+                top.classList.toggle('on', window.scrollY > 900);
+            }, { passive: true });
+            top.addEventListener('click', function (e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+                history.replaceState(null, '', location.pathname);
+            });
+        })();
+    </script>
+</body>
+
+</html>
