@@ -16,6 +16,7 @@ interface AuthContextType {
   membershipLoading: boolean;
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   createCouple: (name: string) => Promise<void>;
   joinCouple: (inviteCode: string, name: string) => Promise<void>;
@@ -96,6 +97,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (error) throw error;
   };
 
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+    if (error) throw error;
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     setMembership(null);
@@ -132,6 +143,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         membershipLoading,
         signUp,
         signIn,
+        signInWithGoogle,
         signOut,
         createCouple,
         joinCouple,

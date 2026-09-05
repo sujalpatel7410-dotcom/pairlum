@@ -248,7 +248,7 @@ export const OurPlacesView: React.FC = () => {
                     </div>
 
                     <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
-                      <img src={pm.momentA.photo} alt={pm.momentA.title} className="w-full h-full object-cover" />
+                      <img src={pm.momentA.photo || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'} alt={pm.momentA.title} className="w-full h-full object-cover" />
                     </div>
 
                     <div>
@@ -291,7 +291,7 @@ export const OurPlacesView: React.FC = () => {
                     </div>
 
                     <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
-                      <img src={pm.momentB.photo} alt={pm.momentB.title} className="w-full h-full object-cover" />
+                      <img src={pm.momentB.photo || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'} alt={pm.momentB.title} className="w-full h-full object-cover" />
                     </div>
 
                     <div>
@@ -381,7 +381,7 @@ export const OurPlacesView: React.FC = () => {
                     </div>
 
                     <div className="aspect-4/3 rounded-xl overflow-hidden bg-[#F7EFE4] mb-2 mt-1">
-                      <img src={place.photo} alt={place.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      <img src={place.photo || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'} alt={place.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                     </div>
 
                     <span className="text-[10px] uppercase font-bold text-[#8E1B1B] tracking-wider block">

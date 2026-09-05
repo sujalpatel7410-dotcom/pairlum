@@ -164,7 +164,7 @@ export const HomeView: React.FC = () => {
 
               <div className="flex items-center gap-3 pt-2">
                 <img 
-                  src={currentUser === 'A' ? couple.avatarB : couple.avatarA} 
+                  src={currentUser === 'A' ? (couple.avatarB || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80') : (couple.avatarA || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80')} 
                   alt={otherPartnerName} 
                   className="w-9 h-9 rounded-full object-cover border border-[#E7D9C9]"
                 />

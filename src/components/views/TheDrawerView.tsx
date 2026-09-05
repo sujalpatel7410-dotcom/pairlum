@@ -27,11 +27,11 @@ import confetti from 'canvas-confetti';
 import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
 
 export const TheDrawerView: React.FC = () => {
-  const { 
-    drawerItems, 
-    addDrawerItem, 
-    currentUser, 
-    couple, 
+  const {
+    drawerItems,
+    addDrawerItem,
+    currentUser,
+    couple,
     unlockDrawerWithPin,
     lockDrawer,
     showToast,
@@ -95,7 +95,7 @@ export const TheDrawerView: React.FC = () => {
       title: letterType === 'open_when' ? (openWhenCondition === 'Custom' ? customCondition : openWhenCondition) : 'A Letter for you',
       body: letterBody,
       author: currentUser,
-      authorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      authorName: currentUser === 'A' ? (couple?.nameA || 'A') : (couple?.nameB || 'B'),
       condition: letterType === 'open_when' ? openWhenCondition : undefined,
       isLocked: false,
       unlockDate: '25 Dec 2026 • 08:00 PM',
@@ -111,7 +111,7 @@ export const TheDrawerView: React.FC = () => {
       title: capsuleTitle || 'Time Capsule',
       body: capsuleMessage,
       author: currentUser,
-      authorName: currentUser === 'A' ? couple.nameA : couple.nameB,
+      authorName: currentUser === 'A' ? (couple?.nameA || 'A') : (couple?.nameB || 'B'),
       unlockDate: capsuleUnlockDate,
       isLocked: true,
       sealedMemoriesCount: selectedCapsuleMemories.length,
@@ -135,11 +135,11 @@ export const TheDrawerView: React.FC = () => {
     return true;
   });
 
-  const isUnlocked = couple.isDrawerUnlocked;
+  const isUnlocked = couple?.isDrawerUnlocked || false;
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto pb-20">
-      
+
       {/* Left PageRail */}
       <PageRail
         step="04 / 06"
@@ -147,16 +147,15 @@ export const TheDrawerView: React.FC = () => {
         title="The Drawer"
         subtitle="Private things only you two share. Time capsules, sealed Open When letters, and secret vows."
         quote="Some things are meant to be felt, not rushed."
-        quoteAuthor="A & B"
+        quoteAuthor={couple ? `${couple.nameA} & ${couple.nameB}` : "A & B"}
         illustrationSrc="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80"
         illustrationCaption="Locked with love in The Drawer ♡"
       >
         <div className="space-y-1 pt-2">
           <button
             onClick={() => setActiveCategory('love_letters')}
-            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-              activeCategory === 'love_letters' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
-            }`}
+            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${activeCategory === 'love_letters' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+              }`}
           >
             <span className="flex items-center gap-2">
               <Mail className="w-4 h-4" />
@@ -169,9 +168,8 @@ export const TheDrawerView: React.FC = () => {
 
           <button
             onClick={() => setActiveCategory('open_when')}
-            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-              activeCategory === 'open_when' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
-            }`}
+            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${activeCategory === 'open_when' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+              }`}
           >
             <span className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
@@ -184,9 +182,8 @@ export const TheDrawerView: React.FC = () => {
 
           <button
             onClick={() => setActiveCategory('time_capsule')}
-            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-              activeCategory === 'time_capsule' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
-            }`}
+            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${activeCategory === 'time_capsule' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+              }`}
           >
             <span className="flex items-center gap-2">
               <Lock className="w-4 h-4" />
@@ -199,28 +196,30 @@ export const TheDrawerView: React.FC = () => {
 
           <button
             onClick={() => setActiveCategory('promises')}
-            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-              activeCategory === 'promises' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
-            }`}
+            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${activeCategory === 'promises' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+              }`}
           >
             <span className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
               <span>Promises</span>
             </span>
-            <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">3</span>
+            <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">
+              {drawerItems.filter(i => i.category === 'promises').length}
+            </span>
           </button>
 
           <button
             onClick={() => setActiveCategory('tickets')}
-            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-              activeCategory === 'tickets' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
-            }`}
+            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${activeCategory === 'tickets' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+              }`}
           >
             <span className="flex items-center gap-2">
               <Ticket className="w-4 h-4" />
               <span>Tickets & Passes</span>
             </span>
-            <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">2</span>
+            <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">
+              {drawerItems.filter(i => i.category === 'tickets').length}
+            </span>
           </button>
         </div>
 
@@ -253,7 +252,7 @@ export const TheDrawerView: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 space-y-8">
-        
+
         {/* IF LOCKED: SHOW PIN GATE */}
         {!isUnlocked ? (
           <div className="p-8 sm:p-12 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow-lg text-center max-w-md mx-auto my-12 space-y-6">
@@ -299,7 +298,7 @@ export const TheDrawerView: React.FC = () => {
         ) : (
           /* DRAWER UNLOCKED INTERFACE */
           <div className="space-y-8 animate-in fade-in duration-200">
-            
+
             {/* Top Action Bar (Screenshot 43) */}
             <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E7D9C9]">
               <div>
@@ -341,7 +340,7 @@ export const TheDrawerView: React.FC = () => {
               <div className="space-y-6">
                 <div className="p-8 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow-lg">
                   <div className="flex flex-col lg:flex-row gap-8 justify-between">
-                    
+
                     <div className="space-y-4 max-w-md">
                       <div className="flex items-center gap-2 text-xs text-[#8E1B1B] font-semibold">
                         <Lock className="w-4 h-4" />
@@ -397,11 +396,11 @@ export const TheDrawerView: React.FC = () => {
                         {['https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80',
                           'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80',
                           'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300&q=80'].map((img, idx) => (
-                          <div key={idx} className="w-20 h-20 rounded-xl overflow-hidden border border-[#E7D9C9] relative bg-black">
-                            <img src={img} alt="Peek" className="w-full h-full object-cover opacity-60 blur-xs" />
-                            <Lock className="w-4 h-4 text-white absolute inset-0 m-auto" />
-                          </div>
-                        ))}
+                            <div key={idx} className="w-20 h-20 rounded-xl overflow-hidden border border-[#E7D9C9] relative bg-black">
+                              <img src={img} alt="Peek" className="w-full h-full object-cover opacity-60 blur-xs" />
+                              <Lock className="w-4 h-4 text-white absolute inset-0 m-auto" />
+                            </div>
+                          ))}
                       </div>
 
                       <div className="p-3.5 rounded-2xl bg-white border border-[#E7D9C9] text-xs">
@@ -418,7 +417,7 @@ export const TheDrawerView: React.FC = () => {
             ) : (
               /* LETTERS / OPEN WHEN LIST (Screenshots 39, 43) */
               <div className="space-y-4">
-                
+
                 {/* Banner message */}
                 <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] flex flex-col sm:flex-row items-center gap-6">
                   <div className="w-24 h-16 rounded-2xl bg-amber-100 border border-amber-200 flex items-center justify-center relative flex-shrink-0">
@@ -435,46 +434,48 @@ export const TheDrawerView: React.FC = () => {
                 </div>
 
                 {/* Letters List */}
-                <div className="space-y-3">
-                  {filteredItems.map((item) => (
-                    <div
-                      key={item.id}
-                      onClick={() => {
-                        if (item.isLocked) {
-                          setSelectedLockedEnvelope(item);
-                        } else {
-                          setSelectedLockedEnvelope(item);
-                        }
-                      }}
-                      className="p-5 rounded-2xl bg-white border border-[#E7D9C9] warm-shadow transition-all hover:scale-[1.01] hover:border-[#8E1B1B]/40 cursor-pointer flex items-center justify-between gap-4"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          item.isLocked ? 'bg-amber-100 text-amber-900' : 'bg-[#8E1B1B]/10 text-[#8E1B1B]'
-                        }`}>
-                          {item.isLocked ? <Lock className="w-4 h-4" /> : <Mail className="w-4 h-4" />}
+                {filteredItems.length === 0 ? (
+                  <div className="py-16 text-center rounded-3xl border border-dashed border-[#E7D9C9] bg-[#F7EFE4]/50 flex flex-col items-center justify-center">
+                    <Mail className="w-10 h-10 text-[#8E1B1B]/30 mb-4" />
+                    <p className="text-base text-[#1C110E] font-medium font-display mb-1">
+                      It's quiet in here
+                    </p>
+                    <p className="text-xs text-[#6E5B52]">Click the button above to add your first item.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {filteredItems.map((item) => (
+                      <div
+                        key={item.id}
+                        onClick={() => setSelectedLockedEnvelope(item)}
+                        className="p-5 rounded-2xl bg-white border border-[#E7D9C9] warm-shadow transition-all hover:scale-[1.01] hover:border-[#8E1B1B]/40 cursor-pointer flex items-center justify-between gap-4"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${item.isLocked ? 'bg-amber-100 text-amber-900' : 'bg-[#8E1B1B]/10 text-[#8E1B1B]'
+                            }`}>
+                            {item.isLocked ? <Lock className="w-4 h-4" /> : <Mail className="w-4 h-4" />}
+                          </div>
+
+                          <div>
+                            <h4 className="font-display text-base font-semibold text-[#1C110E]">
+                              {item.title}
+                            </h4>
+                            <p className="font-script text-base text-[#6E5B52] line-clamp-1">
+                              {item.isLocked ? 'Sealed with love until the right moment.' : `"${item.body}"`}
+                            </p>
+                          </div>
                         </div>
 
-                        <div>
-                          <h4 className="font-display text-base font-semibold text-[#1C110E]">
-                            {item.title}
-                          </h4>
-                          <p className="font-script text-base text-[#6E5B52] line-clamp-1">
-                            {item.isLocked ? 'Sealed with love until the right moment.' : `"${item.body}"`}
-                          </p>
+                        <div className="text-right flex-shrink-0">
+                          <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${item.isLocked ? 'bg-amber-100 text-amber-800' : 'text-[#6E5B52]'
+                            }`}>
+                            {item.isLocked ? `Locked (${item.unlockDate})` : item.createdAt}
+                          </span>
                         </div>
                       </div>
-
-                      <div className="text-right flex-shrink-0">
-                        <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                          item.isLocked ? 'bg-amber-100 text-amber-800' : 'text-[#6E5B52]'
-                        }`}>
-                          {item.isLocked ? `Locked (${item.unlockDate})` : item.createdAt}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
 
               </div>
             )}
@@ -622,16 +623,15 @@ export const TheDrawerView: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-                
+
                 {/* Condition radio choices */}
                 <div className="md:col-span-5 space-y-2">
                   <label className="block text-xs font-semibold text-[#1C110E] mb-2">When should this open?</label>
                   {['When you miss me', 'When you feel sad', 'When you need motivation', 'On a special date', 'Custom'].map((cond) => (
                     <label
                       key={cond}
-                      className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs cursor-pointer transition-colors ${
-                        openWhenCondition === cond ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#F7EFE4] text-[#1C110E] border-[#E7D9C9]'
-                      }`}
+                      className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs cursor-pointer transition-colors ${openWhenCondition === cond ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#F7EFE4] text-[#1C110E] border-[#E7D9C9]'
+                        }`}
                     >
                       <input
                         type="radio"
@@ -754,7 +754,7 @@ export const TheDrawerView: React.FC = () => {
                   <div className="flex gap-2 overflow-x-auto pb-2">
                     {memories.slice(0, 4).map((m) => (
                       <div key={m.id} className="w-24 p-2 bg-white rounded-xl border border-[#8E1B1B] text-center flex-shrink-0">
-                        <img src={m.imageUrl} alt={m.title} className="w-full h-16 object-cover rounded-lg mb-1" />
+                        <img src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80'} alt={m.title} className="w-full h-16 object-cover rounded-lg mb-1" />
                         <p className="text-[10px] font-semibold truncate">{m.title}</p>
                       </div>
                     ))}

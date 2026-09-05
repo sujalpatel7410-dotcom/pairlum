@@ -377,7 +377,7 @@ export const TheDoorView: React.FC = () => {
                   <div className="p-4 rounded-2xl bg-white/10 border border-white/15 space-y-2.5 max-w-lg">
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center gap-2">
-                        <img src={couple.avatarA} alt={couple.nameA} className="w-6 h-6 rounded-full object-cover border border-amber-400" />
+                        <img src={couple.avatarA || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'} alt={couple.nameA} className="w-6 h-6 rounded-full object-cover border border-amber-400" />
                         <div>
                           <p className="font-semibold text-white">{couple.nameA}</p>
                           <p className="text-[10px] text-white/60">{cityA}</p>
@@ -401,7 +401,7 @@ export const TheDoorView: React.FC = () => {
                           <p className="font-semibold text-white">{couple.nameB}</p>
                           <p className="text-[10px] text-white/60">{cityB}</p>
                         </div>
-                        <img src={couple.avatarB} alt={couple.nameB} className="w-6 h-6 rounded-full object-cover border border-amber-400" />
+                        <img src={couple.avatarB || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80'} alt={couple.nameB} className="w-6 h-6 rounded-full object-cover border border-amber-400" />
                       </div>
                     </div>
 
@@ -848,7 +848,7 @@ export const TheDoorView: React.FC = () => {
                   <div className="grid grid-cols-4 gap-2">
                     {memories.slice(0, 4).map((m) => (
                       <div key={m.id} className="p-1.5 bg-[#F7EFE4] rounded-xl border border-[#8E1B1B] text-center">
-                        <img src={m.imageUrl} alt={m.title} className="w-full h-14 object-cover rounded-lg mb-1" />
+                        <img src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=200&q=80'} alt={m.title} className="w-full h-14 object-cover rounded-lg mb-1" />
                         <span className="text-[9px] font-bold block truncate">{m.title}</span>
                       </div>
                     ))}

@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { useAuth } from '../../context/AuthContext';
 import { AppView } from '../../types';
-import { 
+import {
   Heart,
   Sparkles,
   Settings as SettingsIcon,
-  Lock, 
-  CreditCard, 
-  ShieldCheck, 
-  ChevronDown, 
-  Plus, 
+  Lock,
+  CreditCard,
+  ShieldCheck,
+  ChevronDown,
+  Plus,
   LogOut,
   Bell,
   Smartphone,
@@ -22,13 +22,11 @@ import {
 
 const NAV_ITEMS: { id: AppView; label: string }[] = [
   { id: 'home', label: 'Home' },
-  { id: 'wall', label: 'Our Wall' },
   { id: 'shelf', label: 'Our Shelf' },
   { id: 'places', label: 'Our Places' },
   { id: 'drawer', label: 'The Drawer' },
   { id: 'door', label: 'The Door' },
   { id: 'together', label: 'Together' },
-  { id: 'memories', label: 'Memories' },
   { id: 'reunion', label: 'Reunion' }
 ];
 
@@ -57,10 +55,10 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
   return (
     <header className="sticky top-0 z-40 bg-[#FFFBF5]/90 backdrop-blur-md border-b border-[#E7D9C9] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        
+
         {/* Left: Brand Logo & Wordmark */}
         <div className="flex items-center gap-6">
-          <button 
+          <button
             id="pairlum-logo-button"
             onClick={() => setCurrentView('home')}
             className="flex items-center gap-2 group text-left cursor-pointer focus:outline-hidden"
@@ -91,8 +89,8 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
                 onClick={() => setCurrentView(item.id)}
                 className={`
                   relative px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer
-                  ${isActive 
-                    ? 'text-[#8E1B1B] font-semibold' 
+                  ${isActive
+                    ? 'text-[#8E1B1B] font-semibold'
                     : 'text-[#6E5B52] hover:text-[#1C110E]'}
                 `}
               >
@@ -109,7 +107,7 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
 
         {/* Right Actions: Add FAB, Notifications, & Profile Dropdown */}
         <div className="flex items-center gap-2 sm:gap-3">
-          
+
           {/* Quick Add Button */}
           <button
             id="nav-quick-add"
@@ -149,9 +147,8 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
           {onToggleMobileSim && (
             <button
               onClick={onToggleMobileSim}
-              className={`p-2 rounded-full border text-xs transition-colors hidden md:flex items-center gap-1 cursor-pointer ${
-                isMobileSim ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#F7EFE4] text-[#6E5B52] border-[#E7D9C9]'
-              }`}
+              className={`p-2 rounded-full border text-xs transition-colors hidden md:flex items-center gap-1 cursor-pointer ${isMobileSim ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#F7EFE4] text-[#6E5B52] border-[#E7D9C9]'
+                }`}
               title="Toggle Mobile View Preview"
             >
               <Smartphone className="w-4 h-4" />
@@ -172,9 +169,9 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
               <span className="text-[11px] text-[#6E5B52] hidden sm:inline font-medium">
                 {couple.initials}
               </span>
-              <img 
-                src={currentAvatar} 
-                alt={currentPartnerName} 
+              <img
+                src={currentAvatar || (currentUser === 'A' ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80' : 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80')}
+                alt={currentPartnerName}
                 className="w-7 h-7 rounded-full object-cover border border-[#E7D9C9]"
               />
               <ChevronDown className="w-3.5 h-3.5 text-[#6E5B52] mr-1" />
@@ -182,7 +179,7 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
 
             {/* Dropdown Menu */}
             {isProfileMenuOpen && (
-              <div 
+              <div
                 className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#FFFBF5] border border-[#E7D9C9] warm-shadow-lg py-2 z-50 animate-in fade-in zoom-in-95 duration-150"
                 onClick={() => setIsProfileMenuOpen(false)}
               >

@@ -273,7 +273,7 @@ export const SettingsView: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="text-center">
-                <img src={couple.avatarA} alt={couple.nameA} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#E7D9C9]" />
+                <img src={couple.avatarA || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'} alt={couple.nameA} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#E7D9C9]" />
                 <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span>{isUploadingAvatarA ? `Uploading... ${progressAvatarA}%` : `${couple.nameA}'s photo`}</span>
@@ -288,7 +288,7 @@ export const SettingsView: React.FC = () => {
               </div>
 
               <div className="text-center">
-                <img src={couple.avatarB} alt={couple.nameB} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#E7D9C9]" />
+                <img src={couple.avatarB || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80'} alt={couple.nameB} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#E7D9C9]" />
                 <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span>{isUploadingAvatarB ? `Uploading... ${progressAvatarB}%` : `${couple.nameB}'s photo`}</span>
@@ -303,7 +303,7 @@ export const SettingsView: React.FC = () => {
               </div>
 
               <div className="text-center">
-                <img src={couple.coverPhoto} alt="Cover" className="w-full h-20 rounded-xl object-cover mx-auto border border-[#E7D9C9]" />
+                <img src={couple.coverPhoto || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'} alt="Cover" className="w-full h-20 rounded-xl object-cover mx-auto border border-[#E7D9C9]" />
                 <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span>{isUploadingCover ? `Uploading... ${progressCover}%` : 'Cover photo'}</span>

@@ -3,7 +3,6 @@ import { PairlumProvider, usePairlum } from './context/PairlumContext';
 import { TopNav } from './components/navigation/TopNav';
 import { BottomTabs } from './components/navigation/BottomTabs';
 import { HomeView } from './components/views/HomeView';
-import { OurWallView } from './components/views/OurWallView';
 import { OurShelfView } from './components/views/OurShelfView';
 import { OurPlacesView } from './components/views/OurPlacesView';
 import { TheDrawerView } from './components/views/TheDrawerView';
@@ -24,9 +23,7 @@ const AppContent: React.FC = () => {
     switch (currentView) {
       case 'home':
         return <HomeView />;
-      case 'wall':
-      case 'memories':
-        return <OurWallView />;
+
       case 'shelf':
         return <OurShelfView />;
       case 'places':
@@ -55,9 +52,9 @@ const AppContent: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'dark bg-[#120C0A] text-[#FAF3EC]' : 'bg-[#FFFBF5] text-[#1C110E]'} flex flex-col font-sans transition-colors duration-500 ${isCandlelit ? 'candle-glow' : ''}`}>
-      
+
       {/* Interactive Fluid Splash Cursor */}
-      <SplashCursor 
+      <SplashCursor
         SIM_RESOLUTION={128}
         DYE_RESOLUTION={1024}
         DENSITY_DISSIPATION={3.0}
