@@ -17,6 +17,7 @@ export const OurShelfView: React.FC = () => {
   const {
     chapters,
     addChapter,
+    updateChapter,
     memories,
     setActiveLightboxMemory,
     currentUser,
@@ -28,6 +29,7 @@ export const OurShelfView: React.FC = () => {
 
   const [activeChapterId, setActiveChapterId] = useState<string>('');
   const [isCreatingChapter, setIsCreatingChapter] = useState(false);
+  const [editingChapterId, setEditingChapterId] = useState<string | null>(null);
 
   // New Chapter Wizard State
   const [newTitle, setNewTitle] = useState('The Window');
@@ -59,14 +61,54 @@ export const OurShelfView: React.FC = () => {
     )
     : [];
 
+  // Same membership rule as chapterMemories above, applied per-chapter so the
+  // sidebar count always matches what the chapter page itself shows.
+  const getChapterMemoryCount = (ch: Chapter) =>
+    safeMemories.filter((m) => ch.memoryIds?.includes(m.id) || m.chapterId === ch.id).length;
+
   const handleToggleMemorySelect = (id: string) => {
     setSelectedMemoryIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
 
+  const resetChapterForm = () => {
+    setNewTitle('The Window');
+    setNewSubtitle('The little moments that felt like home. The talks, the sunsets, the quiet.');
+    setNewCover('https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80');
+    setNewStartDate('May 2024');
+    setNewEndDate('Aug 2026');
+    setNewTheme('Home & Everyday');
+    setNewSpineColor('#8E1B1B');
+    setSelectedMemoryIds([]);
+  };
+
+  const handleStartCreateChapter = () => {
+    setEditingChapterId(null);
+    resetChapterForm();
+    setIsCreatingChapter(true);
+  };
+
+  const handleStartEditChapter = (chapter: Chapter) => {
+    setEditingChapterId(chapter.id);
+    setNewTitle(chapter.title);
+    setNewSubtitle(chapter.subtitle);
+    setNewCover(chapter.coverImage);
+    setNewStartDate(chapter.startDate);
+    setNewEndDate(chapter.endDate);
+    setNewTheme(chapter.theme);
+    setNewSpineColor(chapter.spineColor);
+    setSelectedMemoryIds(chapter.memoryIds ?? []);
+    setIsCreatingChapter(true);
+  };
+
+  const handleCancelChapterForm = () => {
+    setIsCreatingChapter(false);
+    setEditingChapterId(null);
+  };
+
   const handleSaveChapter = () => {
-    addChapter({
+    const chapterData = {
       title: newTitle || 'Untitled Chapter',
       subtitle: newSubtitle,
       coverImage: newCover,
@@ -75,12 +117,15 @@ export const OurShelfView: React.FC = () => {
       theme: newTheme,
       spineColor: newSpineColor,
       memoryIds: selectedMemoryIds,
-    });
+    };
+    if (editingChapterId) {
+      updateChapter(editingChapterId, chapterData);
+    } else {
+      addChapter(chapterData);
+    }
     setIsCreatingChapter(false);
-    // Reset form
-    setNewTitle('');
-    setNewSubtitle('');
-    setSelectedMemoryIds([]);
+    setEditingChapterId(null);
+    resetChapterForm();
   };
 
   return (
@@ -112,6 +157,7 @@ export const OurShelfView: React.FC = () => {
                   onClick={() => {
                     setActiveChapterId(ch.id);
                     setIsCreatingChapter(false);
+                    setEditingChapterId(null);
                   }}
                   className={`w-full p-3 rounded-2xl text-left transition-all border cursor-pointer ${isSelected && !isCreatingChapter
                       ? 'bg-[#8E1B1B] text-white border-[#8E1B1B] shadow-sm'
@@ -126,7 +172,7 @@ export const OurShelfView: React.FC = () => {
                   </div>
                   <h4 className="font-display text-base font-medium truncate">{ch.title}</h4>
                   <p className={`text-[11px] truncate mt-0.5 ${isSelected && !isCreatingChapter ? 'text-white/80' : 'text-[#6E5B52]'}`}>
-                    {ch.memoryIds.length} memories
+                    {getChapterMemoryCount(ch)} memories
                   </p>
                 </button>
               );
@@ -137,7 +183,7 @@ export const OurShelfView: React.FC = () => {
         {/* Create Chapter button */}
         <div className="pt-3">
           <button
-            onClick={() => setIsCreatingChapter(true)}
+            onClick={handleStartCreateChapter}
             className={`w-full py-2.5 rounded-full text-xs font-semibold tracking-wide flex items-center justify-center gap-2 border transition-all cursor-pointer ${isCreatingChapter
                 ? 'bg-[#1C110E] text-white border-[#1C110E]'
                 : 'bg-[#FFFBF5] border-[#8E1B1B] text-[#8E1B1B] hover:bg-[#8E1B1B]/10'
@@ -158,10 +204,10 @@ export const OurShelfView: React.FC = () => {
             <div>
               <span className="text-xs font-bold text-[#8E1B1B] uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Create Chapter</span>
+                <span>{editingChapterId ? 'Edit Chapter' : 'Create Chapter'}</span>
               </span>
               <h2 className="font-display text-4xl text-[#1C110E] font-medium mt-1">
-                Turn your memories into a chapter.
+                {editingChapterId ? "Update this chapter's details." : 'Turn your memories into a chapter.'}
               </h2>
               <p className="text-sm text-[#6E5B52] mt-1">
                 A chapter is a collection of moments that tell part of your story.
@@ -332,10 +378,10 @@ export const OurShelfView: React.FC = () => {
                   onClick={handleSaveChapter}
                   className="flex-1 py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-md cursor-pointer"
                 >
-                  Create Chapter (It will appear on Our Shelf)
+                  {editingChapterId ? 'Save Changes' : 'Create Chapter (It will appear on Our Shelf)'}
                 </button>
                 <button
-                  onClick={() => setIsCreatingChapter(false)}
+                  onClick={handleCancelChapterForm}
                   className="px-6 py-3 rounded-full bg-white border border-[#E7D9C9] text-xs font-medium text-[#6E5B52] cursor-pointer"
                 >
                   Cancel
@@ -381,7 +427,7 @@ export const OurShelfView: React.FC = () => {
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <button
-                onClick={() => setIsCreatingChapter(true)}
+                onClick={handleStartCreateChapter}
                 className="px-6 py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-semibold flex items-center gap-2 shadow-lg transition-all hover:scale-105 cursor-pointer"
               >
                 <BookOpen className="w-4 h-4" />
@@ -430,7 +476,7 @@ export const OurShelfView: React.FC = () => {
                 })}
 
                 <button
-                  onClick={() => setIsCreatingChapter(true)}
+                  onClick={handleStartCreateChapter}
                   className="w-28 sm:w-32 h-44 rounded-t-xl border-2 border-dashed border-white/30 flex flex-col items-center justify-center text-center p-3 text-white/60 hover:text-white hover:border-white transition-colors cursor-pointer flex-shrink-0"
                 >
                   <Plus className="w-6 h-6 mb-1" />
@@ -472,7 +518,7 @@ export const OurShelfView: React.FC = () => {
 
                   <div className="relative z-10 mt-6 flex flex-wrap gap-3">
                     <button
-                      onClick={() => setIsCreatingChapter(true)}
+                      onClick={() => handleStartEditChapter(activeChapter)}
                       className="px-5 py-2.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-xs text-xs font-medium text-white cursor-pointer"
                     >
                       Edit Chapter ✎

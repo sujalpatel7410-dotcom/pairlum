@@ -63,8 +63,8 @@ export const TheDrawerView: React.FC = () => {
   // Attached photo (optional) for letters / capsules
   const [letterPhotoUrl, setLetterPhotoUrl] = useState<string | undefined>(undefined);
   const [capsulePhotoUrl, setCapsulePhotoUrl] = useState<string | undefined>(undefined);
-  const { upload: uploadLetterPhoto, isUploading: isUploadingLetterPhoto, progress: letterPhotoProgress } = useCloudinaryUpload();
-  const { upload: uploadCapsulePhoto, isUploading: isUploadingCapsulePhoto, progress: capsulePhotoProgress } = useCloudinaryUpload();
+  const { upload: uploadLetterPhoto, isUploading: isUploadingLetterPhoto, progress: letterPhotoProgress, error: letterPhotoError } = useCloudinaryUpload();
+  const { upload: uploadCapsulePhoto, isUploading: isUploadingCapsulePhoto, progress: capsulePhotoProgress, error: capsulePhotoError } = useCloudinaryUpload();
 
   const handleLetterPhotoSelected = async (file: File | undefined) => {
     if (!file) return;
@@ -134,6 +134,16 @@ export const TheDrawerView: React.FC = () => {
     if (activeCategory === 'secrets') return item.category === 'secrets';
     return true;
   });
+
+  // Most recently sealed time capsule (drawerItems arrives newest-first from
+  // context), used to render the "locked" card below from real couple data.
+  const activeCapsule = drawerItems.find(item => item.category === 'time_capsule');
+  const capsuleUnlockDateObj = activeCapsule?.unlockDate
+    ? new Date(activeCapsule.unlockDate.replace(/[•·]/g, ' '))
+    : null;
+  const daysUntilCapsuleUnlock = capsuleUnlockDateObj && !isNaN(capsuleUnlockDateObj.getTime())
+    ? Math.max(0, Math.ceil((capsuleUnlockDateObj.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : null;
 
   const isUnlocked = couple?.isDrawerUnlocked || false;
 
@@ -338,6 +348,15 @@ export const TheDrawerView: React.FC = () => {
             {activeCategory === 'time_capsule' ? (
               /* TIME CAPSULE LOCKED CARD (Screenshot 26) */
               <div className="space-y-6">
+                {!activeCapsule ? (
+                  <div className="py-16 text-center rounded-3xl border border-dashed border-[#E7D9C9] bg-[#F7EFE4]/50 flex flex-col items-center justify-center">
+                    <Lock className="w-10 h-10 text-[#8E1B1B]/30 mb-4" />
+                    <p className="text-base text-[#1C110E] font-medium font-display mb-1">
+                      No time capsule yet
+                    </p>
+                    <p className="text-xs text-[#6E5B52]">Click "Create Time Capsule" above to seal one for the future.</p>
+                  </div>
+                ) : (
                 <div className="p-8 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow-lg">
                   <div className="flex flex-col lg:flex-row gap-8 justify-between">
 
@@ -348,7 +367,7 @@ export const TheDrawerView: React.FC = () => {
                       </div>
 
                       <h3 className="font-display text-4xl text-[#1C110E] font-medium">
-                        Our Year Together ♡
+                        {activeCapsule.title} ♡
                       </h3>
 
                       <div>
@@ -356,25 +375,25 @@ export const TheDrawerView: React.FC = () => {
                           UNLOCK ON
                         </span>
                         <p className="text-sm text-[#1C110E] font-medium mt-0.5">
-                          📅 25 December 2027 • 10:00 AM
+                          📅 {activeCapsule.unlockDate || 'Not set'}
                         </p>
                       </div>
 
                       <div className="py-2">
                         <div className="font-display text-5xl font-bold text-[#8E1B1B]">
-                          18 <span className="text-2xl font-normal text-[#1C110E]">days</span>
+                          {daysUntilCapsuleUnlock !== null ? daysUntilCapsuleUnlock : '—'} <span className="text-2xl font-normal text-[#1C110E]">days</span>
                         </div>
                         <p className="text-xs text-[#6E5B52] mt-1">until unlock</p>
                       </div>
 
                       <p className="text-xs text-[#6E5B52] leading-relaxed">
-                        This capsule is sealed and locked until 25 December 2027. You won't be able to open it until then.
+                        This capsule is sealed and locked until {activeCapsule.unlockDate || 'your chosen date'}. You won't be able to open it until then.
                       </p>
 
                       <div className="pt-2 flex gap-3">
                         <button
                           onClick={() => {
-                            setCapsuleOpenedItem(drawerItems[4]);
+                            setCapsuleOpenedItem(activeCapsule);
                             confetti({ particleCount: 60 });
                           }}
                           className="px-5 py-2.5 rounded-full bg-[#8E1B1B] text-white text-xs font-medium cursor-pointer flex items-center gap-1.5"
@@ -390,29 +409,30 @@ export const TheDrawerView: React.FC = () => {
                       <span className="text-xs font-bold text-[#1C110E] uppercase tracking-wider block">
                         A PEEK INSIDE
                       </span>
-                      <p className="text-xs text-[#6E5B52]">4 memories • 2 notes • 1 promise</p>
+                      <p className="text-xs text-[#6E5B52]">
+                        {activeCapsule.sealedMemoriesCount ?? 0} memor{(activeCapsule.sealedMemoriesCount ?? 0) === 1 ? 'y' : 'ies'} sealed inside
+                      </p>
 
                       <div className="flex gap-2">
-                        {['https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80',
-                          'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80',
-                          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300&q=80'].map((img, idx) => (
-                            <div key={idx} className="w-20 h-20 rounded-xl overflow-hidden border border-[#E7D9C9] relative bg-black">
-                              <img src={img} alt="Peek" className="w-full h-full object-cover opacity-60 blur-xs" />
-                              <Lock className="w-4 h-4 text-white absolute inset-0 m-auto" />
-                            </div>
-                          ))}
+                        {memories.slice(0, 3).map((m) => (
+                          <div key={m.id} className="w-20 h-20 rounded-xl overflow-hidden border border-[#E7D9C9] relative bg-black">
+                            <img src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80'} alt="Peek" className="w-full h-full object-cover opacity-60 blur-xs" />
+                            <Lock className="w-4 h-4 text-white absolute inset-0 m-auto" />
+                          </div>
+                        ))}
                       </div>
 
                       <div className="p-3.5 rounded-2xl bg-white border border-[#E7D9C9] text-xs">
                         <p className="text-[#1C110E] font-script text-base italic leading-snug">
-                          "For the us who made it through everything." ♡
+                          "{activeCapsule.body}" ♡
                         </p>
-                        <p className="text-[10px] text-[#8E1B1B] text-right mt-1">— Emma & Liam</p>
+                        <p className="text-[10px] text-[#8E1B1B] text-right mt-1">— {couple ? `${couple.nameA} & ${couple.nameB}` : 'A & B'}</p>
                       </div>
                     </div>
 
                   </div>
                 </div>
+                )}
               </div>
             ) : (
               /* LETTERS / OPEN WHEN LIST (Screenshots 39, 43) */
@@ -504,7 +524,7 @@ export const TheDrawerView: React.FC = () => {
                   Your time capsule is open. These are the memories you chose to keep, forever.
                 </p>
                 <span className="text-xs text-[#8E1B1B] font-semibold mt-2 inline-block">
-                  Opened on 25 December 2027 ♡
+                  Opened on {capsuleOpenedItem.unlockDate || 'today'} ♡
                 </span>
               </div>
 
@@ -686,6 +706,9 @@ export const TheDrawerView: React.FC = () => {
                         onChange={(e) => handleLetterPhotoSelected(e.target.files?.[0])}
                       />
                     </label>
+                    {letterPhotoError && (
+                      <p className="text-xs text-[#8E1B1B] mt-1.5">{letterPhotoError}</p>
+                    )}
                   </div>
 
                   <button
@@ -777,6 +800,9 @@ export const TheDrawerView: React.FC = () => {
                       onChange={(e) => handleCapsulePhotoSelected(e.target.files?.[0])}
                     />
                   </label>
+                  {capsulePhotoError && (
+                    <p className="text-xs text-[#8E1B1B] mt-1.5">{capsulePhotoError}</p>
+                  )}
                 </div>
 
                 <button

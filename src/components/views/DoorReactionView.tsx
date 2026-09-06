@@ -24,6 +24,11 @@ export const DoorReactionView: React.FC = () => {
 
   const otherPartner = currentUser === 'A' ? couple.nameB : couple.nameA;
 
+  const reunionDateObj = couple.reunionDate ? new Date(couple.reunionDate) : null;
+  const openedOnLabel = reunionDateObj && !isNaN(reunionDateObj.getTime())
+    ? `${reunionDateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} • ${reunionDateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`
+    : '25 Dec 2026 • 08:15 PM';
+
   const feelings = [
     { label: 'Loved it', emoji: '❤️' },
     { label: 'Cried', emoji: '🥺' },
@@ -37,8 +42,7 @@ export const DoorReactionView: React.FC = () => {
       reaction: {
         feeling: selectedFeeling,
         message: reactionText,
-        privateNote,
-        voiceDuration: '0:24'
+        privateNote
       }
     });
 
@@ -103,7 +107,7 @@ export const DoorReactionView: React.FC = () => {
             </div>
             <div className="text-right">
               <p className="font-semibold text-[#1C110E]">Opened on</p>
-              <p className="text-[11px] text-[#6E5B52]">25 Dec 2026 • 08:15 PM</p>
+              <p className="text-[11px] text-[#6E5B52]">{openedOnLabel}</p>
             </div>
           </div>
 

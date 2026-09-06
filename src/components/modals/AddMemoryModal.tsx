@@ -57,15 +57,18 @@ export const AddMemoryModal: React.FC = () => {
 
   const handleFileSelected = async (file: File | undefined, isVideo: boolean) => {
     if (!file) return;
+    const previousImageUrl = imageUrl;
     const localPreview = URL.createObjectURL(file);
-    if (isVideo) {
-      setImageUrl(localPreview);
-    } else {
-      setImageUrl(localPreview);
-    }
+    setImageUrl(localPreview);
 
     const result = await upload(file);
-    if (!result) return;
+    if (!result) {
+      // Upload failed — don't leave a local blob: URL (only valid in this
+      // browser tab) looking like a saved photo; fall back to what was
+      // there before so "Use This Photo" can't save a broken image.
+      setImageUrl(previousImageUrl);
+      return;
+    }
 
     if (isVideo) {
       setVideoUrl(result.secureUrl);
@@ -92,6 +95,17 @@ export const AddMemoryModal: React.FC = () => {
       setIsRecording(false);
       setRecordingSeconds(0);
       setVideoUrl(undefined);
+      // Also clear out whatever the previous memory (if any) left behind, so
+      // reopening this modal for a new memory doesn't silently pre-fill it
+      // with the last one's title, caption, date, location or photo.
+      setTitle('');
+      setCaption('');
+      setDate('20 Aug 2026');
+      setTime('7:45 PM');
+      setLocation('Goa, India');
+      setChapterId(chapters[0]?.id || '');
+      setImageUrl('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=80');
+      setRecordedDuration('0:28');
     }
   }, [isAddMemoryModalOpen, addMemoryModalInitialKind]);
 
@@ -738,6 +752,13 @@ export const AddMemoryModal: React.FC = () => {
                   setStep('format');
                   setTitle('');
                   setCaption('');
+                  setDate('20 Aug 2026');
+                  setTime('7:45 PM');
+                  setLocation('Goa, India');
+                  setChapterId(chapters[0]?.id || '');
+                  setImageUrl('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=80');
+                  setVideoUrl(undefined);
+                  setRecordedDuration('0:28');
                 }}
                 className="px-6 py-3 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] hover:border-[#8E1B1B] cursor-pointer"
               >

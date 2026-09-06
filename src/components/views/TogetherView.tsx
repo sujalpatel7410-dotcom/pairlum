@@ -29,7 +29,6 @@ export const TogetherView: React.FC = () => {
     answerDailyPrompt
   } = usePairlum();
 
-  const [partnerStatus, setPartnerStatus] = useState('Listening to our playlist & thinking of you');
   const moodKey = `pairlum_mood_${couple?.id ?? 'default'}_${currentUser}`;
   const [myMood, setMyMood] = useState<'Warm' | 'Cozy' | 'Missing you' | 'In love' | 'Tired'>(() => {
     const saved = localStorage.getItem(`pairlum_mood_default_${currentUser}`);
@@ -77,7 +76,7 @@ export const TogetherView: React.FC = () => {
         title="Together"
         subtitle="Stay close every single day with shared music, daily questions, and gentle heartbeat pulses."
         quote="Even in silence, you are my favorite company."
-        quoteAuthor="Emma & Liam"
+        quoteAuthor={currentUser === 'A' ? couple.nameB : couple.nameA}
         illustrationSrc="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=600&q=80"
         illustrationCaption="Connected in real time ♡"
       >
@@ -88,11 +87,11 @@ export const TogetherView: React.FC = () => {
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>Partner Live</span>
             </span>
-            <span className="text-[10px] text-[#6E5B52]">Active now</span>
+            <span className="text-[10px] text-[#6E5B52]">{couple.lastActiveTime || 'Active now'}</span>
           </div>
 
           <p className="text-xs text-[#1C110E] font-medium bg-white p-2.5 rounded-xl border border-[#E7D9C9]">
-            "{partnerStatus}"
+            "{couple.lastActiveNote || 'Listening to our playlist & thinking of you'}"
           </p>
 
           <button

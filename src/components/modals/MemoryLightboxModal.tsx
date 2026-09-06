@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { Memory } from '../../types';
 import { 
@@ -43,10 +43,20 @@ export const MemoryLightboxModal: React.FC = () => {
   const [editLocation, setEditLocation] = useState('');
   const [editChapterId, setEditChapterId] = useState('');
 
+  // Reset transient view/edit state whenever a different memory is opened (or
+  // the lightbox is closed) so a stale edit/delete/audio state from the
+  // previous memory can't bleed into the next one.
+  useEffect(() => {
+    setIsEditing(false);
+    setIsConfirmDeleteOpen(false);
+    setIsPlayingAudio(false);
+    setReplyText('');
+  }, [activeLightboxMemory?.id]);
+
   if (!activeLightboxMemory) return null;
 
   const mem = activeLightboxMemory;
-  const currentPartnerName = currentUser === 'A' ? couple.nameA : couple.nameB;
+  const currentPartnerName = currentUser === 'A' ? couple.nameB : couple.nameA;
 
   const handleStartEdit = () => {
     setEditTitle(mem.title);
@@ -194,7 +204,7 @@ export const MemoryLightboxModal: React.FC = () => {
                 
                 <div>
                   <label className="block text-xs font-semibold text-[#6E5B52] mb-1">Visibility</label>
-                  <p className="text-xs text-[#1C110E] font-medium">Only you and {couple.nameB}</p>
+                  <p className="text-xs text-[#1C110E] font-medium">Only you and {currentPartnerName}</p>
                 </div>
 
                 <div>

@@ -266,6 +266,7 @@ interface PairlumContextType {
 
   chapters: Chapter[];
   addChapter: (chapter: Omit<Chapter, 'id'>) => void;
+  updateChapter: (id: string, updates: Partial<Chapter>) => void;
 
   drawerItems: DrawerItem[];
   addDrawerItem: (item: Omit<DrawerItem, 'id' | 'createdAt'>) => void;
@@ -660,6 +661,25 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     showToast('Chapter created on Our Shelf');
   }, [coupleId, showToast]);
 
+  const updateChapter = useCallback((id: string, updates: Partial<Chapter>) => {
+    setChapters((prev) => prev.map((c) => (c.id === id ? { ...c, ...updates } : c)));
+
+    const row: Record<string, any> = {};
+    if ('title' in updates) row.title = updates.title;
+    if ('subtitle' in updates) row.subtitle = updates.subtitle;
+    if ('coverImage' in updates) row.cover_image = updates.coverImage;
+    if ('startDate' in updates) row.start_date = updates.startDate;
+    if ('endDate' in updates) row.end_date = updates.endDate;
+    if ('theme' in updates) row.theme = updates.theme;
+    if ('spineColor' in updates) row.spine_color = updates.spineColor;
+    if ('memoryIds' in updates) row.memory_ids = updates.memoryIds;
+
+    supabase.from('chapters').update(row).eq('id', id).then(({ error }) => {
+      if (error) console.error('Failed to update chapter', error);
+    });
+    showToast('Chapter updated');
+  }, [showToast]);
+
   const addDrawerItem = useCallback(async (itemData: Omit<DrawerItem, 'id' | 'createdAt'>) => {
     if (!coupleId || !couple) return;
     const { data, error } = await supabase.from('drawer_items').insert({
@@ -839,7 +859,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
         couple, updateCouple, updateCoupleProfile,
         isCandlelit, toggleCandlelight, isDarkMode, toggleDarkMode, themeMode, setThemeMode,
         memories, addMemory, deleteMemory, updateMemory, toggleReaction, addReply,
-        chapters, addChapter,
+        chapters, addChapter, updateChapter,
         drawerItems, addDrawerItem, unlockDrawerWithPin, lockDrawer,
         reunionPlan, toggleReunionStop, addReunionStop,
         doorState, updateDoorState, openTheDoor,

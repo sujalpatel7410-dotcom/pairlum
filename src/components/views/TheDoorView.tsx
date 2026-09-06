@@ -35,11 +35,12 @@ import confetti from 'canvas-confetti';
 import { ReunionStop } from '../../types';
 
 export const TheDoorView: React.FC = () => {
-  const { 
-    couple, 
-    doorState, 
-    updateDoorState, 
-    openTheDoor, 
+  const {
+    couple,
+    updateCouple,
+    doorState,
+    updateDoorState,
+    openTheDoor,
     reunionPlan, 
     toggleReunionStop, 
     addReunionStop,
@@ -64,18 +65,19 @@ export const TheDoorView: React.FC = () => {
   const [newStopAssignee, setNewStopAssignee] = useState<'A' | 'B' | 'both'>('both');
   const [newStopDueDate, setNewStopDueDate] = useState('18 Dec 2026');
 
-  // Live countdown calculation based on couple.reunionDate
+  // Live countdown calculation based on couple.reunionDate, falling back to
+  // the same default reunion date/time used elsewhere in this view until the
+  // couple sets their own in Settings.
   const [timeLeft, setTimeLeft] = useState({
-    days: 18,
-    hours: 6,
-    minutes: 42,
-    seconds: 15
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
   });
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      if (!couple.reunionDate) return;
-      const target = new Date(couple.reunionDate).getTime();
+      const target = new Date(couple.reunionDate || '2026-12-25T20:00:00').getTime();
       const now = new Date().getTime();
       const diff = target - now;
 
@@ -86,14 +88,7 @@ export const TheDoorView: React.FC = () => {
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
         setTimeLeft({ days, hours, minutes, seconds });
       } else {
-        // Fallback default for romantic preview if date is in past or arbitrary
-        setTimeLeft(prev => {
-          if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-          if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-          if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-          if (prev.days > 0) return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
-          return prev;
-        });
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
 
@@ -183,6 +178,14 @@ export const TheDoorView: React.FC = () => {
   const flightDuration = couple.flightDuration || '9h 15m flight';
   const timezoneDiff = couple.timezoneDiff || '4.5 hrs time difference';
 
+  const reunionDateObj = couple.reunionDate ? new Date(couple.reunionDate) : null;
+  const reunionDateTimeLabel = reunionDateObj && !isNaN(reunionDateObj.getTime())
+    ? `${reunionDateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} • ${reunionDateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`
+    : '25 Dec 2026 • 08:00 PM';
+  // The curation grid below only ever previews the first 4 memories, so cap
+  // the headline count to match what's actually shown.
+  const doorMemoryCount = Math.min(memories.length, 4);
+
   return (
     <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto pb-20">
       
@@ -193,7 +196,7 @@ export const TheDoorView: React.FC = () => {
         title="The Door"
         subtitle="The magical doorway that bridges every single mile between us. Every plan brings us closer."
         quote="Distance is just a test to see how far love can travel."
-        quoteAuthor="Emma & Liam"
+        quoteAuthor={`${couple.nameA} & ${couple.nameB}`}
         illustrationSrc="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80"
         illustrationCaption="Waiting by The Door ♡"
       >
@@ -252,11 +255,11 @@ export const TheDoorView: React.FC = () => {
               <Globe2 className="w-3.5 h-3.5" />
               <span>Distance Apart</span>
             </span>
-            <span className="font-mono text-[11px] text-[#8E1B1B] font-bold">7,192 km</span>
+            <span className="font-mono text-[11px] text-[#8E1B1B] font-bold">{distanceKmText}</span>
           </div>
           <div className="flex items-center justify-between text-[11px] text-[#6E5B52]">
             <span>{cityA.split(',')[0]} ✈ {cityB.split(',')[0]}</span>
-            <span>{flightDuration.split(' ')[0]} flight</span>
+            <span>{flightDuration}</span>
           </div>
           <div className="w-full bg-[#E7D9C9] h-1.5 rounded-full overflow-hidden">
             <div className="bg-[#8E1B1B] h-full rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }} />
@@ -338,7 +341,7 @@ export const TheDoorView: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-semibold">
                       <Clock className="w-3.5 h-3.5" />
-                      <span>Next Reunion: 25 Dec 2026 • 08:00 PM</span>
+                      <span>Next Reunion: {reunionDateTimeLabel}</span>
                     </div>
 
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white/90 text-xs">
@@ -470,10 +473,10 @@ export const TheDoorView: React.FC = () => {
                       </div>
                       <h4 className="font-display text-2xl font-bold text-[#1C110E]">The Door is Ready</h4>
                       <p className="text-xs text-[#1C110E]/80 font-script text-base">
-                        Bridging {distanceKmText} with 4 memories, soundtrack & final letter.
+                        Bridging {distanceKmText} with {doorMemoryCount} memor{doorMemoryCount === 1 ? 'y' : 'ies'}, soundtrack & final letter.
                       </p>
                       <span className="text-[11px] font-mono font-bold text-[#8E1B1B] bg-white/80 px-3 py-1 rounded-full inline-block">
-                        Yellow — Coldplay
+                        {doorState.musicTrack || 'Yellow — Coldplay'}
                       </span>
                     </div>
 
@@ -818,7 +821,7 @@ export const TheDoorView: React.FC = () => {
                   <input
                     type="text"
                     value={couple.reunionTitle}
-                    onChange={(e) => couple.reunionTitle = e.target.value}
+                    onChange={(e) => updateCouple({ reunionTitle: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-sm"
                   />
                 </div>

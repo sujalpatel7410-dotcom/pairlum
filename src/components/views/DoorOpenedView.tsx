@@ -18,6 +18,12 @@ export const DoorOpenedView: React.FC = () => {
   const { setCurrentView, doorState, couple, memories } = usePairlum();
   const [isPlaying, setIsPlaying] = useState(true);
 
+  const coverMemory = memories.find((m) => m.id === doorState.coverMemoryId);
+  const startDateObj = couple.startDate ? new Date(couple.startDate) : null;
+  const startDateLabel = startDateObj && !isNaN(startDateObj.getTime())
+    ? startDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()
+    : 'MAY 16, 2024';
+
   return (
     <div className="relative min-h-[90vh] rounded-3xl overflow-hidden bg-[#1C110E] text-white p-6 sm:p-12 border-2 border-amber-300/40 candle-glow warm-shadow-lg flex flex-col justify-between max-w-6xl mx-auto my-6">
       
@@ -68,8 +74,8 @@ export const DoorOpenedView: React.FC = () => {
         {/* Left Floating Polaroids & Notes */}
         <div className="lg:col-span-3 space-y-4 hidden sm:block">
           <div className="p-3 bg-white text-[#1C110E] rounded-2xl warm-shadow rotate-[-4deg] scale-95 hover:rotate-0 transition-transform">
-            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80" alt="Mem" className="w-full h-28 object-cover rounded-xl mb-1.5" />
-            <p className="font-script text-base text-center leading-tight">"The wait is over. You're home. ♡"</p>
+            <img src={coverMemory?.imageUrl || "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80"} alt="Mem" className="w-full h-28 object-cover rounded-xl mb-1.5" />
+            <p className="font-script text-base text-center leading-tight">"{doorState.finalMessage || "The wait is over. You're home. ♡"}"</p>
           </div>
 
           <div className="p-3 bg-[#FFF5E9] text-[#1C110E] rounded-2xl border border-amber-200 rotate-[3deg]">
@@ -122,12 +128,12 @@ export const DoorOpenedView: React.FC = () => {
               <span>ADMIT ONE</span>
             </div>
             <p className="font-display text-base font-bold text-center my-1.5">{couple.initials}</p>
-            <p className="text-[10px] text-center text-[#6E5B52]">MAY 16, 2024</p>
+            <p className="text-[10px] text-center text-[#6E5B52]">{startDateLabel}</p>
           </div>
 
           <div className="p-3 bg-white text-[#1C110E] rounded-2xl warm-shadow rotate-[-2deg]">
             <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80" alt="Mem" className="w-full h-28 object-cover rounded-xl mb-1.5" />
-            <p className="font-script text-base text-center">"Home is wherever we're together. ♡"</p>
+            <p className="font-script text-base text-center">"{couple.reunionTitle || "Home is wherever we're together"}. ♡"</p>
           </div>
         </div>
 
