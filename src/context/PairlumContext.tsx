@@ -694,7 +694,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const unlockDrawerWithPin = useCallback((enteredPin: string) => {
     if (!couple) return false;
-    if (enteredPin === couple.pin || enteredPin === couple.drawerPin || enteredPin === '140224' || enteredPin === '123456') {
+    const validPin = couple.drawerPin || couple.pin;
+    if (validPin && enteredPin === validPin) {
       updateCouple({ isDrawerUnlocked: true });
       return true;
     }

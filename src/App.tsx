@@ -3,6 +3,7 @@ import { PairlumProvider, usePairlum } from './context/PairlumContext';
 import { TopNav } from './components/navigation/TopNav';
 import { BottomTabs } from './components/navigation/BottomTabs';
 import { HomeView } from './components/views/HomeView';
+import { OurWallView } from './components/views/OurWallView';
 import { OurShelfView } from './components/views/OurShelfView';
 import { OurPlacesView } from './components/views/OurPlacesView';
 import { TheDrawerView } from './components/views/TheDrawerView';
@@ -24,6 +25,8 @@ const AppContent: React.FC = () => {
       case 'home':
         return <HomeView />;
 
+      case 'wall':
+        return <OurWallView />;
       case 'shelf':
         return <OurShelfView />;
       case 'places':

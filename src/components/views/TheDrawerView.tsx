@@ -279,7 +279,7 @@ export const TheDrawerView: React.FC = () => {
 
               {pinError && (
                 <p className="text-xs text-[#8E1B1B] font-medium animate-shake">
-                  Incorrect PIN. Try 140224 or 123456.
+                  Incorrect PIN.
                 </p>
               )}
 
@@ -292,7 +292,7 @@ export const TheDrawerView: React.FC = () => {
             </form>
 
             <p className="text-[11px] text-[#6E5B52]">
-              Demo PIN: <strong>140224</strong> (Anniversary date)
+              Forgot it? Set a new one from Settings → The Drawer Passcode.
             </p>
           </div>
         ) : (
