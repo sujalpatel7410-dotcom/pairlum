@@ -61,9 +61,9 @@ export const SettingsView: React.FC = () => {
   const [reunionDate, setReunionDate] = useState(couple.reunionDate || '2026-12-25T20:00:00');
   const [drawerPin, setDrawerPin] = useState(couple.drawerPin || '');
 
-  const { upload: uploadAvatarA, isUploading: isUploadingAvatarA, progress: progressAvatarA } = useCloudinaryUpload();
-  const { upload: uploadAvatarB, isUploading: isUploadingAvatarB, progress: progressAvatarB } = useCloudinaryUpload();
-  const { upload: uploadCover, isUploading: isUploadingCover, progress: progressCover } = useCloudinaryUpload();
+  const { upload: uploadAvatarA, isUploading: isUploadingAvatarA, progress: progressAvatarA, error: avatarAError } = useCloudinaryUpload();
+  const { upload: uploadAvatarB, isUploading: isUploadingAvatarB, progress: progressAvatarB, error: avatarBError } = useCloudinaryUpload();
+  const { upload: uploadCover, isUploading: isUploadingCover, progress: progressCover, error: coverError } = useCloudinaryUpload();
 
   const handleAvatarSelected = async (file: File | undefined, role: 'A' | 'B') => {
     if (!file) return;
@@ -285,6 +285,7 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleAvatarSelected(e.target.files?.[0], 'A')}
                   />
                 </label>
+                {avatarAError && <p className="text-[11px] text-[#8E1B1B] mt-1">{avatarAError}</p>}
               </div>
 
               <div className="text-center">
@@ -300,6 +301,7 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleAvatarSelected(e.target.files?.[0], 'B')}
                   />
                 </label>
+                {avatarBError && <p className="text-[11px] text-[#8E1B1B] mt-1">{avatarBError}</p>}
               </div>
 
               <div className="text-center">
@@ -315,6 +317,7 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleCoverSelected(e.target.files?.[0])}
                   />
                 </label>
+                {coverError && <p className="text-[11px] text-[#8E1B1B] mt-1">{coverError}</p>}
               </div>
             </div>
           </div>
