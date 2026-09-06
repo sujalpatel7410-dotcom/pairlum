@@ -593,6 +593,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if ('isFavorite' in updates) row.is_favorite = updates.isFavorite;
     if ('isPrivate' in updates) row.is_private = updates.isPrivate;
     if ('chapterId' in updates) row.chapter_id = updates.chapterId;
+    if ('imageUrl' in updates) row.image_url = updates.imageUrl;
 
     supabase.from('memories').update(row).eq('id', id).then(({ error }) => {
       if (error) console.error('Failed to update memory', error);

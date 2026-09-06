@@ -17,6 +17,7 @@ import {
   AlertTriangle,
   Image as ImageIcon
 } from 'lucide-react';
+import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
 
 export const MemoryLightboxModal: React.FC = () => {
   const { 
@@ -42,6 +43,7 @@ export const MemoryLightboxModal: React.FC = () => {
   const [editDate, setEditDate] = useState('');
   const [editLocation, setEditLocation] = useState('');
   const [editChapterId, setEditChapterId] = useState('');
+  const { upload: uploadPhoto, isUploading: isUploadingPhoto, progress: photoProgress, error: photoError } = useCloudinaryUpload();
 
   // Reset transient view/edit state whenever a different memory is opened (or
   // the lightbox is closed) so a stale edit/delete/audio state from the
@@ -76,6 +78,12 @@ export const MemoryLightboxModal: React.FC = () => {
       chapterId: editChapterId
     });
     setIsEditing(false);
+  };
+
+  const handlePhotoChange = async (file: File | undefined) => {
+    if (!file) return;
+    const result = await uploadPhoto(file);
+    if (result) updateMemory(mem.id, { imageUrl: result.secureUrl });
   };
 
   const handleSendReply = (e: React.FormEvent) => {
@@ -150,10 +158,22 @@ export const MemoryLightboxModal: React.FC = () => {
                 {mem.imageUrl && (
                   <div className="relative rounded-2xl overflow-hidden border border-[#E7D9C9] aspect-16/10 bg-[#F7EFE4]">
                     <img src={mem.imageUrl} alt={mem.title} className="w-full h-full object-cover" />
-                    <button className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-xs text-xs font-medium text-[#1C110E] shadow-sm hover:bg-white flex items-center gap-1.5">
+                    <label className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-xs text-xs font-medium text-[#1C110E] shadow-sm hover:bg-white flex items-center gap-1.5 cursor-pointer">
                       <ImageIcon className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                      <span>Change Photo</span>
-                    </button>
+                      <span>{isUploadingPhoto ? `Uploading... ${photoProgress}%` : 'Change Photo'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={isUploadingPhoto}
+                        onChange={(e) => handlePhotoChange(e.target.files?.[0])}
+                      />
+                    </label>
+                    {photoError && (
+                      <p className="absolute bottom-3 left-3 right-32 px-2 py-1 rounded-lg bg-white/90 text-[10px] text-[#8E1B1B]">
+                        {photoError}
+                      </p>
+                    )}
                   </div>
                 )}
 
