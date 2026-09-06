@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { PageRail } from '../common/PageRail';
 import { PaperCard, HandNote } from '../common/PaperCard';
-import { 
-  Sparkles, 
-  Heart, 
-  Smile, 
-  Coffee, 
-  Music, 
-  Play, 
-  Pause, 
-  MessageCircle, 
-  CheckCircle2, 
-  Flame, 
-  Moon, 
-  Sun, 
+import {
+  Sparkles,
+  Heart,
+  Smile,
+  Coffee,
+  Music,
+  Play,
+  Pause,
+  MessageCircle,
+  CheckCircle2,
+  Flame,
+  Moon,
+  Sun,
   Send,
   Headphones
 } from 'lucide-react';
@@ -30,11 +30,24 @@ export const TogetherView: React.FC = () => {
   } = usePairlum();
 
   const [partnerStatus, setPartnerStatus] = useState('Listening to our playlist & thinking of you');
-  const [myMood, setMyMood] = useState<'Warm' | 'Cozy' | 'Missing you' | 'In love' | 'Tired'>('Missing you');
+  const moodKey = `pairlum_mood_${couple?.id ?? 'default'}_${currentUser}`;
+  const [myMood, setMyMood] = useState<'Warm' | 'Cozy' | 'Missing you' | 'In love' | 'Tired'>(() => {
+    const saved = localStorage.getItem(`pairlum_mood_default_${currentUser}`);
+    const validMoods = ['Warm', 'Cozy', 'Missing you', 'In love', 'Tired'];
+    return (validMoods.includes(saved ?? '') ? saved : 'Cozy') as 'Warm' | 'Cozy' | 'Missing you' | 'In love' | 'Tired';
+  });
   const [isPlayingSyncAudio, setIsPlayingSyncAudio] = useState(false);
   const [dailyAnswerInput, setDailyAnswerInput] = useState('');
 
   const moods: Array<'Warm' | 'Cozy' | 'Missing you' | 'In love' | 'Tired'> = ['Warm', 'Cozy', 'Missing you', 'In love', 'Tired'];
+
+  // Re-read from storage once the real couple id is available (replaces the 'default' key used before couple loaded)
+  useEffect(() => {
+    const saved = localStorage.getItem(moodKey);
+    if (saved && moods.includes(saved as any)) {
+      setMyMood(saved as typeof myMood);
+    }
+  }, [moodKey]);
 
   const handleSaveAnswer = () => {
     if (!dailyAnswerInput.trim() || !todayPrompt) return;
@@ -56,7 +69,7 @@ export const TogetherView: React.FC = () => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto pb-20">
-      
+
       {/* Left PageRail */}
       <PageRail
         step="06 / 06"
@@ -112,7 +125,7 @@ export const TogetherView: React.FC = () => {
 
       {/* Main Area */}
       <main className="flex-1 space-y-8">
-        
+
         {/* Header */}
         <div>
           <span className="text-xs font-bold text-[#8E1B1B] uppercase tracking-wider">DAILY RITUALS</span>
@@ -139,13 +152,13 @@ export const TogetherView: React.FC = () => {
                 key={m}
                 onClick={() => {
                   setMyMood(m);
+                  localStorage.setItem(moodKey, m);
                   showToast(`Mood updated to "${m}"`);
                 }}
-                className={`py-3 px-4 rounded-2xl text-xs font-medium transition-all text-center cursor-pointer ${
-                  myMood === m
+                className={`py-3 px-4 rounded-2xl text-xs font-medium transition-all text-center cursor-pointer ${myMood === m
                     ? 'bg-[#8E1B1B] text-white shadow-sm ring-2 ring-[#8E1B1B]/30'
                     : 'bg-white border border-[#E7D9C9] text-[#1C110E] hover:border-[#8E1B1B]'
-                }`}
+                  }`}
               >
                 <span className="block text-base mb-1">
                   {m === 'Warm' ? '☀️' : m === 'Cozy' ? '☕' : m === 'Missing you' ? '🕊️' : m === 'In love' ? '❤️' : '🌙'}
@@ -161,76 +174,76 @@ export const TogetherView: React.FC = () => {
           {!todayPrompt ? (
             <p className="text-xs text-[#6E5B52]">Preparing today's question…</p>
           ) : (
-          <>
-          <div className="flex items-center justify-between border-b border-[#E7D9C9] pb-4">
-            <div>
-              <span className="text-[10px] uppercase font-mono tracking-widest text-[#8E1B1B] font-bold">
-                DAILY QUESTION • {todayPrompt.date}
-              </span>
-              <h3 className="font-display text-2xl sm:text-3xl text-[#1C110E] font-medium mt-1">
-                "{todayPrompt.question}"
-              </h3>
-            </div>
-            <Sparkles className="w-5 h-5 text-[#8E1B1B]" />
-          </div>
-
-          {/* Answers Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            {/* Emma's Answer */}
-            <div className="p-5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-2 relative">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-[#8E1B1B] font-sans">{couple.nameA}'s answer</span>
-                <span className="text-[10px] text-[#6E5B52]">Today</span>
+            <>
+              <div className="flex items-center justify-between border-b border-[#E7D9C9] pb-4">
+                <div>
+                  <span className="text-[10px] uppercase font-mono tracking-widest text-[#8E1B1B] font-bold">
+                    DAILY QUESTION • {todayPrompt.date}
+                  </span>
+                  <h3 className="font-display text-2xl sm:text-3xl text-[#1C110E] font-medium mt-1">
+                    "{todayPrompt.question}"
+                  </h3>
+                </div>
+                <Sparkles className="w-5 h-5 text-[#8E1B1B]" />
               </div>
-              <p className="font-script text-xl text-[#1C110E] leading-snug">
-                {todayPrompt.answerA ? `"${todayPrompt.answerA}"` : 'Not answered yet.'}
-              </p>
-              <div className="w-5 h-5 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center text-[10px] absolute bottom-3 right-3 font-serif">
-                ♡
-              </div>
-            </div>
 
-            {/* Liam's Answer */}
-            <div className="p-5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-2 relative">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-[#8E1B1B] font-sans">{couple.nameB}'s answer</span>
-                <span className="text-[10px] text-[#6E5B52]">Today</span>
-              </div>
-              <p className="font-script text-xl text-[#1C110E] leading-snug">
-                {todayPrompt.answerB ? `"${todayPrompt.answerB}"` : 'Not answered yet.'}
-              </p>
-              <div className="w-5 h-5 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center text-[10px] absolute bottom-3 right-3 font-serif">
-                ♡
-              </div>
-            </div>
+              {/* Answers Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          </div>
+                {/* Emma's Answer */}
+                <div className="p-5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-2 relative">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-[#8E1B1B] font-sans">{couple.nameA}'s answer</span>
+                    <span className="text-[10px] text-[#6E5B52]">Today</span>
+                  </div>
+                  <p className="font-script text-xl text-[#1C110E] leading-snug">
+                    {todayPrompt.answerA ? `"${todayPrompt.answerA}"` : 'Not answered yet.'}
+                  </p>
+                  <div className="w-5 h-5 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center text-[10px] absolute bottom-3 right-3 font-serif">
+                    ♡
+                  </div>
+                </div>
 
-          {/* Answer input for current user */}
-          <div className="pt-2 flex gap-3">
-            <input
-              type="text"
-              value={dailyAnswerInput}
-              onChange={(e) => setDailyAnswerInput(e.target.value)}
-              placeholder={`Add or update your thoughts, ${currentUser === 'A' ? couple.nameA : couple.nameB}...`}
-              className="flex-1 px-4 py-3 rounded-2xl bg-white border border-[#E7D9C9] text-xs"
-            />
-            <button
-              onClick={handleSaveAnswer}
-              className="px-6 py-3 rounded-2xl bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold flex items-center gap-2 cursor-pointer shadow-sm"
-            >
-              <span>Add</span>
-              <Send className="w-3.5 h-3.5" />
-            </button>
-          </div>
-          </>
+                {/* Liam's Answer */}
+                <div className="p-5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-2 relative">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-[#8E1B1B] font-sans">{couple.nameB}'s answer</span>
+                    <span className="text-[10px] text-[#6E5B52]">Today</span>
+                  </div>
+                  <p className="font-script text-xl text-[#1C110E] leading-snug">
+                    {todayPrompt.answerB ? `"${todayPrompt.answerB}"` : 'Not answered yet.'}
+                  </p>
+                  <div className="w-5 h-5 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center text-[10px] absolute bottom-3 right-3 font-serif">
+                    ♡
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Answer input for current user */}
+              <div className="pt-2 flex gap-3">
+                <input
+                  type="text"
+                  value={dailyAnswerInput}
+                  onChange={(e) => setDailyAnswerInput(e.target.value)}
+                  placeholder={`Add or update your thoughts, ${currentUser === 'A' ? couple.nameA : couple.nameB}...`}
+                  className="flex-1 px-4 py-3 rounded-2xl bg-white border border-[#E7D9C9] text-xs"
+                />
+                <button
+                  onClick={handleSaveAnswer}
+                  className="px-6 py-3 rounded-2xl bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold flex items-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <span>Add</span>
+                  <Send className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </>
           )}
         </div>
 
         {/* Micro-Rituals & Nightly Check-in */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+
           <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-3">
             <h4 className="font-display text-lg font-semibold text-[#1C110E] flex items-center gap-2">
               <Flame className="w-4 h-4 text-[#8E1B1B]" />
