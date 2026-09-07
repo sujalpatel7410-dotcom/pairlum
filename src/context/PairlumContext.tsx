@@ -298,6 +298,7 @@ interface PairlumContextType {
   goals: SharedGoal[];
   promises: PromiseItem[];
   addGoal: (goal: Omit<SharedGoal, 'id'>) => void;
+  updateGoal: (id: string, updates: Partial<SharedGoal>) => void;
   addPromise: (text: string) => void;
 
   activityFeed: ActivityEvent[];
@@ -847,6 +848,22 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     showToast('Shared goal added');
   }, [coupleId, showToast]);
 
+  const updateGoal = useCallback((id: string, updates: Partial<SharedGoal>) => {
+    setGoals((prev) => prev.map((g) => (g.id === id ? { ...g, ...updates } : g)));
+
+    const row: Record<string, any> = {};
+    if ('title' in updates) row.title = updates.title;
+    if ('description' in updates) row.description = updates.description;
+    if ('current' in updates) row.current = updates.current;
+    if ('target' in updates) row.target = updates.target;
+    if ('unit' in updates) row.unit = updates.unit;
+    if ('cover' in updates) row.cover = updates.cover;
+
+    supabase.from('shared_goals').update(row).eq('id', id).then(({ error }) => {
+      if (error) console.error('Failed to update goal', error);
+    });
+  }, []);
+
   const addPromise = useCallback(async (text: string) => {
     if (!coupleId) return;
     const madeOn = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -892,7 +909,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
         doorState, updateDoorState, openTheDoor, sendHeartbeat,
         parallelMoments, addParallelMoment,
         dailyPrompts, todayPrompt, answerDailyPrompt,
-        goals, promises, addGoal, addPromise,
+        goals, promises, addGoal, updateGoal, addPromise,
         activityFeed,
         isAddMemoryModalOpen, openAddMemoryModal, closeAddMemoryModal, addMemoryModalInitialKind,
         activeLightboxMemory, setActiveLightboxMemory,
