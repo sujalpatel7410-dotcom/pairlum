@@ -42,6 +42,7 @@ interface DoorState {
   isPrepared: boolean;
   isOpened: boolean;
   musicTrack: string;
+  musicUrl?: string;
   finalMessage: string;
   coverMemoryId: string;
   selectedMemoryIds: string[];
@@ -49,6 +50,7 @@ interface DoorState {
     feeling: string;
     message: string;
     voiceDuration?: string;
+    voiceUrl?: string;
     privateNote?: string;
   };
 }
@@ -96,7 +98,10 @@ const mapCouple = (row: any): { couple: CoupleProfile; doorState: DoorState } =>
     isDrawerUnlocked: row.is_drawer_unlocked,
     plan: row.plan,
     wallpaper: row.wallpaper ?? undefined,
-    coverPhoto: row.cover_photo ?? ''
+    coverPhoto: row.cover_photo ?? '',
+    moodA: row.mood_a ?? undefined,
+    moodB: row.mood_b ?? undefined,
+    ritualsToday: row.rituals_today ?? undefined
   },
   doorState: { ...DEFAULT_DOOR_STATE, ...(row.door_state ?? {}) }
 });
@@ -110,7 +115,8 @@ const COUPLE_FIELD_MAP: Record<string, string> = {
   fontStyle: 'font_style', streakCount: 'streak_count', streakDays: 'streak_days',
   lastActiveNote: 'last_active_note', lastActiveTime: 'last_active_time', pin: 'pin',
   drawerPin: 'drawer_pin', isDrawerUnlocked: 'is_drawer_unlocked', plan: 'plan',
-  wallpaper: 'wallpaper', coverPhoto: 'cover_photo'
+  wallpaper: 'wallpaper', coverPhoto: 'cover_photo',
+  moodA: 'mood_a', moodB: 'mood_b', ritualsToday: 'rituals_today'
 };
 
 const coupleUpdatesToRow = (updates: Partial<CoupleProfile>) => {
@@ -131,6 +137,7 @@ const mapMemory = (row: any): Memory => ({
   kind: row.kind,
   imageUrl: row.image_url ?? undefined,
   videoUrl: row.video_url ?? undefined,
+  audioUrl: row.audio_url ?? undefined,
   audioDuration: row.audio_duration ?? undefined,
   videoDuration: row.video_duration ?? undefined,
   date: row.date ?? '',
@@ -266,6 +273,7 @@ interface PairlumContextType {
 
   chapters: Chapter[];
   addChapter: (chapter: Omit<Chapter, 'id'>) => void;
+  updateChapter: (id: string, updates: Partial<Chapter>) => void;
 
   drawerItems: DrawerItem[];
   addDrawerItem: (item: Omit<DrawerItem, 'id' | 'createdAt'>) => void;
@@ -278,6 +286,7 @@ interface PairlumContextType {
   doorState: DoorState;
   updateDoorState: (updates: Partial<DoorState>) => void;
   openTheDoor: () => void;
+  sendHeartbeat: () => void;
 
   parallelMoments: ParallelMoment[];
   addParallelMoment: (momentA: any, momentB: any) => void;
@@ -289,6 +298,7 @@ interface PairlumContextType {
   goals: SharedGoal[];
   promises: PromiseItem[];
   addGoal: (goal: Omit<SharedGoal, 'id'>) => void;
+  updateGoal: (id: string, updates: Partial<SharedGoal>) => void;
   addPromise: (text: string) => void;
 
   activityFeed: ActivityEvent[];
@@ -532,6 +542,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       kind: newMemData.kind,
       image_url: newMemData.imageUrl,
       video_url: newMemData.videoUrl,
+      audio_url: newMemData.audioUrl,
       audio_duration: newMemData.audioDuration,
       video_duration: newMemData.videoDuration,
       date: newMemData.date,
@@ -592,6 +603,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if ('isFavorite' in updates) row.is_favorite = updates.isFavorite;
     if ('isPrivate' in updates) row.is_private = updates.isPrivate;
     if ('chapterId' in updates) row.chapter_id = updates.chapterId;
+    if ('imageUrl' in updates) row.image_url = updates.imageUrl;
+    if ('audioUrl' in updates) row.audio_url = updates.audioUrl;
 
     supabase.from('memories').update(row).eq('id', id).then(({ error }) => {
       if (error) console.error('Failed to update memory', error);
@@ -660,6 +673,25 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     showToast('Chapter created on Our Shelf');
   }, [coupleId, showToast]);
 
+  const updateChapter = useCallback((id: string, updates: Partial<Chapter>) => {
+    setChapters((prev) => prev.map((c) => (c.id === id ? { ...c, ...updates } : c)));
+
+    const row: Record<string, any> = {};
+    if ('title' in updates) row.title = updates.title;
+    if ('subtitle' in updates) row.subtitle = updates.subtitle;
+    if ('coverImage' in updates) row.cover_image = updates.coverImage;
+    if ('startDate' in updates) row.start_date = updates.startDate;
+    if ('endDate' in updates) row.end_date = updates.endDate;
+    if ('theme' in updates) row.theme = updates.theme;
+    if ('spineColor' in updates) row.spine_color = updates.spineColor;
+    if ('memoryIds' in updates) row.memory_ids = updates.memoryIds;
+
+    supabase.from('chapters').update(row).eq('id', id).then(({ error }) => {
+      if (error) console.error('Failed to update chapter', error);
+    });
+    showToast('Chapter updated');
+  }, [showToast]);
+
   const addDrawerItem = useCallback(async (itemData: Omit<DrawerItem, 'id' | 'createdAt'>) => {
     if (!coupleId || !couple) return;
     const { data, error } = await supabase.from('drawer_items').insert({
@@ -694,7 +726,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const unlockDrawerWithPin = useCallback((enteredPin: string) => {
     if (!couple) return false;
-    if (enteredPin === couple.pin || enteredPin === couple.drawerPin || enteredPin === '140224' || enteredPin === '123456') {
+    const validPin = couple.drawerPin || couple.pin;
+    if (validPin && enteredPin === validPin) {
       updateCouple({ isDrawerUnlocked: true });
       return true;
     }
@@ -755,15 +788,31 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const openTheDoor = useCallback(() => {
     if (!couple) return;
+    const alreadyOpened = doorState.isOpened;
     updateDoorState({ isOpened: true });
     setCurrentView('door_opened');
     confetti({ particleCount: 100, spread: 120, origin: { y: 0.6 }, colors: ['#E8A33D', '#8E1B1B', '#C63A2E', '#FFFBF5'] });
 
-    sendN8nEvent({
-      eventType: 'door_opened', coupleId: couple.id, actorName, partnerEmail,
-      title: couple.reunionTitle, subtitle: doorState.finalMessage,
+    // Only notify the partner the first time the door is truly opened —
+    // this button doubles as a "relive it" replay, and re-notifying "the
+    // door was opened!" on every replay would spam the partner's inbox and
+    // spoil a reveal that hasn't really happened yet.
+    if (!alreadyOpened) {
+      sendN8nEvent({
+        eventType: 'door_opened', coupleId: couple.id, actorName, partnerEmail,
+        title: couple.reunionTitle, subtitle: doorState.finalMessage,
+      });
+    }
+  }, [couple, doorState.isOpened, doorState.finalMessage, updateDoorState, actorName, partnerEmail]);
+
+  const sendHeartbeat = useCallback(() => {
+    if (!coupleId) return;
+    logActivity({
+      dateGroup: 'Today', actor: currentUser, actorName,
+      type: 'presence', title: `${actorName} sent a heartbeat pulse`,
+      subtitle: 'Thinking of you right now ♡'
     });
-  }, [couple, updateDoorState, actorName, partnerEmail, doorState.finalMessage]);
+  }, [coupleId, currentUser, actorName, logActivity]);
 
   const addParallelMoment = useCallback(async (momentA: any, momentB: any) => {
     if (!coupleId) return;
@@ -798,6 +847,22 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setGoals((prev) => upsertById(prev, mapGoal(data)));
     showToast('Shared goal added');
   }, [coupleId, showToast]);
+
+  const updateGoal = useCallback((id: string, updates: Partial<SharedGoal>) => {
+    setGoals((prev) => prev.map((g) => (g.id === id ? { ...g, ...updates } : g)));
+
+    const row: Record<string, any> = {};
+    if ('title' in updates) row.title = updates.title;
+    if ('description' in updates) row.description = updates.description;
+    if ('current' in updates) row.current = updates.current;
+    if ('target' in updates) row.target = updates.target;
+    if ('unit' in updates) row.unit = updates.unit;
+    if ('cover' in updates) row.cover = updates.cover;
+
+    supabase.from('shared_goals').update(row).eq('id', id).then(({ error }) => {
+      if (error) console.error('Failed to update goal', error);
+    });
+  }, []);
 
   const addPromise = useCallback(async (text: string) => {
     if (!coupleId) return;
@@ -838,13 +903,13 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
         couple, updateCouple, updateCoupleProfile,
         isCandlelit, toggleCandlelight, isDarkMode, toggleDarkMode, themeMode, setThemeMode,
         memories, addMemory, deleteMemory, updateMemory, toggleReaction, addReply,
-        chapters, addChapter,
+        chapters, addChapter, updateChapter,
         drawerItems, addDrawerItem, unlockDrawerWithPin, lockDrawer,
         reunionPlan, toggleReunionStop, addReunionStop,
-        doorState, updateDoorState, openTheDoor,
+        doorState, updateDoorState, openTheDoor, sendHeartbeat,
         parallelMoments, addParallelMoment,
         dailyPrompts, todayPrompt, answerDailyPrompt,
-        goals, promises, addGoal, addPromise,
+        goals, promises, addGoal, updateGoal, addPromise,
         activityFeed,
         isAddMemoryModalOpen, openAddMemoryModal, closeAddMemoryModal, addMemoryModalInitialKind,
         activeLightboxMemory, setActiveLightboxMemory,

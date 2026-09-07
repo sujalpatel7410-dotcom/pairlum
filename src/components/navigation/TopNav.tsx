@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { useAuth } from '../../context/AuthContext';
 import { AppView } from '../../types';
+import { formatMonthYear } from '../../lib/format';
 import {
   Heart,
-  Sparkles,
   Settings as SettingsIcon,
   Lock,
   CreditCard,
@@ -22,6 +22,7 @@ import {
 
 const NAV_ITEMS: { id: AppView; label: string }[] = [
   { id: 'home', label: 'Home' },
+  { id: 'wall', label: 'Our Wall' },
   { id: 'shelf', label: 'Our Shelf' },
   { id: 'places', label: 'Our Places' },
   { id: 'drawer', label: 'The Drawer' },
@@ -43,14 +44,17 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
     isDarkMode,
     toggleDarkMode,
     themeMode,
-    setThemeMode
+    setThemeMode,
+    activityFeed
   } = usePairlum();
   const { signOut } = useAuth();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isActivityMenuOpen, setIsActivityMenuOpen] = useState(false);
 
   const currentPartnerName = currentUser === 'A' ? couple.nameA : couple.nameB;
   const otherPartnerName = currentUser === 'A' ? couple.nameB : couple.nameA;
   const currentAvatar = currentUser === 'A' ? couple.avatarA : couple.avatarB;
+  const togetherSinceLabel = formatMonthYear(couple.startDate) || couple.togetherSince || null;
 
   return (
     <header className="sticky top-0 z-40 bg-[#FFFBF5]/90 backdrop-blur-md border-b border-[#E7D9C9] transition-all">
@@ -133,15 +137,54 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
           </button>
 
           {/* Activity / Notification button */}
-          <button
-            id="nav-activity-btn"
-            onClick={() => setCurrentView('activity')}
-            className="w-9 h-9 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] flex items-center justify-center text-[#6E5B52] hover:text-[#8E1B1B] transition-colors relative cursor-pointer"
-            title="Activity Feed"
-          >
-            <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C63A2E]" />
-          </button>
+          <div className="relative">
+            <button
+              id="nav-activity-btn"
+              onClick={() => setIsActivityMenuOpen(!isActivityMenuOpen)}
+              className="w-9 h-9 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] flex items-center justify-center text-[#6E5B52] hover:text-[#8E1B1B] transition-colors relative cursor-pointer"
+              title="Activity Feed"
+            >
+              <Bell className="w-4 h-4" />
+              {activityFeed.length > 0 && (
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C63A2E]" />
+              )}
+            </button>
+
+            {isActivityMenuOpen && (
+              <div
+                className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-2xl bg-[#FFFBF5] border border-[#E7D9C9] warm-shadow-lg py-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+              >
+                <div className="px-4 py-2 border-b border-[#E7D9C9]/60">
+                  <p className="text-xs font-semibold text-[#1C110E]">Activity</p>
+                </div>
+                {activityFeed.length === 0 ? (
+                  <p className="px-4 py-6 text-xs text-[#6E5B52] text-center">Nothing yet — activity from you two will show up here.</p>
+                ) : (
+                  <div className="py-1">
+                    {activityFeed.slice(0, 12).map((event) => (
+                      <button
+                        key={event.id}
+                        onClick={() => {
+                          if (event.actionTarget) setCurrentView(event.actionTarget);
+                          setIsActivityMenuOpen(false);
+                        }}
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#F7EFE4] flex items-start gap-2.5 cursor-pointer"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#8E1B1B] mt-1.5 flex-shrink-0" />
+                        <span className="min-w-0 flex-1">
+                          <span className="block text-xs font-medium text-[#1C110E] truncate">{event.title}</span>
+                          {event.subtitle && (
+                            <span className="block text-[11px] text-[#6E5B52] truncate">{event.subtitle}</span>
+                          )}
+                          <span className="block text-[10px] text-[#6E5B52]/70 mt-0.5">{event.timeAgo}</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Simulator toggle button */}
           {onToggleMobileSim && (
@@ -186,7 +229,9 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
                 <div className="px-4 py-3 border-b border-[#E7D9C9]/60">
                   <p className="text-xs text-[#6E5B52]">Signed in as</p>
                   <p className="text-sm font-semibold text-[#1C110E]">{currentPartnerName} ({currentUser})</p>
-                  <p className="text-[11px] text-[#8E1B1B] font-script text-base mt-0.5">Together with {otherPartnerName} since May 2024</p>
+                  <p className="text-[11px] text-[#8E1B1B] font-script text-base mt-0.5">
+                    Together with {otherPartnerName}{togetherSinceLabel ? ` since ${togetherSinceLabel}` : ''}
+                  </p>
                 </div>
 
                 <div className="py-1">
@@ -235,14 +280,6 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
                   >
                     <Heart className="w-3.5 h-3.5 text-[#C63A2E]" />
                     <span>Partner Invite Link</span>
-                  </button>
-
-                  <button
-                    onClick={() => setCurrentView('onboarding')}
-                    className="w-full px-4 py-2 text-left text-xs text-[#1C110E] hover:bg-[#F7EFE4] flex items-center gap-2 cursor-pointer"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                    <span>Experience Onboarding Flow</span>
                   </button>
 
                   <button

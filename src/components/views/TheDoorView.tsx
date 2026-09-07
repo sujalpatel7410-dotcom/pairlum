@@ -29,17 +29,23 @@ import {
   CheckSquare,
   Globe2,
   Navigation,
-  Sparkle
+  Sparkle,
+  X,
+  UploadCloud
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { ReunionStop } from '../../types';
+import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
+import { useAudioPlayback } from '../../lib/useAudioPlayback';
+import { formatDuration } from '../../lib/format';
 
 export const TheDoorView: React.FC = () => {
-  const { 
-    couple, 
-    doorState, 
-    updateDoorState, 
-    openTheDoor, 
+  const {
+    couple,
+    updateCouple,
+    doorState,
+    updateDoorState,
+    openTheDoor,
     reunionPlan, 
     toggleReunionStop, 
     addReunionStop,
@@ -52,8 +58,15 @@ export const TheDoorView: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'door' | 'reunion_plan' | 'prepare'>('door');
   const [filterCategory, setFilterCategory] = useState<'all' | 'prep' | 'reunion_day' | 'completed'>('all');
-  const [isPlayingMusic, setIsPlayingMusic] = useState(false);
-  const [distanceUnit, setDistanceUnit] = useState<'km' | 'mi'>('km');
+  const musicPlayer = useAudioPlayback(doorState.musicUrl);
+  const { upload: uploadTrack, isUploading: isUploadingTrack, progress: trackProgress, error: trackError } = useCloudinaryUpload();
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const handleTrackSelected = async (file: File | undefined) => {
+    if (!file) return;
+    const result = await uploadTrack(file);
+    if (result) updateDoorState({ musicUrl: result.secureUrl });
+  };
 
   // Form states for new milestone / to-do
   const [newStopTitle, setNewStopTitle] = useState('');
@@ -64,18 +77,19 @@ export const TheDoorView: React.FC = () => {
   const [newStopAssignee, setNewStopAssignee] = useState<'A' | 'B' | 'both'>('both');
   const [newStopDueDate, setNewStopDueDate] = useState('18 Dec 2026');
 
-  // Live countdown calculation based on couple.reunionDate
+  // Live countdown calculation based on couple.reunionDate, falling back to
+  // the same default reunion date/time used elsewhere in this view until the
+  // couple sets their own in Settings.
   const [timeLeft, setTimeLeft] = useState({
-    days: 18,
-    hours: 6,
-    minutes: 42,
-    seconds: 15
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
   });
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      if (!couple.reunionDate) return;
-      const target = new Date(couple.reunionDate).getTime();
+      const target = new Date(couple.reunionDate || '2026-12-25T20:00:00').getTime();
       const now = new Date().getTime();
       const diff = target - now;
 
@@ -86,14 +100,7 @@ export const TheDoorView: React.FC = () => {
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
         setTimeLeft({ days, hours, minutes, seconds });
       } else {
-        // Fallback default for romantic preview if date is in past or arbitrary
-        setTimeLeft(prev => {
-          if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-          if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-          if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-          if (prev.days > 0) return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
-          return prev;
-        });
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
 
@@ -183,6 +190,14 @@ export const TheDoorView: React.FC = () => {
   const flightDuration = couple.flightDuration || '9h 15m flight';
   const timezoneDiff = couple.timezoneDiff || '4.5 hrs time difference';
 
+  const reunionDateObj = couple.reunionDate ? new Date(couple.reunionDate) : null;
+  const reunionDateTimeLabel = reunionDateObj && !isNaN(reunionDateObj.getTime())
+    ? `${reunionDateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} • ${reunionDateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`
+    : '25 Dec 2026 • 08:00 PM';
+  // The curation grid below only ever previews the first 4 memories, so cap
+  // the headline count to match what's actually shown.
+  const doorMemoryCount = Math.min(memories.length, 4);
+
   return (
     <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto pb-20">
       
@@ -193,7 +208,7 @@ export const TheDoorView: React.FC = () => {
         title="The Door"
         subtitle="The magical doorway that bridges every single mile between us. Every plan brings us closer."
         quote="Distance is just a test to see how far love can travel."
-        quoteAuthor="Emma & Liam"
+        quoteAuthor={`${couple.nameA} & ${couple.nameB}`}
         illustrationSrc="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80"
         illustrationCaption="Waiting by The Door ♡"
       >
@@ -252,11 +267,11 @@ export const TheDoorView: React.FC = () => {
               <Globe2 className="w-3.5 h-3.5" />
               <span>Distance Apart</span>
             </span>
-            <span className="font-mono text-[11px] text-[#8E1B1B] font-bold">7,192 km</span>
+            <span className="font-mono text-[11px] text-[#8E1B1B] font-bold">{distanceKmText}</span>
           </div>
           <div className="flex items-center justify-between text-[11px] text-[#6E5B52]">
             <span>{cityA.split(',')[0]} ✈ {cityB.split(',')[0]}</span>
-            <span>{flightDuration.split(' ')[0]} flight</span>
+            <span>{flightDuration}</span>
           </div>
           <div className="w-full bg-[#E7D9C9] h-1.5 rounded-full overflow-hidden">
             <div className="bg-[#8E1B1B] h-full rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }} />
@@ -338,7 +353,7 @@ export const TheDoorView: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-semibold">
                       <Clock className="w-3.5 h-3.5" />
-                      <span>Next Reunion: 25 Dec 2026 • 08:00 PM</span>
+                      <span>Next Reunion: {reunionDateTimeLabel}</span>
                     </div>
 
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white/90 text-xs">
@@ -470,10 +485,10 @@ export const TheDoorView: React.FC = () => {
                       </div>
                       <h4 className="font-display text-2xl font-bold text-[#1C110E]">The Door is Ready</h4>
                       <p className="text-xs text-[#1C110E]/80 font-script text-base">
-                        Bridging {distanceKmText} with 4 memories, soundtrack & final letter.
+                        Bridging {distanceKmText} with {doorMemoryCount} memor{doorMemoryCount === 1 ? 'y' : 'ies'}, soundtrack & final letter.
                       </p>
                       <span className="text-[11px] font-mono font-bold text-[#8E1B1B] bg-white/80 px-3 py-1 rounded-full inline-block">
-                        Yellow — Coldplay
+                        {doorState.musicTrack || 'Yellow — Coldplay'}
                       </span>
                     </div>
 
@@ -550,15 +565,20 @@ export const TheDoorView: React.FC = () => {
                 </div>
                 
                 <div className="p-4 rounded-2xl bg-white border border-[#E7D9C9] flex items-center gap-3">
+                  <audio {...musicPlayer.bind} className="hidden" />
                   <button
-                    onClick={() => setIsPlayingMusic(!isPlayingMusic)}
-                    className="w-11 h-11 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center flex-shrink-0 cursor-pointer shadow-md hover:scale-105 transition-transform"
+                    onClick={musicPlayer.toggle}
+                    disabled={!doorState.musicUrl}
+                    title={doorState.musicUrl ? undefined : 'Upload a track in the Prepare tab first'}
+                    className="w-11 h-11 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center flex-shrink-0 cursor-pointer shadow-md hover:scale-105 transition-transform disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
-                    {isPlayingMusic ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-white ml-0.5" />}
+                    {musicPlayer.isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-white ml-0.5" />}
                   </button>
                   <div className="flex-1">
-                    <h4 className="font-display text-base font-semibold text-[#1C110E]">{doorState.musicTrack}</h4>
-                    <p className="text-xs text-[#6E5B52]">Will autoplay during the door reveal at the airport</p>
+                    <h4 className="font-display text-base font-semibold text-[#1C110E]">{doorState.musicTrack || 'No track chosen yet'}</h4>
+                    <p className="text-xs text-[#6E5B52]">
+                      {doorState.musicUrl ? 'Will autoplay during the door reveal' : 'Add an audio file in the Prepare tab to make this playable'}
+                    </p>
                   </div>
                 </div>
 
@@ -818,7 +838,7 @@ export const TheDoorView: React.FC = () => {
                   <input
                     type="text"
                     value={couple.reunionTitle}
-                    onChange={(e) => couple.reunionTitle = e.target.value}
+                    onChange={(e) => updateCouple({ reunionTitle: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-sm"
                   />
                 </div>
@@ -839,32 +859,86 @@ export const TheDoorView: React.FC = () => {
                     type="text"
                     value={doorState.musicTrack}
                     onChange={(e) => updateDoorState({ musicTrack: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs font-medium"
+                    placeholder="Song title"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs font-medium mb-2"
                   />
+                  <label className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5 hover:border-[#8E1B1B]">
+                    <UploadCloud className="w-3.5 h-3.5 text-[#8E1B1B]" />
+                    <span>
+                      {isUploadingTrack ? `Uploading... ${trackProgress}%` : doorState.musicUrl ? 'Replace audio file' : 'Upload the actual track (optional)'}
+                    </span>
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      className="hidden"
+                      disabled={isUploadingTrack}
+                      onChange={(e) => handleTrackSelected(e.target.files?.[0])}
+                    />
+                  </label>
+                  {trackError && <p className="text-xs text-[#8E1B1B] mt-1.5">{trackError}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-2">Memories in The Door Reveal</label>
-                  <div className="grid grid-cols-4 gap-2">
-                    {memories.slice(0, 4).map((m) => (
-                      <div key={m.id} className="p-1.5 bg-[#F7EFE4] rounded-xl border border-[#8E1B1B] text-center">
-                        <img src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=200&q=80'} alt={m.title} className="w-full h-14 object-cover rounded-lg mb-1" />
-                        <span className="text-[9px] font-bold block truncate">{m.title}</span>
-                      </div>
-                    ))}
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-xs font-semibold text-[#1C110E]">Memories in The Door Reveal</label>
+                    <span className="text-[10px] text-[#6E5B52]">{(doorState.selectedMemoryIds || []).length} selected</span>
                   </div>
+                  {memories.length === 0 ? (
+                    <p className="text-xs text-[#6E5B52] italic">Pin a few memories on Our Wall first, then come back to choose which ones appear here.</p>
+                  ) : (
+                    <div className="grid grid-cols-4 gap-2">
+                      {memories.slice(0, 12).map((m) => {
+                        const selectedIds = doorState.selectedMemoryIds || [];
+                        const isSelected = selectedIds.includes(m.id);
+                        const isCover = doorState.coverMemoryId === m.id;
+                        return (
+                          <div
+                            key={m.id}
+                            onClick={() => {
+                              const nextSelected = isSelected ? selectedIds.filter((id) => id !== m.id) : [...selectedIds, m.id];
+                              const nextCover = isSelected && isCover
+                                ? ''
+                                : (!isSelected && !doorState.coverMemoryId ? m.id : doorState.coverMemoryId);
+                              updateDoorState({ selectedMemoryIds: nextSelected, coverMemoryId: nextCover });
+                            }}
+                            className={`relative p-1.5 rounded-xl border text-center cursor-pointer transition-all ${
+                              isSelected ? 'bg-[#F7EFE4] border-[#8E1B1B] ring-2 ring-[#8E1B1B]/30' : 'bg-white border-[#E7D9C9] opacity-60 hover:opacity-100'
+                            }`}
+                          >
+                            <img src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=200&q=80'} alt={m.title} className="w-full h-14 object-cover rounded-lg mb-1" />
+                            <span className="text-[9px] font-bold block truncate">{m.title}</span>
+                            {isSelected && (
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  updateDoorState({ coverMemoryId: isCover ? '' : m.id });
+                                }}
+                                title={isCover ? 'Cover photo' : 'Set as cover photo'}
+                                className={`absolute top-1 right-1 w-4 h-4 rounded-full flex items-center justify-center text-[9px] cursor-pointer ${
+                                  isCover ? 'bg-amber-400 text-[#1C110E]' : 'bg-black/40 text-white'
+                                }`}
+                              >
+                                ★
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 <button
-                  onClick={() => {
-                    showToast('Door configuration saved');
-                    openTheDoor();
-                  }}
+                  onClick={() => setIsPreviewOpen(true)}
                   className="w-full py-3.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-md cursor-pointer flex items-center justify-center gap-2"
                 >
                   <Sparkles className="w-4 h-4 text-amber-300" />
                   <span>Preview The Door Reveal →</span>
                 </button>
+                <p className="text-[10px] text-[#6E5B52] text-center -mt-3">
+                  This is a look-only preview — {currentUser === 'A' ? couple.nameB : couple.nameA} won't be notified.
+                </p>
               </div>
 
               {/* Right Live Preview Visual */}
@@ -875,8 +949,8 @@ export const TheDoorView: React.FC = () => {
                   <div className="w-12 h-12 rounded-full bg-white/80 text-[#8E1B1B] flex items-center justify-center mb-3 shadow-lg">
                     <Play className="w-5 h-5 fill-[#8E1B1B] ml-0.5" />
                   </div>
-                  <h4 className="font-display text-xl font-bold text-[#1C110E]">The Door to Forever</h4>
-                  <p className="text-xs text-[#1C110E] font-script text-base">"Bridging {distanceKmText} forever."</p>
+                  <h4 className="font-display text-xl font-bold text-[#1C110E]">{couple.reunionTitle || 'The Door to Forever'}</h4>
+                  <p className="text-xs text-[#1C110E] font-script text-base">"{doorState.finalMessage || `Bridging ${distanceKmText} forever.`}"</p>
                 </div>
 
                 <div className="text-xs text-white/70 space-y-1.5 pt-2 border-t border-white/20">
@@ -896,6 +970,50 @@ export const TheDoorView: React.FC = () => {
         )}
 
       </main>
+
+      {/* Local-only preview — never touches doorState.isOpened or notifies anyone */}
+      {isPreviewOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
+          <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-[#1C110E] text-white p-8 border-2 border-amber-300/40 warm-shadow-lg text-center space-y-4">
+            <button
+              onClick={() => setIsPreviewOpen(false)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <span className="text-[11px] font-bold text-amber-300 uppercase tracking-widest block">
+              Preview only — nothing is sent yet
+            </span>
+
+            <div className="w-40 h-40 mx-auto rounded-2xl overflow-hidden border-2 border-amber-300/50">
+              <img
+                src={
+                  memories.find((m) => m.id === doorState.coverMemoryId)?.imageUrl ||
+                  memories.find((m) => (doorState.selectedMemoryIds || []).includes(m.id))?.imageUrl ||
+                  'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=400&q=80'
+                }
+                alt="Cover"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <h3 className="font-display text-2xl font-bold">{couple.reunionTitle || "Home is wherever we're together"}</h3>
+            <p className="font-script text-xl text-white/90 leading-snug">
+              "{doorState.finalMessage || 'Your final message will appear here once you write one above.'}"
+            </p>
+
+            <div className="flex items-center justify-center gap-2 text-xs text-amber-300">
+              <Music className="w-3.5 h-3.5" />
+              <span>{doorState.musicTrack || 'No track set yet'}</span>
+            </div>
+
+            <p className="text-[11px] text-white/50 pt-2 border-t border-white/10">
+              This is what {currentUser === 'A' ? couple.nameB : couple.nameA} will see when you open the door for real.
+            </p>
+          </div>
+        </div>
+      )}
 
     </div>
   );

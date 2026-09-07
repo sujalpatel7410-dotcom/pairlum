@@ -18,12 +18,13 @@ import {
 } from 'lucide-react';
 
 export const OurPlacesView: React.FC = () => {
-  const { 
-    parallelMoments, 
-    addParallelMoment, 
-    currentUser, 
+  const {
+    memories,
+    parallelMoments,
+    addParallelMoment,
+    currentUser,
     couple,
-    showToast 
+    showToast
   } = usePairlum();
 
   const [activeTab, setActiveTab] = useState<'parallel' | 'map'>('parallel');
@@ -39,12 +40,21 @@ export const OurPlacesView: React.FC = () => {
   const [newDescB, setNewDescB] = useState('Looking at the same stars from across the sea.');
   const [newLocB, setNewLocB] = useState('London, UK');
 
-  const places = [
-    { name: 'Sunset Beach Point', city: 'Goa, India', category: 'date', date: 'Aug 2026', photo: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=400&q=80', note: 'Our favorite evening ever.' },
-    { name: 'Marine Drive Promenade', city: 'Mumbai, India', category: 'trip', date: 'Jul 2026', photo: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=400&q=80', note: 'Holding hands in the rain.' },
-    { name: 'Old Town Café', city: 'Ahmedabad, India', category: 'date', date: 'May 2026', photo: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80', note: 'Where we talked for 4 hours non-stop.' },
-    { name: 'Eiffel Tower at Twilight', city: 'Paris, France', category: 'dream', date: 'Future Dream', photo: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80', note: 'One day we will stand here together.' }
-  ];
+  // One card per unique memory location, represented by the most recent
+  // memory pinned there (memories arrive newest-first from context).
+  const placesByLocation = new Map<string, typeof memories[number]>();
+  for (const m of memories) {
+    if (m.location && !placesByLocation.has(m.location)) {
+      placesByLocation.set(m.location, m);
+    }
+  }
+  const places = Array.from(placesByLocation.entries()).map(([location, mem]) => ({
+    name: mem.title,
+    city: location,
+    date: mem.date,
+    photo: mem.imageUrl,
+    note: mem.caption
+  }));
 
   const handleSaveParallel = () => {
     addParallelMoment(
@@ -106,7 +116,7 @@ export const OurPlacesView: React.FC = () => {
               <MapPin className="w-4 h-4" />
               <span>Paper Map & Trips</span>
             </span>
-            <span className="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">4 spots</span>
+            <span className="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">{places.length} spot{places.length === 1 ? '' : 's'}</span>
           </button>
         </div>
 
@@ -369,30 +379,36 @@ export const OurPlacesView: React.FC = () => {
                   Parchment Canvas
                 </span>
                 <h3 className="font-display text-2xl text-[#1C110E]">Our Journey Coordinates</h3>
-                <p className="text-xs text-[#6E5B52]">3 Cities visited • 1 Dream destination charted</p>
+                <p className="text-xs text-[#6E5B52]">{places.length} {places.length === 1 ? 'city' : 'cities'} pinned from your memories</p>
               </div>
 
               {/* Pinned Places Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 relative z-10">
-                {places.map((place, idx) => (
-                  <div key={idx} className="p-3 bg-white rounded-2xl border border-[#E7D9C9] warm-shadow relative group">
-                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#8E1B1B] shadow-sm flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                    </div>
+              {places.length === 0 ? (
+                <p className="relative z-10 text-sm text-[#6E5B52] py-8 text-center">
+                  Add a location to one of your memories on Our Wall and it'll show up here as a pin.
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 relative z-10">
+                  {places.map((place, idx) => (
+                    <div key={idx} className="p-3 bg-white rounded-2xl border border-[#E7D9C9] warm-shadow relative group">
+                      <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#8E1B1B] shadow-sm flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                      </div>
 
-                    <div className="aspect-4/3 rounded-xl overflow-hidden bg-[#F7EFE4] mb-2 mt-1">
-                      <img src={place.photo || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'} alt={place.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                    </div>
+                      <div className="aspect-4/3 rounded-xl overflow-hidden bg-[#F7EFE4] mb-2 mt-1">
+                        <img src={place.photo || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'} alt={place.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                      </div>
 
-                    <span className="text-[10px] uppercase font-bold text-[#8E1B1B] tracking-wider block">
-                      {place.category} • {place.date}
-                    </span>
-                    <h4 className="font-display text-sm font-semibold text-[#1C110E] truncate">{place.name}</h4>
-                    <p className="text-[11px] text-[#6E5B52]">{place.city}</p>
-                    <p className="font-script text-sm text-[#8E1B1B] mt-1 italic truncate">"{place.note}"</p>
-                  </div>
-                ))}
-              </div>
+                      <span className="text-[10px] uppercase font-bold text-[#8E1B1B] tracking-wider block">
+                        {place.date}
+                      </span>
+                      <h4 className="font-display text-sm font-semibold text-[#1C110E] truncate">{place.name}</h4>
+                      <p className="text-[11px] text-[#6E5B52]">{place.city}</p>
+                      <p className="font-script text-sm text-[#8E1B1B] mt-1 italic truncate">"{place.note}"</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -21,6 +21,7 @@ import {
   Camera
 } from 'lucide-react';
 import { PaperCard, HandNote } from '../common/PaperCard';
+import { formatMonthYear } from '../../lib/format';
 
 export const HomeView: React.FC = () => {
   const {
@@ -29,6 +30,7 @@ export const HomeView: React.FC = () => {
     currentUser,
     couple,
     memories,
+    chapters,
     openAddMemoryModal,
     setActiveLightboxMemory,
     windowOpened,
@@ -42,6 +44,15 @@ export const HomeView: React.FC = () => {
   const otherPronoun = currentUser === 'A' ? 'He' : 'She';
 
   const safeMemories = memories || [];
+  const togetherSinceLabel = formatMonthYear(couple.startDate) || couple.togetherSince || 'day one';
+  const reunionDate = couple.reunionDate ? new Date(couple.reunionDate) : null;
+  const daysToReunion = reunionDate && !isNaN(reunionDate.getTime())
+    ? Math.max(0, Math.ceil((reunionDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : null;
+  const reunionCountdownLabel = daysToReunion !== null
+    ? `${daysToReunion} day${daysToReunion === 1 ? '' : 's'} to reunion`
+    : 'reunion date not set';
+  const knownPlaces = Array.from(new Set(safeMemories.map((m) => m.location).filter(Boolean))) as string[];
   const windowMemory = safeMemories.find(m => m.location === 'The Window') || safeMemories[0] || {
     id: 'mem-default',
     title: 'A little sunset for you',
@@ -108,14 +119,14 @@ export const HomeView: React.FC = () => {
               </div>
               <div className="flex items-center gap-1.5 bg-[#F7EFE4] px-3 py-1.5 rounded-full border border-[#E7D9C9]">
                 <Heart className="w-4 h-4 text-[#8E1B1B] fill-[#8E1B1B]" />
-                <span>Together since <strong className="text-[#1C110E]">May 2024</strong></span>
+                <span>Together since <strong className="text-[#1C110E]">{togetherSinceLabel}</strong></span>
               </div>
               <div
                 onClick={() => setCurrentView('door')}
                 className="flex items-center gap-1.5 bg-[#8E1B1B]/10 text-[#8E1B1B] px-3 py-1.5 rounded-full border border-[#8E1B1B]/20 cursor-pointer hover:bg-[#8E1B1B]/20 transition-colors"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span><strong>{couple.distance || '7,192 km'} apart</strong> • 18 days to reunion</span>
+                <span><strong>{couple.distance || '7,192 km'} apart</strong> • {reunionCountdownLabel}</span>
               </div>
             </div>
           </div>
@@ -396,7 +407,7 @@ export const HomeView: React.FC = () => {
             </div>
             <div className="mt-6 flex items-center gap-2 text-xs font-medium text-[#8E1B1B]">
               <BookOpen className="w-4 h-4" />
-              <span>3 active chapters</span>
+              <span>{chapters.length} active chapter{chapters.length === 1 ? '' : 's'}</span>
             </div>
           </div>
 
@@ -422,7 +433,7 @@ export const HomeView: React.FC = () => {
             </div>
             <div className="mt-6 flex items-center gap-2 text-xs font-medium text-[#8E1B1B]">
               <MapPin className="w-4 h-4" />
-              <span>Goa, Mumbai, Ahmedabad</span>
+              <span>{knownPlaces.length > 0 ? knownPlaces.slice(0, 3).join(', ') : 'Add your first place'}</span>
             </div>
           </div>
 
@@ -475,7 +486,7 @@ export const HomeView: React.FC = () => {
             <div className="mt-6 flex items-center justify-between text-xs font-semibold text-[#8E1B1B]">
               <div className="flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-[#E8A33D]" />
-                <span>18 days to reunion</span>
+                <span>{reunionCountdownLabel}</span>
               </div>
               <span className="text-[11px] font-mono bg-[#8E1B1B]/10 px-2.5 py-0.5 rounded-full">
                 {couple.distance || '7,192 km'} apart

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { Memory } from '../../types';
 import { 
@@ -17,13 +17,15 @@ import {
   AlertTriangle,
   Image as ImageIcon
 } from 'lucide-react';
+import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
+import { AudioPlayer } from '../common/AudioPlayer';
 
 export const MemoryLightboxModal: React.FC = () => {
-  const { 
-    activeLightboxMemory, 
-    setActiveLightboxMemory, 
-    toggleReaction, 
-    addReply, 
+  const {
+    activeLightboxMemory,
+    setActiveLightboxMemory,
+    toggleReaction,
+    addReply,
     deleteMemory,
     updateMemory,
     currentUser,
@@ -31,7 +33,6 @@ export const MemoryLightboxModal: React.FC = () => {
     chapters
   } = usePairlum();
 
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
@@ -42,11 +43,21 @@ export const MemoryLightboxModal: React.FC = () => {
   const [editDate, setEditDate] = useState('');
   const [editLocation, setEditLocation] = useState('');
   const [editChapterId, setEditChapterId] = useState('');
+  const { upload: uploadPhoto, isUploading: isUploadingPhoto, progress: photoProgress, error: photoError } = useCloudinaryUpload();
+
+  // Reset transient view/edit state whenever a different memory is opened (or
+  // the lightbox is closed) so a stale edit/delete/audio state from the
+  // previous memory can't bleed into the next one.
+  useEffect(() => {
+    setIsEditing(false);
+    setIsConfirmDeleteOpen(false);
+    setReplyText('');
+  }, [activeLightboxMemory?.id]);
 
   if (!activeLightboxMemory) return null;
 
   const mem = activeLightboxMemory;
-  const currentPartnerName = currentUser === 'A' ? couple.nameA : couple.nameB;
+  const currentPartnerName = currentUser === 'A' ? couple.nameB : couple.nameA;
 
   const handleStartEdit = () => {
     setEditTitle(mem.title);
@@ -66,6 +77,12 @@ export const MemoryLightboxModal: React.FC = () => {
       chapterId: editChapterId
     });
     setIsEditing(false);
+  };
+
+  const handlePhotoChange = async (file: File | undefined) => {
+    if (!file) return;
+    const result = await uploadPhoto(file);
+    if (result) updateMemory(mem.id, { imageUrl: result.secureUrl });
   };
 
   const handleSendReply = (e: React.FormEvent) => {
@@ -140,10 +157,22 @@ export const MemoryLightboxModal: React.FC = () => {
                 {mem.imageUrl && (
                   <div className="relative rounded-2xl overflow-hidden border border-[#E7D9C9] aspect-16/10 bg-[#F7EFE4]">
                     <img src={mem.imageUrl} alt={mem.title} className="w-full h-full object-cover" />
-                    <button className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-xs text-xs font-medium text-[#1C110E] shadow-sm hover:bg-white flex items-center gap-1.5">
+                    <label className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-xs text-xs font-medium text-[#1C110E] shadow-sm hover:bg-white flex items-center gap-1.5 cursor-pointer">
                       <ImageIcon className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                      <span>Change Photo</span>
-                    </button>
+                      <span>{isUploadingPhoto ? `Uploading... ${photoProgress}%` : 'Change Photo'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        disabled={isUploadingPhoto}
+                        onChange={(e) => handlePhotoChange(e.target.files?.[0])}
+                      />
+                    </label>
+                    {photoError && (
+                      <p className="absolute bottom-3 left-3 right-32 px-2 py-1 rounded-lg bg-white/90 text-[10px] text-[#8E1B1B]">
+                        {photoError}
+                      </p>
+                    )}
                   </div>
                 )}
 
@@ -194,7 +223,7 @@ export const MemoryLightboxModal: React.FC = () => {
                 
                 <div>
                   <label className="block text-xs font-semibold text-[#6E5B52] mb-1">Visibility</label>
-                  <p className="text-xs text-[#1C110E] font-medium">Only you and {couple.nameB}</p>
+                  <p className="text-xs text-[#1C110E] font-medium">Only you and {currentPartnerName}</p>
                 </div>
 
                 <div>
@@ -271,29 +300,17 @@ export const MemoryLightboxModal: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Audio Waveform Player if voice note */}
-                  {mem.audioDuration && (
-                    <div className="mt-4 p-3 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] flex items-center gap-3">
-                      <button
-                        onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-                        className="w-9 h-9 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center flex-shrink-0 cursor-pointer"
-                      >
-                        {isPlayingAudio ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white ml-0.5" />}
-                      </button>
-                      <div className="flex-1 flex items-center gap-1 h-6">
-                        {Array.from({ length: 24 }).map((_, i) => (
-                          <div
-                            key={i}
-                            style={{ height: `${Math.abs(Math.sin(i * 0.4)) * 18 + 6}px` }}
-                            className={`flex-1 rounded-full ${
-                              isPlayingAudio ? 'bg-[#8E1B1B]' : 'bg-[#C63A2E]/60'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-xs text-[#6E5B52] font-mono">{mem.audioDuration}</span>
+                  {/* Audio Player if voice note */}
+                  {mem.audioUrl ? (
+                    <div className="mt-4">
+                      <AudioPlayer src={mem.audioUrl} durationLabel={mem.audioDuration} />
                     </div>
-                  )}
+                  ) : mem.audioDuration ? (
+                    <div className="mt-4 p-3 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] flex items-center gap-3 text-xs text-[#6E5B52]">
+                      <Mic className="w-4 h-4 flex-shrink-0" />
+                      <span>Voice note ({mem.audioDuration}) — recorded before playback support was added.</span>
+                    </div>
+                  ) : null}
 
                   {/* Polaroid caption footer */}
                   <div className="pt-3 px-1 flex items-center justify-between">

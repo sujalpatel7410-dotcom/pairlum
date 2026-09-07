@@ -46,6 +46,9 @@ create table if not exists couples (
   wallpaper text,
   cover_photo text default '',
   door_state jsonb not null default '{"isPrepared":false,"isOpened":false,"musicTrack":"","finalMessage":"","coverMemoryId":"","selectedMemoryIds":[]}',
+  mood_a text default '',
+  mood_b text default '',
+  rituals_today jsonb not null default '{"date":"","A":[false,false,false],"B":[false,false,false]}',
   created_at timestamptz not null default now()
 );
 
@@ -77,12 +80,18 @@ $$;
 alter table couples enable row level security;
 alter table couple_members enable row level security;
 
+-- `drop ... if exists` before each `create policy`: policies have no
+-- `create or replace` / `if not exists` form in Postgres, so this pair is
+-- what makes re-running this file on an existing database safe.
+drop policy if exists "members can read their couple" on couples;
 create policy "members can read their couple" on couples
   for select using (is_couple_member(id));
 
+drop policy if exists "members can update their couple" on couples;
 create policy "members can update their couple" on couples
   for update using (is_couple_member(id)) with check (is_couple_member(id));
 
+drop policy if exists "members can read their membership rows" on couple_members;
 create policy "members can read their membership rows" on couple_members
   for select using (is_couple_member(couple_id));
 
@@ -104,6 +113,7 @@ create table if not exists memories (
   kind text not null,
   image_url text,
   video_url text,
+  audio_url text,
   audio_duration text,
   video_duration text,
   date text default '',
@@ -224,6 +234,17 @@ create table if not exists daily_prompts (
   unique (couple_id, date)
 );
 
+-- ---------------------------------------------------------------------------
+-- Migration: safe to re-run on a database that already ran an earlier
+-- version of this file — `add column if not exists` no-ops on fresh
+-- installs (the create table statements above already include these) and
+-- adds the new columns on existing ones.
+-- ---------------------------------------------------------------------------
+alter table couples add column if not exists mood_a text default '';
+alter table couples add column if not exists mood_b text default '';
+alter table couples add column if not exists rituals_today jsonb not null default '{"date":"","A":[false,false,false],"B":[false,false,false]}';
+alter table memories add column if not exists audio_url text;
+
 do $$
 declare
   t text;
@@ -234,18 +255,23 @@ begin
   ]
   loop
     execute format('alter table %I enable row level security;', t);
+
+    execute format('drop policy if exists "couple members can select" on %I;', t);
     execute format(
       'create policy "couple members can select" on %I for select using (is_couple_member(couple_id));',
       t
     );
+    execute format('drop policy if exists "couple members can insert" on %I;', t);
     execute format(
       'create policy "couple members can insert" on %I for insert with check (is_couple_member(couple_id));',
       t
     );
+    execute format('drop policy if exists "couple members can update" on %I;', t);
     execute format(
       'create policy "couple members can update" on %I for update using (is_couple_member(couple_id)) with check (is_couple_member(couple_id));',
       t
     );
+    execute format('drop policy if exists "couple members can delete" on %I;', t);
     execute format(
       'create policy "couple members can delete" on %I for delete using (is_couple_member(couple_id));',
       t
@@ -333,7 +359,24 @@ grant execute on function join_couple(text, text, text) to authenticated;
 
 -- ---------------------------------------------------------------------------
 -- Realtime: broadcast row changes so both partners' clients update live.
+-- `alter publication ... add table` errors if the table is already a
+-- member (no `if not exists` form), so check first — this is what makes
+-- re-running this file safe.
 -- ---------------------------------------------------------------------------
-alter publication supabase_realtime add table
-  couples, memories, chapters, drawer_items, parallel_moments,
-  reunion_stops, shared_goals, promises, activity_events, daily_prompts;
+do $$
+declare
+  t text;
+begin
+  foreach t in array array[
+    'couples', 'memories', 'chapters', 'drawer_items', 'parallel_moments',
+    'reunion_stops', 'shared_goals', 'promises', 'activity_events', 'daily_prompts'
+  ]
+  loop
+    if not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = t
+    ) then
+      execute format('alter publication supabase_realtime add table %I;', t);
+    end if;
+  end loop;
+end $$;

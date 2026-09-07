@@ -59,11 +59,11 @@ export const SettingsView: React.FC = () => {
   const [reunionTitle, setReunionTitle] = useState(couple.reunionTitle || 'Home is wherever we\'re together');
   const [startDate, setStartDate] = useState(couple.startDate || '2024-05-16');
   const [reunionDate, setReunionDate] = useState(couple.reunionDate || '2026-12-25T20:00:00');
-  const [drawerPin, setDrawerPin] = useState(couple.drawerPin || '140224');
+  const [drawerPin, setDrawerPin] = useState(couple.drawerPin || '');
 
-  const { upload: uploadAvatarA, isUploading: isUploadingAvatarA, progress: progressAvatarA } = useCloudinaryUpload();
-  const { upload: uploadAvatarB, isUploading: isUploadingAvatarB, progress: progressAvatarB } = useCloudinaryUpload();
-  const { upload: uploadCover, isUploading: isUploadingCover, progress: progressCover } = useCloudinaryUpload();
+  const { upload: uploadAvatarA, isUploading: isUploadingAvatarA, progress: progressAvatarA, error: avatarAError } = useCloudinaryUpload();
+  const { upload: uploadAvatarB, isUploading: isUploadingAvatarB, progress: progressAvatarB, error: avatarBError } = useCloudinaryUpload();
+  const { upload: uploadCover, isUploading: isUploadingCover, progress: progressCover, error: coverError } = useCloudinaryUpload();
 
   const handleAvatarSelected = async (file: File | undefined, role: 'A' | 'B') => {
     if (!file) return;
@@ -285,6 +285,7 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleAvatarSelected(e.target.files?.[0], 'A')}
                   />
                 </label>
+                {avatarAError && <p className="text-[11px] text-[#8E1B1B] mt-1">{avatarAError}</p>}
               </div>
 
               <div className="text-center">
@@ -300,6 +301,7 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleAvatarSelected(e.target.files?.[0], 'B')}
                   />
                 </label>
+                {avatarBError && <p className="text-[11px] text-[#8E1B1B] mt-1">{avatarBError}</p>}
               </div>
 
               <div className="text-center">
@@ -315,6 +317,7 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleCoverSelected(e.target.files?.[0])}
                   />
                 </label>
+                {coverError && <p className="text-[11px] text-[#8E1B1B] mt-1">{coverError}</p>}
               </div>
             </div>
           </div>
@@ -485,6 +488,7 @@ export const SettingsView: React.FC = () => {
                 maxLength={6}
                 value={drawerPin}
                 onChange={(e) => setDrawerPin(e.target.value)}
+                placeholder="Set a 6-digit PIN"
                 className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs font-mono text-center tracking-widest text-lg"
               />
             </div>

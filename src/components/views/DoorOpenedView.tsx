@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { LightRays } from '../common/LightRays';
-import { 
-  Heart, 
-  Sparkles, 
-  Play, 
-  Pause, 
-  ArrowRight, 
-  Music, 
-  Ticket, 
+import {
+  Heart,
+  Sparkles,
+  Play,
+  Pause,
+  ArrowRight,
+  Music,
+  Ticket,
   X,
   Volume2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { useAudioPlayback } from '../../lib/useAudioPlayback';
+import { formatDuration } from '../../lib/format';
 
 export const DoorOpenedView: React.FC = () => {
   const { setCurrentView, doorState, couple, memories } = usePairlum();
-  const [isPlaying, setIsPlaying] = useState(true);
+  const musicPlayer = useAudioPlayback(doorState.musicUrl);
+
+  const coverMemory = memories.find((m) => m.id === doorState.coverMemoryId);
+  const startDateObj = couple.startDate ? new Date(couple.startDate) : null;
+  const startDateLabel = startDateObj && !isNaN(startDateObj.getTime())
+    ? startDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()
+    : 'MAY 16, 2024';
 
   return (
     <div className="relative min-h-[90vh] rounded-3xl overflow-hidden bg-[#1C110E] text-white p-6 sm:p-12 border-2 border-amber-300/40 candle-glow warm-shadow-lg flex flex-col justify-between max-w-6xl mx-auto my-6">
@@ -68,8 +76,8 @@ export const DoorOpenedView: React.FC = () => {
         {/* Left Floating Polaroids & Notes */}
         <div className="lg:col-span-3 space-y-4 hidden sm:block">
           <div className="p-3 bg-white text-[#1C110E] rounded-2xl warm-shadow rotate-[-4deg] scale-95 hover:rotate-0 transition-transform">
-            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80" alt="Mem" className="w-full h-28 object-cover rounded-xl mb-1.5" />
-            <p className="font-script text-base text-center leading-tight">"The wait is over. You're home. ♡"</p>
+            <img src={coverMemory?.imageUrl || "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80"} alt="Mem" className="w-full h-28 object-cover rounded-xl mb-1.5" />
+            <p className="font-script text-base text-center leading-tight">"{doorState.finalMessage || "The wait is over. You're home. ♡"}"</p>
           </div>
 
           <div className="p-3 bg-[#FFF5E9] text-[#1C110E] rounded-2xl border border-amber-200 rotate-[3deg]">
@@ -118,16 +126,16 @@ export const DoorOpenedView: React.FC = () => {
         <div className="lg:col-span-3 space-y-4 hidden sm:block">
           <div className="p-3.5 bg-amber-50 text-[#1C110E] rounded-2xl border-2 border-dashed border-amber-300 rotate-[3deg]">
             <div className="flex items-center justify-between text-[10px] uppercase font-mono font-bold text-[#8E1B1B]">
-              <span>MUSEUM OF ICE CREAM</span>
+              <span>{couple.reunionLocation || 'MUSEUM OF ICE CREAM'}</span>
               <span>ADMIT ONE</span>
             </div>
             <p className="font-display text-base font-bold text-center my-1.5">{couple.initials}</p>
-            <p className="text-[10px] text-center text-[#6E5B52]">MAY 16, 2024</p>
+            <p className="text-[10px] text-center text-[#6E5B52]">{startDateLabel}</p>
           </div>
 
           <div className="p-3 bg-white text-[#1C110E] rounded-2xl warm-shadow rotate-[-2deg]">
             <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80" alt="Mem" className="w-full h-28 object-cover rounded-xl mb-1.5" />
-            <p className="font-script text-base text-center">"Home is wherever we're together. ♡"</p>
+            <p className="font-script text-base text-center">"{couple.reunionTitle || "Home is wherever we're together"}. ♡"</p>
           </div>
         </div>
 
@@ -135,25 +143,32 @@ export const DoorOpenedView: React.FC = () => {
 
       {/* Bottom Music Player Bar (Screenshot 15) */}
       <div className="relative z-10 p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-xl mx-auto w-full">
+        <audio {...musicPlayer.bind} className="hidden" />
         <div className="flex items-center gap-3">
           <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=100&q=80" alt="Track" className="w-10 h-10 rounded-xl object-cover" />
           <div>
-            <h4 className="font-display text-sm font-semibold text-white">{doorState.musicTrack}</h4>
-            <p className="text-[11px] text-amber-300">Playing in celebration</p>
+            <h4 className="font-display text-sm font-semibold text-white">{doorState.musicTrack || 'No track chosen'}</h4>
+            <p className="text-[11px] text-amber-300">{doorState.musicUrl ? 'Playing in celebration' : 'No audio file was uploaded for this'}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="w-9 h-9 rounded-full bg-amber-400 text-[#1C110E] flex items-center justify-center cursor-pointer shadow-md"
+            onClick={musicPlayer.toggle}
+            disabled={!doorState.musicUrl}
+            className="w-9 h-9 rounded-full bg-amber-400 text-[#1C110E] flex items-center justify-center cursor-pointer shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-[#1C110E] ml-0.5" />}
+            {musicPlayer.isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-[#1C110E] ml-0.5" />}
           </button>
           <div className="w-32 h-1.5 bg-white/20 rounded-full overflow-hidden">
-            <div className={`h-full bg-amber-400 ${isPlaying ? 'w-2/3 animate-pulse' : 'w-1/3'}`} />
+            <div
+              className="h-full bg-amber-400"
+              style={{ width: musicPlayer.duration ? `${(musicPlayer.currentTime / musicPlayer.duration) * 100}%` : '0%' }}
+            />
           </div>
-          <span className="text-xs font-mono text-white/80">0:45 / 4:26</span>
+          <span className="text-xs font-mono text-white/80">
+            {doorState.musicUrl ? `${formatDuration(musicPlayer.currentTime)} / ${formatDuration(musicPlayer.duration)}` : '—:—'}
+          </span>
         </div>
       </div>
 

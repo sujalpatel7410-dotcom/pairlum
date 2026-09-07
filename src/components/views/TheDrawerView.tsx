@@ -63,8 +63,8 @@ export const TheDrawerView: React.FC = () => {
   // Attached photo (optional) for letters / capsules
   const [letterPhotoUrl, setLetterPhotoUrl] = useState<string | undefined>(undefined);
   const [capsulePhotoUrl, setCapsulePhotoUrl] = useState<string | undefined>(undefined);
-  const { upload: uploadLetterPhoto, isUploading: isUploadingLetterPhoto, progress: letterPhotoProgress } = useCloudinaryUpload();
-  const { upload: uploadCapsulePhoto, isUploading: isUploadingCapsulePhoto, progress: capsulePhotoProgress } = useCloudinaryUpload();
+  const { upload: uploadLetterPhoto, isUploading: isUploadingLetterPhoto, progress: letterPhotoProgress, error: letterPhotoError } = useCloudinaryUpload();
+  const { upload: uploadCapsulePhoto, isUploading: isUploadingCapsulePhoto, progress: capsulePhotoProgress, error: capsulePhotoError } = useCloudinaryUpload();
 
   const handleLetterPhotoSelected = async (file: File | undefined) => {
     if (!file) return;
@@ -98,7 +98,6 @@ export const TheDrawerView: React.FC = () => {
       authorName: currentUser === 'A' ? (couple?.nameA || 'A') : (couple?.nameB || 'B'),
       condition: letterType === 'open_when' ? openWhenCondition : undefined,
       isLocked: false,
-      unlockDate: '25 Dec 2026 • 08:00 PM',
       photoUrl: letterPhotoUrl
     });
     setIsNewLetterOpen(false);
@@ -135,6 +134,16 @@ export const TheDrawerView: React.FC = () => {
     return true;
   });
 
+  // Most recently sealed time capsule (drawerItems arrives newest-first from
+  // context), used to render the "locked" card below from real couple data.
+  const activeCapsule = drawerItems.find(item => item.category === 'time_capsule');
+  const capsuleUnlockDateObj = activeCapsule?.unlockDate
+    ? new Date(activeCapsule.unlockDate.replace(/[•·]/g, ' '))
+    : null;
+  const daysUntilCapsuleUnlock = capsuleUnlockDateObj && !isNaN(capsuleUnlockDateObj.getTime())
+    ? Math.max(0, Math.ceil((capsuleUnlockDateObj.getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : null;
+
   const isUnlocked = couple?.isDrawerUnlocked || false;
 
   return (
@@ -145,7 +154,7 @@ export const TheDrawerView: React.FC = () => {
         step="04 / 06"
         categoryLabel="PRIVATE ARCHIVE"
         title="The Drawer"
-        subtitle="Private things only you two share. Time capsules, sealed Open When letters, and secret vows."
+        subtitle="Private things only you two share. Time capsules, Open When letters, and secret vows."
         quote="Some things are meant to be felt, not rushed."
         quoteAuthor={couple ? `${couple.nameA} & ${couple.nameB}` : "A & B"}
         illustrationSrc="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80"
@@ -279,7 +288,7 @@ export const TheDrawerView: React.FC = () => {
 
               {pinError && (
                 <p className="text-xs text-[#8E1B1B] font-medium animate-shake">
-                  Incorrect PIN. Try 140224 or 123456.
+                  Incorrect PIN.
                 </p>
               )}
 
@@ -292,7 +301,7 @@ export const TheDrawerView: React.FC = () => {
             </form>
 
             <p className="text-[11px] text-[#6E5B52]">
-              Demo PIN: <strong>140224</strong> (Anniversary date)
+              Forgot it? Set a new one from Settings → The Drawer Passcode.
             </p>
           </div>
         ) : (
@@ -338,6 +347,15 @@ export const TheDrawerView: React.FC = () => {
             {activeCategory === 'time_capsule' ? (
               /* TIME CAPSULE LOCKED CARD (Screenshot 26) */
               <div className="space-y-6">
+                {!activeCapsule ? (
+                  <div className="py-16 text-center rounded-3xl border border-dashed border-[#E7D9C9] bg-[#F7EFE4]/50 flex flex-col items-center justify-center">
+                    <Lock className="w-10 h-10 text-[#8E1B1B]/30 mb-4" />
+                    <p className="text-base text-[#1C110E] font-medium font-display mb-1">
+                      No time capsule yet
+                    </p>
+                    <p className="text-xs text-[#6E5B52]">Click "Create Time Capsule" above to seal one for the future.</p>
+                  </div>
+                ) : (
                 <div className="p-8 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow-lg">
                   <div className="flex flex-col lg:flex-row gap-8 justify-between">
 
@@ -348,7 +366,7 @@ export const TheDrawerView: React.FC = () => {
                       </div>
 
                       <h3 className="font-display text-4xl text-[#1C110E] font-medium">
-                        Our Year Together ♡
+                        {activeCapsule.title} ♡
                       </h3>
 
                       <div>
@@ -356,25 +374,25 @@ export const TheDrawerView: React.FC = () => {
                           UNLOCK ON
                         </span>
                         <p className="text-sm text-[#1C110E] font-medium mt-0.5">
-                          📅 25 December 2027 • 10:00 AM
+                          📅 {activeCapsule.unlockDate || 'Not set'}
                         </p>
                       </div>
 
                       <div className="py-2">
                         <div className="font-display text-5xl font-bold text-[#8E1B1B]">
-                          18 <span className="text-2xl font-normal text-[#1C110E]">days</span>
+                          {daysUntilCapsuleUnlock !== null ? daysUntilCapsuleUnlock : '—'} <span className="text-2xl font-normal text-[#1C110E]">days</span>
                         </div>
                         <p className="text-xs text-[#6E5B52] mt-1">until unlock</p>
                       </div>
 
                       <p className="text-xs text-[#6E5B52] leading-relaxed">
-                        This capsule is sealed and locked until 25 December 2027. You won't be able to open it until then.
+                        This capsule is sealed and locked until {activeCapsule.unlockDate || 'your chosen date'}. You won't be able to open it until then.
                       </p>
 
                       <div className="pt-2 flex gap-3">
                         <button
                           onClick={() => {
-                            setCapsuleOpenedItem(drawerItems[4]);
+                            setCapsuleOpenedItem(activeCapsule);
                             confetti({ particleCount: 60 });
                           }}
                           className="px-5 py-2.5 rounded-full bg-[#8E1B1B] text-white text-xs font-medium cursor-pointer flex items-center gap-1.5"
@@ -390,29 +408,30 @@ export const TheDrawerView: React.FC = () => {
                       <span className="text-xs font-bold text-[#1C110E] uppercase tracking-wider block">
                         A PEEK INSIDE
                       </span>
-                      <p className="text-xs text-[#6E5B52]">4 memories • 2 notes • 1 promise</p>
+                      <p className="text-xs text-[#6E5B52]">
+                        {activeCapsule.sealedMemoriesCount ?? 0} memor{(activeCapsule.sealedMemoriesCount ?? 0) === 1 ? 'y' : 'ies'} sealed inside
+                      </p>
 
                       <div className="flex gap-2">
-                        {['https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80',
-                          'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80',
-                          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300&q=80'].map((img, idx) => (
-                            <div key={idx} className="w-20 h-20 rounded-xl overflow-hidden border border-[#E7D9C9] relative bg-black">
-                              <img src={img} alt="Peek" className="w-full h-full object-cover opacity-60 blur-xs" />
-                              <Lock className="w-4 h-4 text-white absolute inset-0 m-auto" />
-                            </div>
-                          ))}
+                        {memories.slice(0, 3).map((m) => (
+                          <div key={m.id} className="w-20 h-20 rounded-xl overflow-hidden border border-[#E7D9C9] relative bg-black">
+                            <img src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80'} alt="Peek" className="w-full h-full object-cover opacity-60 blur-xs" />
+                            <Lock className="w-4 h-4 text-white absolute inset-0 m-auto" />
+                          </div>
+                        ))}
                       </div>
 
                       <div className="p-3.5 rounded-2xl bg-white border border-[#E7D9C9] text-xs">
                         <p className="text-[#1C110E] font-script text-base italic leading-snug">
-                          "For the us who made it through everything." ♡
+                          "{activeCapsule.body}" ♡
                         </p>
-                        <p className="text-[10px] text-[#8E1B1B] text-right mt-1">— Emma & Liam</p>
+                        <p className="text-[10px] text-[#8E1B1B] text-right mt-1">— {couple ? `${couple.nameA} & ${couple.nameB}` : 'A & B'}</p>
                       </div>
                     </div>
 
                   </div>
                 </div>
+                )}
               </div>
             ) : (
               /* LETTERS / OPEN WHEN LIST (Screenshots 39, 43) */
@@ -501,10 +520,10 @@ export const TheDrawerView: React.FC = () => {
               <div>
                 <h2 className="font-display text-5xl font-medium text-[#1C110E]">It's time.</h2>
                 <p className="text-sm text-[#6E5B52] mt-1.5 font-script text-2xl">
-                  Your time capsule is open. These are the memories you chose to keep, forever.
+                  Your time capsule is open. Here's a peek back at some of your memories, forever.
                 </p>
                 <span className="text-xs text-[#8E1B1B] font-semibold mt-2 inline-block">
-                  Opened on 25 December 2027 ♡
+                  Opened on {capsuleOpenedItem.unlockDate || 'today'} ♡
                 </span>
               </div>
 
@@ -521,13 +540,13 @@ export const TheDrawerView: React.FC = () => {
                 ))}
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] max-w-md mx-auto flex items-center gap-3 text-left">
-                <div className="w-10 h-10 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center flex-shrink-0">
-                  <Play className="w-4 h-4 fill-white ml-0.5" />
-                </div>
+              <div className="p-5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] max-w-md mx-auto text-left space-y-3">
+                {capsuleOpenedItem.photoUrl && (
+                  <img src={capsuleOpenedItem.photoUrl} alt={capsuleOpenedItem.title} className="w-full h-40 object-cover rounded-xl" />
+                )}
                 <div>
-                  <h4 className="font-display text-sm font-semibold text-[#1C110E]">A message for you</h4>
-                  <p className="text-xs text-[#6E5B52]">Voice note • 0:48</p>
+                  <h4 className="font-display text-sm font-semibold text-[#8E1B1B] uppercase tracking-wide">{capsuleOpenedItem.title}</h4>
+                  <p className="font-script text-xl text-[#1C110E] mt-1 leading-snug">"{capsuleOpenedItem.body}"</p>
                 </div>
               </div>
 
@@ -618,48 +637,56 @@ export const TheDrawerView: React.FC = () => {
               </button>
 
               <div>
-                <h2 className="font-display text-3xl font-medium text-[#1C110E]">Open When...</h2>
-                <p className="text-xs text-[#6E5B52] mt-0.5">Write something now for a moment they'll need later.</p>
+                <h2 className="font-display text-3xl font-medium text-[#1C110E]">
+                  {letterType === 'open_when' ? 'Open When...' : 'Write a Love Letter'}
+                </h2>
+                <p className="text-xs text-[#6E5B52] mt-0.5">
+                  {letterType === 'open_when'
+                    ? "Write something now for a moment they'll need later."
+                    : 'Words from the heart, kept somewhere safe.'}
+                </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
 
-                {/* Condition radio choices */}
-                <div className="md:col-span-5 space-y-2">
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-2">When should this open?</label>
-                  {['When you miss me', 'When you feel sad', 'When you need motivation', 'On a special date', 'Custom'].map((cond) => (
-                    <label
-                      key={cond}
-                      className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs cursor-pointer transition-colors ${openWhenCondition === cond ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#F7EFE4] text-[#1C110E] border-[#E7D9C9]'
-                        }`}
-                    >
-                      <input
-                        type="radio"
-                        name="cond"
-                        checked={openWhenCondition === cond}
-                        onChange={() => setOpenWhenCondition(cond)}
-                        className="hidden"
-                      />
-                      <span className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${openWhenCondition === cond ? 'border-white' : 'border-[#6E5B52]'}`}>
-                        {openWhenCondition === cond && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                      </span>
-                      <span>{cond}</span>
-                    </label>
-                  ))}
+                {/* Condition radio choices — only for Open When letters */}
+                {letterType === 'open_when' && (
+                  <div className="md:col-span-5 space-y-2">
+                    <label className="block text-xs font-semibold text-[#1C110E] mb-2">When should this open?</label>
+                    {['When you miss me', 'When you feel sad', 'When you need motivation', 'On a special date', 'Custom'].map((cond) => (
+                      <label
+                        key={cond}
+                        className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs cursor-pointer transition-colors ${openWhenCondition === cond ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#F7EFE4] text-[#1C110E] border-[#E7D9C9]'
+                          }`}
+                      >
+                        <input
+                          type="radio"
+                          name="cond"
+                          checked={openWhenCondition === cond}
+                          onChange={() => setOpenWhenCondition(cond)}
+                          className="hidden"
+                        />
+                        <span className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${openWhenCondition === cond ? 'border-white' : 'border-[#6E5B52]'}`}>
+                          {openWhenCondition === cond && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </span>
+                        <span>{cond}</span>
+                      </label>
+                    ))}
 
-                  {openWhenCondition === 'Custom' && (
-                    <input
-                      type="text"
-                      value={customCondition}
-                      onChange={(e) => setCustomCondition(e.target.value)}
-                      placeholder="e.g. When it rains in Mumbai"
-                      className="w-full p-2 rounded-xl bg-white border border-[#E7D9C9] text-xs mt-2"
-                    />
-                  )}
-                </div>
+                    {openWhenCondition === 'Custom' && (
+                      <input
+                        type="text"
+                        value={customCondition}
+                        onChange={(e) => setCustomCondition(e.target.value)}
+                        placeholder="e.g. When it rains in Mumbai"
+                        className="w-full p-2 rounded-xl bg-white border border-[#E7D9C9] text-xs mt-2"
+                      />
+                    )}
+                  </div>
+                )}
 
                 {/* Stationery Textarea */}
-                <div className="md:col-span-7 space-y-4">
+                <div className={letterType === 'open_when' ? 'md:col-span-7 space-y-4' : 'md:col-span-12 space-y-4'}>
                   <label className="block text-xs font-semibold text-[#1C110E]">Write your letter</label>
                   <div className="p-4 rounded-2xl bg-[#FFFBF5] border border-[#E7D9C9] stationery-lines warm-shadow">
                     <textarea
@@ -686,13 +713,16 @@ export const TheDrawerView: React.FC = () => {
                         onChange={(e) => handleLetterPhotoSelected(e.target.files?.[0])}
                       />
                     </label>
+                    {letterPhotoError && (
+                      <p className="text-xs text-[#8E1B1B] mt-1.5">{letterPhotoError}</p>
+                    )}
                   </div>
 
                   <button
                     onClick={handleSaveLetter}
                     className="w-full py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-sm cursor-pointer"
                   >
-                    Save & Lock ♡
+                    {letterType === 'open_when' ? 'Save Open When Letter ♡' : 'Save Love Letter ♡'}
                   </button>
                 </div>
 
@@ -777,6 +807,9 @@ export const TheDrawerView: React.FC = () => {
                       onChange={(e) => handleCapsulePhotoSelected(e.target.files?.[0])}
                     />
                   </label>
+                  {capsulePhotoError && (
+                    <p className="text-xs text-[#8E1B1B] mt-1.5">{capsulePhotoError}</p>
+                  )}
                 </div>
 
                 <button

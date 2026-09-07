@@ -13,6 +13,9 @@ import {
   Clock
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { useAudioRecorder } from '../../lib/useAudioRecorder';
+import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
+import { formatDuration } from '../../lib/format';
 
 export const DoorReactionView: React.FC = () => {
   const { setCurrentView, couple, currentUser, updateDoorState, showToast } = usePairlum();
@@ -20,9 +23,33 @@ export const DoorReactionView: React.FC = () => {
   const [selectedFeeling, setSelectedFeeling] = useState('Loved it');
   const [reactionText, setReactionText] = useState('I don\'t even know where to start. This was more beautiful than I imagined. You remembered the little things I didn\'t say out loud. I felt so seen, so loved, so home. My heart is so full right now. Thank you for creating this for me. I\'ll never forget it. ♡');
   const [privateNote, setPrivateNote] = useState('P.S. I\'ve replayed the music you added like five times already.');
-  const [isRecordingVoice, setIsRecordingVoice] = useState(false);
+
+  const voiceRecorder = useAudioRecorder();
+  const { upload, isUploading: isUploadingVoice, error: voiceUploadError } = useCloudinaryUpload();
+  const [voiceUrl, setVoiceUrl] = useState<string | undefined>(undefined);
+  const [voiceDuration, setVoiceDuration] = useState<string | undefined>(undefined);
+
+  const handleToggleVoiceReply = async () => {
+    if (voiceRecorder.isRecording) {
+      const file = await voiceRecorder.stop();
+      if (file) {
+        setVoiceDuration(formatDuration(voiceRecorder.seconds));
+        const result = await upload(file);
+        if (result) setVoiceUrl(result.secureUrl);
+      }
+    } else {
+      setVoiceUrl(undefined);
+      setVoiceDuration(undefined);
+      voiceRecorder.start();
+    }
+  };
 
   const otherPartner = currentUser === 'A' ? couple.nameB : couple.nameA;
+
+  const reunionDateObj = couple.reunionDate ? new Date(couple.reunionDate) : null;
+  const openedOnLabel = reunionDateObj && !isNaN(reunionDateObj.getTime())
+    ? `${reunionDateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} • ${reunionDateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`
+    : '25 Dec 2026 • 08:15 PM';
 
   const feelings = [
     { label: 'Loved it', emoji: '❤️' },
@@ -38,7 +65,7 @@ export const DoorReactionView: React.FC = () => {
         feeling: selectedFeeling,
         message: reactionText,
         privateNote,
-        voiceDuration: '0:24'
+        ...(voiceUrl ? { voiceUrl, voiceDuration } : {})
       }
     });
 
@@ -103,7 +130,7 @@ export const DoorReactionView: React.FC = () => {
             </div>
             <div className="text-right">
               <p className="font-semibold text-[#1C110E]">Opened on</p>
-              <p className="text-[11px] text-[#6E5B52]">25 Dec 2026 • 08:15 PM</p>
+              <p className="text-[11px] text-[#6E5B52]">{openedOnLabel}</p>
             </div>
           </div>
 
@@ -157,9 +184,10 @@ export const DoorReactionView: React.FC = () => {
             </label>
             <div className="p-3 rounded-2xl bg-white border border-[#E7D9C9] flex items-center gap-3">
               <button
-                onClick={() => setIsRecordingVoice(!isRecordingVoice)}
-                className={`w-9 h-9 rounded-full flex items-center justify-center text-white cursor-pointer ${
-                  isRecordingVoice ? 'bg-[#8E1B1B] animate-pulse' : 'bg-[#8E1B1B]'
+                onClick={handleToggleVoiceReply}
+                disabled={isUploadingVoice}
+                className={`w-9 h-9 rounded-full flex items-center justify-center text-white cursor-pointer disabled:opacity-50 ${
+                  voiceRecorder.isRecording ? 'bg-[#8E1B1B] animate-pulse' : 'bg-[#8E1B1B]'
                 }`}
               >
                 <Mic className="w-4 h-4" />
@@ -169,12 +197,20 @@ export const DoorReactionView: React.FC = () => {
                   <div
                     key={i}
                     style={{ height: `${Math.sin(i * 0.4) * 10 + 12}px` }}
-                    className={`flex-1 rounded-full ${isRecordingVoice ? 'bg-[#8E1B1B]' : 'bg-[#C63A2E]/60'}`}
+                    className={`flex-1 rounded-full ${voiceRecorder.isRecording ? 'bg-[#8E1B1B]' : 'bg-[#C63A2E]/60'}`}
                   />
                 ))}
               </div>
-              <span className="text-xs font-mono text-[#6E5B52]">0:24</span>
+              <span className="text-xs font-mono text-[#6E5B52]">
+                {voiceRecorder.isRecording
+                  ? formatDuration(voiceRecorder.seconds)
+                  : isUploadingVoice
+                    ? 'Uploading…'
+                    : voiceDuration || '0:00'}
+              </span>
             </div>
+            {voiceRecorder.error && <p className="text-xs text-[#8E1B1B] mt-1.5">{voiceRecorder.error}</p>}
+            {voiceUploadError && <p className="text-xs text-[#8E1B1B] mt-1.5">{voiceUploadError}</p>}
           </div>
 
           {/* Private Note */}

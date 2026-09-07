@@ -57,6 +57,9 @@ export interface CoupleProfile {
   plan: 'essential' | 'premium' | 'signature' | 'concierge';
   wallpaper?: string;
   coverPhoto: string;
+  moodA?: string;
+  moodB?: string;
+  ritualsToday?: { date: string; A: boolean[]; B: boolean[] };
 }
 
 export interface DailyPrompt {
@@ -95,6 +98,7 @@ export interface Memory {
   kind: MemoryKind;
   imageUrl?: string;
   videoUrl?: string;
+  audioUrl?: string;
   audioDuration?: string;
   videoDuration?: string;
   date: string;
