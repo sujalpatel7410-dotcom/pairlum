@@ -46,6 +46,9 @@ create table if not exists couples (
   wallpaper text,
   cover_photo text default '',
   door_state jsonb not null default '{"isPrepared":false,"isOpened":false,"musicTrack":"","finalMessage":"","coverMemoryId":"","selectedMemoryIds":[]}',
+  mood_a text default '',
+  mood_b text default '',
+  rituals_today jsonb not null default '{"date":"","A":[false,false,false],"B":[false,false,false]}',
   created_at timestamptz not null default now()
 );
 
@@ -104,6 +107,7 @@ create table if not exists memories (
   kind text not null,
   image_url text,
   video_url text,
+  audio_url text,
   audio_duration text,
   video_duration text,
   date text default '',
@@ -223,6 +227,17 @@ create table if not exists daily_prompts (
   created_at timestamptz not null default now(),
   unique (couple_id, date)
 );
+
+-- ---------------------------------------------------------------------------
+-- Migration: safe to re-run on a database that already ran an earlier
+-- version of this file — `add column if not exists` no-ops on fresh
+-- installs (the create table statements above already include these) and
+-- adds the new columns on existing ones.
+-- ---------------------------------------------------------------------------
+alter table couples add column if not exists mood_a text default '';
+alter table couples add column if not exists mood_b text default '';
+alter table couples add column if not exists rituals_today jsonb not null default '{"date":"","A":[false,false,false],"B":[false,false,false]}';
+alter table memories add column if not exists audio_url text;
 
 do $$
 declare

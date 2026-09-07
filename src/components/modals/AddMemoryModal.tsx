@@ -25,6 +25,23 @@ import {
 import { PaperCard } from '../common/PaperCard';
 import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
 import { cloudinaryVideoThumbnail } from '../../lib/cloudinary';
+import { useAudioRecorder } from '../../lib/useAudioRecorder';
+import { formatDuration } from '../../lib/format';
+
+// Reads a video file's real duration client-side (no network round trip)
+// by loading it into an off-DOM <video> element and waiting for metadata.
+const readVideoDuration = (file: File): Promise<string | undefined> => {
+  return new Promise((resolve) => {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = () => {
+      URL.revokeObjectURL(video.src);
+      resolve(isFinite(video.duration) ? formatDuration(video.duration) : undefined);
+    };
+    video.onerror = () => resolve(undefined);
+    video.src = URL.createObjectURL(file);
+  });
+};
 
 export const AddMemoryModal: React.FC = () => {
   const { 
@@ -51,8 +68,10 @@ export const AddMemoryModal: React.FC = () => {
   const [chapterId, setChapterId] = useState(chapters[0]?.id || '');
   const [imageUrl, setImageUrl] = useState('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=80');
   const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined);
+  const [videoDuration, setVideoDuration] = useState<string | undefined>(undefined);
 
-  // Cloudinary upload
+  // Cloudinary upload — shared by photo/video selection and the finished
+  // voice recording (only one of these happens per modal visit).
   const { upload, isUploading, progress: uploadPercent, error: uploadError } = useCloudinaryUpload();
 
   const handleFileSelected = async (file: File | undefined, isVideo: boolean) => {
@@ -60,6 +79,10 @@ export const AddMemoryModal: React.FC = () => {
     const previousImageUrl = imageUrl;
     const localPreview = URL.createObjectURL(file);
     setImageUrl(localPreview);
+
+    if (isVideo) {
+      readVideoDuration(file).then((d) => { if (d) setVideoDuration(d); });
+    }
 
     const result = await upload(file);
     if (!result) {
@@ -78,11 +101,39 @@ export const AddMemoryModal: React.FC = () => {
     }
   };
 
-  // Voice Recording state
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingSeconds, setRecordingSeconds] = useState(0);
-  const [recordedDuration, setRecordedDuration] = useState('0:28');
-  
+  // Voice Recording
+  const voiceRecorder = useAudioRecorder();
+  const [audioUrl, setAudioUrl] = useState<string | undefined>(undefined);
+
+  const finishRecording = async () => {
+    const file = await voiceRecorder.stop();
+    if (file) {
+      const result = await upload(file);
+      if (result) setAudioUrl(result.secureUrl);
+    }
+  };
+
+  const handleToggleRecording = async () => {
+    if (voiceRecorder.isRecording) {
+      await finishRecording();
+    } else {
+      setAudioUrl(undefined);
+      voiceRecorder.start();
+    }
+  };
+
+  const handleDeleteRecording = () => {
+    voiceRecorder.cancel();
+    setAudioUrl(undefined);
+  };
+
+  const handleDoneRecording = async () => {
+    if (voiceRecorder.isRecording) {
+      await finishRecording();
+    }
+    setStep('details');
+  };
+
   // Upload Progress
   const [uploadProgress, setUploadProgress] = useState(0);
   const [lastCreatedId, setLastCreatedId] = useState<string>('');
@@ -92,9 +143,10 @@ export const AddMemoryModal: React.FC = () => {
       setSelectedKind(addMemoryModalInitialKind);
       setStep('media');
       setUploadProgress(0);
-      setIsRecording(false);
-      setRecordingSeconds(0);
+      voiceRecorder.cancel();
+      setAudioUrl(undefined);
       setVideoUrl(undefined);
+      setVideoDuration(undefined);
       // Also clear out whatever the previous memory (if any) left behind, so
       // reopening this modal for a new memory doesn't silently pre-fill it
       // with the last one's title, caption, date, location or photo.
@@ -105,26 +157,8 @@ export const AddMemoryModal: React.FC = () => {
       setLocation('Goa, India');
       setChapterId(chapters[0]?.id || '');
       setImageUrl('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=80');
-      setRecordedDuration('0:28');
     }
   }, [isAddMemoryModalOpen, addMemoryModalInitialKind]);
-
-  // Voice recording timer
-  useEffect(() => {
-    let interval: any;
-    if (isRecording) {
-      interval = setInterval(() => {
-        setRecordingSeconds(prev => {
-          const next = prev + 1;
-          const mins = Math.floor(next / 60);
-          const secs = next % 60;
-          setRecordedDuration(`${mins}:${secs < 10 ? '0' : ''}${secs}`);
-          return next;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isRecording]);
 
   if (!isAddMemoryModalOpen) return null;
 
@@ -152,8 +186,9 @@ export const AddMemoryModal: React.FC = () => {
             kind: selectedKind,
             imageUrl: (selectedKind === 'note' ? undefined : imageUrl),
             videoUrl: selectedKind === 'video' ? videoUrl : undefined,
-            audioDuration: selectedKind === 'voice' ? recordedDuration : undefined,
-            videoDuration: selectedKind === 'video' ? '0:24' : undefined,
+            audioUrl: selectedKind === 'voice' ? audioUrl : undefined,
+            audioDuration: selectedKind === 'voice' ? formatDuration(voiceRecorder.seconds) : undefined,
+            videoDuration: selectedKind === 'video' ? (videoDuration || '0:00') : undefined,
             date,
             time,
             location: location || 'The Window',
@@ -357,15 +392,15 @@ export const AddMemoryModal: React.FC = () => {
                   {/* Audio Waveform visual */}
                   <div className="h-20 flex items-center justify-center gap-1 sm:gap-1.5 px-4 mb-6">
                     {Array.from({ length: 28 }).map((_, i) => {
-                      const height = isRecording 
-                        ? Math.sin(i * 0.4 + recordingSeconds) * 28 + 36 
+                      const height = voiceRecorder.isRecording
+                        ? Math.sin(i * 0.4 + voiceRecorder.seconds) * 28 + 36
                         : Math.abs(Math.sin(i * 0.3)) * 40 + 15;
                       return (
                         <div
                           key={i}
                           style={{ height: `${height}px` }}
                           className={`w-1.5 sm:w-2 rounded-full transition-all duration-150 ${
-                            isRecording ? 'bg-[#8E1B1B]' : 'bg-[#C63A2E]/70'
+                            voiceRecorder.isRecording ? 'bg-[#8E1B1B]' : 'bg-[#C63A2E]/70'
                           }`}
                         />
                       );
@@ -373,40 +408,48 @@ export const AddMemoryModal: React.FC = () => {
                   </div>
 
                   <div className="font-display text-2xl text-[#1C110E] mb-1 font-semibold">
-                    {recordedDuration}
+                    {formatDuration(voiceRecorder.seconds)}
                   </div>
                   <p className="text-xs text-[#6E5B52] mb-6">
-                    {isRecording ? 'Listening to your voice...' : 'Tap record to speak or done to save'}
+                    {voiceRecorder.isRecording
+                      ? 'Listening to your voice...'
+                      : isUploading
+                        ? `Uploading... ${uploadPercent}%`
+                        : audioUrl
+                          ? 'Recorded — tap done to save, or record again'
+                          : 'Tap record to speak or done to save'}
                   </p>
+                  {voiceRecorder.error && (
+                    <p className="text-xs text-[#8E1B1B] mb-4">{voiceRecorder.error}</p>
+                  )}
+                  {uploadError && (
+                    <p className="text-xs text-[#8E1B1B] mb-4">{uploadError}</p>
+                  )}
 
                   <div className="flex items-center justify-center gap-6">
                     <button
-                      onClick={() => {
-                        setIsRecording(false);
-                        setRecordingSeconds(0);
-                        setRecordedDuration('0:00');
-                      }}
-                      className="px-6 py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#6E5B52] hover:text-[#1C110E] cursor-pointer"
+                      onClick={handleDeleteRecording}
+                      disabled={isUploading}
+                      className="px-6 py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#6E5B52] hover:text-[#1C110E] cursor-pointer disabled:opacity-50"
                     >
                       Delete
                     </button>
 
-                    {/* Record / Pause Toggle */}
+                    {/* Record / Stop Toggle */}
                     <button
-                      onClick={() => setIsRecording(!isRecording)}
-                      className={`w-16 h-16 rounded-full flex items-center justify-center text-white shadow-md transition-transform hover:scale-105 cursor-pointer ${
-                        isRecording ? 'bg-[#8E1B1B] animate-pulse ring-4 ring-[#8E1B1B]/20' : 'bg-[#8E1B1B]'
+                      onClick={handleToggleRecording}
+                      disabled={isUploading}
+                      className={`w-16 h-16 rounded-full flex items-center justify-center text-white shadow-md transition-transform hover:scale-105 cursor-pointer disabled:opacity-50 ${
+                        voiceRecorder.isRecording ? 'bg-[#8E1B1B] animate-pulse ring-4 ring-[#8E1B1B]/20' : 'bg-[#8E1B1B]'
                       }`}
                     >
-                      {isRecording ? <Pause className="w-7 h-7" /> : <Mic className="w-7 h-7" />}
+                      {voiceRecorder.isRecording ? <Pause className="w-7 h-7" /> : <Mic className="w-7 h-7" />}
                     </button>
 
                     <button
-                      onClick={() => {
-                        setIsRecording(false);
-                        setStep('details');
-                      }}
-                      className="px-6 py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] hover:border-[#8E1B1B] cursor-pointer"
+                      onClick={handleDoneRecording}
+                      disabled={isUploading}
+                      className="px-6 py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] hover:border-[#8E1B1B] cursor-pointer disabled:opacity-50"
                     >
                       Done
                     </button>
@@ -758,7 +801,9 @@ export const AddMemoryModal: React.FC = () => {
                   setChapterId(chapters[0]?.id || '');
                   setImageUrl('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=80');
                   setVideoUrl(undefined);
-                  setRecordedDuration('0:28');
+                  setVideoDuration(undefined);
+                  voiceRecorder.cancel();
+                  setAudioUrl(undefined);
                 }}
                 className="px-6 py-3 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] hover:border-[#8E1B1B] cursor-pointer"
               >

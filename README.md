@@ -16,6 +16,10 @@ from the browser to [Cloudinary](https://cloudinary.com).
    table, locks them down with row-level security so only the two paired
    partners can read/write their own space, and adds the `create_couple` /
    `join_couple` functions the sign-up flow uses.
+   Already have a Pairlum project from before? Re-running the updated file is
+   safe — the `create table` statements no-op on tables that already exist,
+   and the migration block near the bottom (`alter table ... add column if
+   not exists ...`) picks up any new columns without touching your data.
 3. Go to **Project Settings → API** and copy the **Project URL** and
    **anon public** key.
 4. In **Authentication → Providers**, email/password sign-up is on by default.

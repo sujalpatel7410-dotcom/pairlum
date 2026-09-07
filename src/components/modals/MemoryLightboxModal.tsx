@@ -18,13 +18,14 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
+import { AudioPlayer } from '../common/AudioPlayer';
 
 export const MemoryLightboxModal: React.FC = () => {
-  const { 
-    activeLightboxMemory, 
-    setActiveLightboxMemory, 
-    toggleReaction, 
-    addReply, 
+  const {
+    activeLightboxMemory,
+    setActiveLightboxMemory,
+    toggleReaction,
+    addReply,
     deleteMemory,
     updateMemory,
     currentUser,
@@ -32,7 +33,6 @@ export const MemoryLightboxModal: React.FC = () => {
     chapters
   } = usePairlum();
 
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
@@ -51,7 +51,6 @@ export const MemoryLightboxModal: React.FC = () => {
   useEffect(() => {
     setIsEditing(false);
     setIsConfirmDeleteOpen(false);
-    setIsPlayingAudio(false);
     setReplyText('');
   }, [activeLightboxMemory?.id]);
 
@@ -301,29 +300,17 @@ export const MemoryLightboxModal: React.FC = () => {
                     </div>
                   )}
 
-                  {/* Audio Waveform Player if voice note */}
-                  {mem.audioDuration && (
-                    <div className="mt-4 p-3 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] flex items-center gap-3">
-                      <button
-                        onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-                        className="w-9 h-9 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center flex-shrink-0 cursor-pointer"
-                      >
-                        {isPlayingAudio ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white ml-0.5" />}
-                      </button>
-                      <div className="flex-1 flex items-center gap-1 h-6">
-                        {Array.from({ length: 24 }).map((_, i) => (
-                          <div
-                            key={i}
-                            style={{ height: `${Math.abs(Math.sin(i * 0.4)) * 18 + 6}px` }}
-                            className={`flex-1 rounded-full ${
-                              isPlayingAudio ? 'bg-[#8E1B1B]' : 'bg-[#C63A2E]/60'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-xs text-[#6E5B52] font-mono">{mem.audioDuration}</span>
+                  {/* Audio Player if voice note */}
+                  {mem.audioUrl ? (
+                    <div className="mt-4">
+                      <AudioPlayer src={mem.audioUrl} durationLabel={mem.audioDuration} />
                     </div>
-                  )}
+                  ) : mem.audioDuration ? (
+                    <div className="mt-4 p-3 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] flex items-center gap-3 text-xs text-[#6E5B52]">
+                      <Mic className="w-4 h-4 flex-shrink-0" />
+                      <span>Voice note ({mem.audioDuration}) — recorded before playback support was added.</span>
+                    </div>
+                  ) : null}
 
                   {/* Polaroid caption footer */}
                   <div className="pt-3 px-1 flex items-center justify-between">
