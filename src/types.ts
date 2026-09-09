@@ -1,18 +1,18 @@
 export type UserRole = 'A' | 'B';
 
-export type AppView = 
-  | 'home' 
-  | 'wall' 
-  | 'shelf' 
-  | 'places' 
-  | 'drawer' 
-  | 'door' 
-  | 'together' 
-  | 'memories' 
-  | 'activity' 
-  | 'reunion' 
-  | 'settings' 
-  | 'pricing' 
+export type AppView =
+  | 'home'
+  | 'wall'
+  | 'shelf'
+  | 'places'
+  | 'drawer'
+  | 'door'
+  | 'together'
+  | 'memories'
+  | 'activity'
+  | 'reunion'
+  | 'settings'
+  | 'pricing'
   | 'legal'
   | 'onboarding'
   | 'invite'
@@ -87,6 +87,7 @@ export interface MemoryReply {
   text: string;
   time: string;
   voiceDuration?: string;
+  voiceUrl?: string;
 }
 
 export interface Memory {
@@ -124,12 +125,12 @@ export interface Chapter {
   memoryIds: string[];
 }
 
-export type DrawerCategory = 
-  | 'love_letters' 
-  | 'open_when' 
-  | 'promises' 
-  | 'time_capsule' 
-  | 'tickets' 
+export type DrawerCategory =
+  | 'love_letters'
+  | 'open_when'
+  | 'promises'
+  | 'time_capsule'
+  | 'tickets'
   | 'secrets';
 
 export interface DrawerItem {

@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { Memory } from '../../types';
-import { 
-  X, 
-  Heart, 
-  MapPin, 
-  Calendar, 
-  Clock, 
-  Edit3, 
-  Trash2, 
-  Play, 
-  Pause, 
-  Send, 
-  Mic, 
-  Lock, 
+import {
+  X,
+  Heart,
+  MapPin,
+  Calendar,
+  Clock,
+  Edit3,
+  Trash2,
+  Play,
+  Pause,
+  Send,
+  Mic,
+  Lock,
   AlertTriangle,
   Image as ImageIcon
 } from 'lucide-react';
 import { useCloudinaryUpload } from '../../lib/useCloudinaryUpload';
+import { useAudioRecorder } from '../../lib/useAudioRecorder';
+import { formatDuration } from '../../lib/format';
 import { AudioPlayer } from '../common/AudioPlayer';
 
 export const MemoryLightboxModal: React.FC = () => {
@@ -44,6 +46,10 @@ export const MemoryLightboxModal: React.FC = () => {
   const [editLocation, setEditLocation] = useState('');
   const [editChapterId, setEditChapterId] = useState('');
   const { upload: uploadPhoto, isUploading: isUploadingPhoto, progress: photoProgress, error: photoError } = useCloudinaryUpload();
+  const { upload: uploadVoiceReply, isUploading: isUploadingVoiceReply, error: voiceReplyUploadError } = useCloudinaryUpload();
+  const voiceReplyRecorder = useAudioRecorder();
+  const [replyVoiceUrl, setReplyVoiceUrl] = useState<string | undefined>(undefined);
+  const [replyVoiceDuration, setReplyVoiceDuration] = useState<string | undefined>(undefined);
 
   // Reset transient view/edit state whenever a different memory is opened (or
   // the lightbox is closed) so a stale edit/delete/audio state from the
@@ -52,6 +58,9 @@ export const MemoryLightboxModal: React.FC = () => {
     setIsEditing(false);
     setIsConfirmDeleteOpen(false);
     setReplyText('');
+    setReplyVoiceUrl(undefined);
+    setReplyVoiceDuration(undefined);
+    voiceReplyRecorder.cancel();
   }, [activeLightboxMemory?.id]);
 
   if (!activeLightboxMemory) return null;
@@ -87,16 +96,33 @@ export const MemoryLightboxModal: React.FC = () => {
 
   const handleSendReply = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!replyText.trim()) return;
-    addReply(mem.id, replyText);
+    if (!replyText.trim() && !replyVoiceUrl) return;
+    addReply(mem.id, replyText, replyVoiceDuration, replyVoiceUrl);
     setReplyText('');
+    setReplyVoiceUrl(undefined);
+    setReplyVoiceDuration(undefined);
+  };
+
+  const handleToggleReplyVoice = async () => {
+    if (voiceReplyRecorder.isRecording) {
+      const file = await voiceReplyRecorder.stop();
+      if (file) {
+        setReplyVoiceDuration(formatDuration(voiceReplyRecorder.seconds));
+        const result = await uploadVoiceReply(file);
+        if (result) setReplyVoiceUrl(result.secureUrl);
+      }
+    } else {
+      setReplyVoiceUrl(undefined);
+      setReplyVoiceDuration(undefined);
+      voiceReplyRecorder.start();
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C110E]/70 backdrop-blur-xs animate-in fade-in duration-200">
-      
+
       <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#FFFBF5] border border-[#E7D9C9] warm-shadow-lg p-6 sm:p-8">
-        
+
         {/* Close Button */}
         <button
           onClick={() => setActiveLightboxMemory(null)}
@@ -220,7 +246,7 @@ export const MemoryLightboxModal: React.FC = () => {
 
               <div className="lg:col-span-5 p-6 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-5">
                 <h4 className="font-display text-xl text-[#1C110E]">Memory controls</h4>
-                
+
                 <div>
                   <label className="block text-xs font-semibold text-[#6E5B52] mb-1">Visibility</label>
                   <p className="text-xs text-[#1C110E] font-medium">Only you and {currentPartnerName}</p>
@@ -264,7 +290,7 @@ export const MemoryLightboxModal: React.FC = () => {
           /* STANDARD LIGHTBOX VIEW (Screenshots 14, 37) */
           <div>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              
+
               {/* Left Column: Polaroid Media */}
               <div className="lg:col-span-7 space-y-4">
                 <div className="p-3.5 bg-white rounded-2xl border border-[#E7D9C9] warm-shadow-lg">
@@ -339,7 +365,7 @@ export const MemoryLightboxModal: React.FC = () => {
 
               {/* Right Column: Reactions, Replies, and Actions */}
               <div className="lg:col-span-5 flex flex-col gap-6">
-                
+
                 {/* Header info */}
                 <div className="flex items-center justify-between pb-3 border-b border-[#E7D9C9]">
                   <div>
@@ -367,8 +393,8 @@ export const MemoryLightboxModal: React.FC = () => {
                         onClick={() => toggleReaction(mem.id, r.id)}
                         className={`
                           px-3.5 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer
-                          ${r.reactedByMe 
-                            ? 'bg-[#8E1B1B] text-white shadow-xs' 
+                          ${r.reactedByMe
+                            ? 'bg-[#8E1B1B] text-white shadow-xs'
                             : 'bg-[#F7EFE4] border border-[#E7D9C9] text-[#1C110E] hover:border-[#8E1B1B]'}
                         `}
                       >
@@ -403,12 +429,16 @@ export const MemoryLightboxModal: React.FC = () => {
                             <span>{rep.time}</span>
                           </div>
                           <p className="text-[#1C110E] font-script text-lg leading-snug">{rep.text}</p>
-                          {rep.voiceDuration && (
+                          {rep.voiceUrl ? (
+                            <div className="mt-2">
+                              <AudioPlayer src={rep.voiceUrl} durationLabel={rep.voiceDuration} />
+                            </div>
+                          ) : rep.voiceDuration ? (
                             <div className="mt-1.5 flex items-center gap-2 text-[10px] text-[#8E1B1B]">
                               <Mic className="w-3 h-3" />
                               <span>Voice note ({rep.voiceDuration})</span>
                             </div>
-                          )}
+                          ) : null}
                         </div>
                       ))
                     )}
@@ -417,17 +447,53 @@ export const MemoryLightboxModal: React.FC = () => {
 
                 {/* Reply Input Form */}
                 <form onSubmit={handleSendReply} className="space-y-2 pt-2 border-t border-[#E7D9C9]">
-                  <div className="relative">
+                  {/* Voice reply recording indicator */}
+                  {(voiceReplyRecorder.isRecording || replyVoiceUrl) && (
+                    <div className="p-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] flex items-center gap-2 text-xs">
+                      <Mic className={`w-3.5 h-3.5 ${voiceReplyRecorder.isRecording ? 'text-[#8E1B1B] animate-pulse' : 'text-[#6E5B52]'}`} />
+                      <span className="text-[#1C110E] font-mono">
+                        {voiceReplyRecorder.isRecording
+                          ? formatDuration(voiceReplyRecorder.seconds)
+                          : isUploadingVoiceReply
+                            ? 'Uploading...'
+                            : `Recorded (${replyVoiceDuration})`}
+                      </span>
+                      {replyVoiceUrl && (
+                        <button
+                          type="button"
+                          onClick={() => { setReplyVoiceUrl(undefined); setReplyVoiceDuration(undefined); }}
+                          className="ml-auto text-[10px] text-[#8E1B1B] hover:underline cursor-pointer"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  {voiceReplyRecorder.error && <p className="text-xs text-[#8E1B1B]">{voiceReplyRecorder.error}</p>}
+                  {voiceReplyUploadError && <p className="text-xs text-[#8E1B1B]">{voiceReplyUploadError}</p>}
+                  <div className="relative flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleToggleReplyVoice}
+                      disabled={isUploadingVoiceReply}
+                      className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 transition-colors cursor-pointer disabled:opacity-50 ${voiceReplyRecorder.isRecording
+                          ? 'bg-[#8E1B1B] text-white animate-pulse'
+                          : 'bg-[#F7EFE4] border border-[#E7D9C9] text-[#6E5B52] hover:text-[#8E1B1B]'
+                        }`}
+                      title={voiceReplyRecorder.isRecording ? 'Stop recording' : 'Record voice reply'}
+                    >
+                      <Mic className="w-4 h-4" />
+                    </button>
                     <input
                       type="text"
                       value={replyText}
                       onChange={(e) => setReplyText(e.target.value)}
                       placeholder={`Write a reply to ${mem.authorName}...`}
-                      className="w-full pl-4 pr-10 py-2.5 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-hidden focus:border-[#8E1B1B]"
+                      className="flex-1 pl-4 pr-10 py-2.5 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-hidden focus:border-[#8E1B1B]"
                     />
                     <button
                       type="submit"
-                      disabled={!replyText.trim()}
+                      disabled={(!replyText.trim() && !replyVoiceUrl) || isUploadingVoiceReply}
                       className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center disabled:opacity-40 cursor-pointer"
                     >
                       <Send className="w-3.5 h-3.5" />

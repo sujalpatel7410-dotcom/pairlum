@@ -269,7 +269,7 @@ interface PairlumContextType {
   deleteMemory: (id: string) => void;
   updateMemory: (id: string, updates: Partial<Memory>) => void;
   toggleReaction: (memoryId: string, reactionId: string) => void;
-  addReply: (memoryId: string, text: string, voiceDuration?: string) => void;
+  addReply: (memoryId: string, text: string, voiceDuration?: string, voiceUrl?: string) => void;
 
   chapters: Chapter[];
   addChapter: (chapter: Omit<Chapter, 'id'>) => void;
@@ -634,8 +634,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     confetti({ particleCount: 25, spread: 60, origin: { y: 0.8 }, colors: ['#8E1B1B', '#C63A2E', '#E8A33D'] });
   }, []);
 
-  const addReply = useCallback((memoryId: string, text: string, voiceDuration?: string) => {
-    const newReply = { id: `rep-${Date.now()}`, author: currentUser, authorName: actorName, text, time: 'Just now', voiceDuration };
+  const addReply = useCallback((memoryId: string, text: string, voiceDuration?: string, voiceUrl?: string) => {
+    const newReply = { id: `rep-${Date.now()}`, author: currentUser, authorName: actorName, text, time: 'Just now', voiceDuration, voiceUrl };
     let nextReplies: Memory['replies'] | null = null;
     setMemories((prev) => prev.map((m) => {
       if (m.id !== memoryId) return m;
