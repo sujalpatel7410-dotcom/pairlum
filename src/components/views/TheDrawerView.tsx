@@ -89,8 +89,8 @@ export const TheDrawerView: React.FC = () => {
     }
   };
 
-  const handleSaveLetter = () => {
-    addDrawerItem({
+  const handleSaveLetter = async () => {
+    const saved = await addDrawerItem({
       category: letterType === 'open_when' ? 'open_when' : 'love_letters',
       title: letterType === 'open_when' ? (openWhenCondition === 'Custom' ? customCondition : openWhenCondition) : 'A Letter for you',
       body: letterBody,
@@ -100,12 +100,13 @@ export const TheDrawerView: React.FC = () => {
       isLocked: false,
       photoUrl: letterPhotoUrl
     });
+    if (!saved) return;
     setIsNewLetterOpen(false);
     setLetterPhotoUrl(undefined);
   };
 
-  const handleSaveCapsule = () => {
-    addDrawerItem({
+  const handleSaveCapsule = async () => {
+    const saved = await addDrawerItem({
       category: 'time_capsule',
       title: capsuleTitle || 'Time Capsule',
       body: capsuleMessage,
@@ -116,6 +117,7 @@ export const TheDrawerView: React.FC = () => {
       sealedMemoriesCount: selectedCapsuleMemories.length,
       photoUrl: capsulePhotoUrl
     });
+    if (!saved) return;
     setIsTimeCapsuleWizardOpen(false);
     setCapsulePhotoUrl(undefined);
     confetti({

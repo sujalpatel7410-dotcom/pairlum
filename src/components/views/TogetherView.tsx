@@ -99,10 +99,10 @@ export const TogetherView: React.FC = () => {
   const [newGoalTarget, setNewGoalTarget] = useState('');
   const [newGoalUnit, setNewGoalUnit] = useState('');
 
-  const handleAddGoal = (e: React.FormEvent) => {
+  const handleAddGoal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newGoalTitle.trim() || !newGoalTarget.trim()) return;
-    addGoal({
+    const saved = await addGoal({
       title: newGoalTitle.trim(),
       description: '',
       current: 0,
@@ -110,6 +110,7 @@ export const TogetherView: React.FC = () => {
       unit: newGoalUnit.trim(),
       cover: ''
     });
+    if (!saved) return;
     setNewGoalTitle('');
     setNewGoalTarget('');
     setNewGoalUnit('');
@@ -118,10 +119,11 @@ export const TogetherView: React.FC = () => {
 
   // Promises
   const [newPromiseText, setNewPromiseText] = useState('');
-  const handleAddPromise = (e: React.FormEvent) => {
+  const handleAddPromise = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPromiseText.trim()) return;
-    addPromise(newPromiseText.trim());
+    const saved = await addPromise(newPromiseText.trim());
+    if (!saved) return;
     setNewPromiseText('');
   };
 

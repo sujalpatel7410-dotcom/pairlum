@@ -56,8 +56,8 @@ export const OurPlacesView: React.FC = () => {
     note: mem.caption
   }));
 
-  const handleSaveParallel = () => {
-    addParallelMoment(
+  const handleSaveParallel = async () => {
+    const saved = await addParallelMoment(
       {
         location: newLocA,
         title: newTitleA,
@@ -75,6 +75,7 @@ export const OurPlacesView: React.FC = () => {
         timeAgo: 'Just now'
       }
     );
+    if (!saved) return;
     setIsCreatingParallel(false);
   };
 
