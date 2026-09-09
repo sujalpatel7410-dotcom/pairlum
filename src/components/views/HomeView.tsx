@@ -352,10 +352,20 @@ export const HomeView: React.FC = () => {
 
       {/* 4. MAIN NAVIGATION CARDS BENTO (Screenshot 20) */}
       <section className="space-y-4 pt-4">
-        <h2 className="font-display text-2xl text-[#1C110E] flex items-center gap-2">
-          <span>Explore Your Space</span>
-          <span className="text-[#8E1B1B] text-lg">♡</span>
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-2xl text-[#1C110E] flex items-center gap-2">
+            <span>Explore Your Space</span>
+            <span className="text-[#8E1B1B] text-lg">♡</span>
+          </h2>
+          <button
+            id="home-view-all-memories"
+            onClick={() => setCurrentView('memories')}
+            className="text-xs text-[#8E1B1B] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
+          >
+            <span>View all memories</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 

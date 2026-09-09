@@ -12,6 +12,7 @@ import { DoorOpenedView } from './components/views/DoorOpenedView';
 import { DoorReactionView } from './components/views/DoorReactionView';
 import { TogetherView } from './components/views/TogetherView';
 import { SettingsView } from './components/views/SettingsView';
+import { MemoriesView } from './components/views/MemoriesView';
 import { AddMemoryModal } from './components/modals/AddMemoryModal';
 import { MemoryLightboxModal } from './components/modals/MemoryLightboxModal';
 import { SplashCursor } from './components/common/SplashCursor';
@@ -44,6 +45,8 @@ const AppContent: React.FC = () => {
       case 'together':
       case 'invite':
         return <TogetherView />;
+      case 'memories':
+        return <MemoriesView />;
       case 'settings':
       case 'pricing':
       case 'legal':

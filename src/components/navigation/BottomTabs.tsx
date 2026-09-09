@@ -1,15 +1,15 @@
 import React from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import { AppView } from '../../types';
-import { Home, Plus, BookOpen, Users, Sparkles } from 'lucide-react';
+import { Home, Plus, BookOpen, Users, Sparkles, Image as ImageIcon } from 'lucide-react';
 
 export const BottomTabs: React.FC = () => {
   const { currentView, setCurrentView, openAddMemoryModal } = usePairlum();
 
   const tabs: { id: AppView; label: string; icon: React.FC<{ className?: string }> }[] = [
     { id: 'home', label: 'Home', icon: Home },
-    { id: 'shelf', label: 'Our Shelf', icon: BookOpen },
-    { id: 'reunion', label: 'Reunion', icon: Sparkles },
+    { id: 'memories', label: 'Memories', icon: ImageIcon },
+    { id: 'shelf', label: 'Shelf', icon: BookOpen },
     { id: 'together', label: 'Together', icon: Users }
   ];
 
@@ -50,7 +50,6 @@ export const BottomTabs: React.FC = () => {
         {/* Last 2 tabs */}
         {tabs.slice(2, 4).map((tab) => {
           const isActive = currentView === tab.id ||
-            (tab.id === 'reunion' && (currentView === 'door' || currentView === 'door_opened' || currentView === 'door_reaction' || currentView === 'prepare_door')) ||
             (tab.id === 'together' && currentView === 'places');
           const Icon = tab.icon;
           return (

@@ -22,6 +22,7 @@ import {
 
 const NAV_ITEMS: { id: AppView; label: string }[] = [
   { id: 'home', label: 'Home' },
+  { id: 'memories', label: 'Memories' },
   { id: 'wall', label: 'Our Wall' },
   { id: 'shelf', label: 'Our Shelf' },
   { id: 'places', label: 'Our Places' },
