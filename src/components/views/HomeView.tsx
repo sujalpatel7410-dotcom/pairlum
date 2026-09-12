@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import {
   Heart,
-  Plus,
-  Image as ImageIcon,
-  BookOpen,
-  MapPin,
   Lock,
-  Calendar,
   Sparkles,
   Play,
   Pause,
@@ -17,7 +12,6 @@ import {
   FileText,
   ArrowRight,
   Flame,
-  CheckCircle2,
   Camera
 } from 'lucide-react';
 import { PaperCard, HandNote } from '../common/PaperCard';
@@ -30,7 +24,6 @@ export const HomeView: React.FC = () => {
     currentUser,
     couple,
     memories,
-    chapters,
     openAddMemoryModal,
     setActiveLightboxMemory,
     windowOpened,
@@ -52,7 +45,6 @@ export const HomeView: React.FC = () => {
   const reunionCountdownLabel = daysToReunion !== null
     ? `${daysToReunion} day${daysToReunion === 1 ? '' : 's'} to reunion`
     : 'reunion date not set';
-  const knownPlaces = Array.from(new Set(safeMemories.map((m) => m.location).filter(Boolean))) as string[];
   const windowMemory = safeMemories.find(m => m.location === 'The Window') || safeMemories[0] || {
     id: 'mem-default',
     title: 'A little sunset for you',
@@ -73,10 +65,10 @@ export const HomeView: React.FC = () => {
 
       {/* 1. HERO SECTION (Screenshot 20) */}
       <section className="relative pt-6 sm:pt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="max-w-2xl">
 
-          {/* Left Hero Content */}
-          <div className="lg:col-span-6 space-y-5">
+          {/* Hero Content */}
+          <div className="space-y-5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] text-xs font-semibold">
               <span className="w-2 h-2 rounded-full bg-[#C63A2E] animate-pulse" />
               <span>{otherPronoun} was here {couple.lastActiveTime}</span>
@@ -112,7 +104,7 @@ export const HomeView: React.FC = () => {
             </div>
 
             {/* Streak & Milestone pills */}
-            <div className="flex flex-wrap items-center gap-3 pt-4 text-xs text-[#6E5B52]">
+            <div className="flex flex-wrap items-center gap-2.5 pt-4 text-xs text-[#6E5B52]">
               <div className="flex items-center gap-1.5 bg-[#F7EFE4] px-3 py-1.5 rounded-full border border-[#E7D9C9]">
                 <Flame className="w-4 h-4 text-[#E8A33D] fill-[#E8A33D]" />
                 <span><strong className="text-[#1C110E]">{couple.streakCount} days</strong> streak</span>
@@ -121,31 +113,13 @@ export const HomeView: React.FC = () => {
                 <Heart className="w-4 h-4 text-[#8E1B1B] fill-[#8E1B1B]" />
                 <span>Together since <strong className="text-[#1C110E]">{togetherSinceLabel}</strong></span>
               </div>
-              <div
+              <button
                 onClick={() => setCurrentView('door')}
-                className="flex items-center gap-1.5 bg-[#8E1B1B]/10 text-[#8E1B1B] px-3 py-1.5 rounded-full border border-[#8E1B1B]/20 cursor-pointer hover:bg-[#8E1B1B]/20 transition-colors"
+                className="flex items-center gap-1.5 bg-[#F7EFE4] px-3 py-1.5 rounded-full border border-[#E7D9C9] hover:border-[#8E1B1B]/40 hover:bg-[#F0E4D3] transition-colors cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span><strong>{couple.distance || '7,192 km'} apart</strong> • {reunionCountdownLabel}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Hero Image Card */}
-          <div className="lg:col-span-6">
-            <div className="relative p-3 bg-white rounded-3xl border border-[#E7D9C9] warm-shadow-lg rotate-[1deg] hover:rotate-0 transition-transform duration-300">
-              <div className="relative rounded-2xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
-                <img
-                  src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1000&q=80"
-                  alt="Couple by candle window"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <p className="font-script text-2xl drop-shadow-sm">"So many moments, so many memories to come. ♡"</p>
-                  <p className="text-xs text-white/80 mt-1">Our shared sanctuary • Always private</p>
-                </div>
-              </div>
+                <Sparkles className="w-3.5 h-3.5 text-[#8E1B1B]" />
+                <span className="text-[#8E1B1B]"><strong>{couple.distance || '7,192 km'} apart</strong> • {reunionCountdownLabel}</span>
+              </button>
             </div>
           </div>
 
@@ -153,7 +127,7 @@ export const HomeView: React.FC = () => {
       </section>
 
       {/* 2. THE WINDOW INTERACTIVE WIDGET (Screenshot 16 & Prompt 3) */}
-      <section className="pt-4">
+      <section>
         <PaperCard hasTape elevated className="p-6 sm:p-8 bg-gradient-to-br from-[#F7EFE4] to-[#FFFBF5]">
           <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
 
@@ -349,191 +323,6 @@ export const HomeView: React.FC = () => {
           </button>
         </div>
       </section>
-
-      {/* 4. MAIN NAVIGATION CARDS BENTO (Screenshot 20) */}
-      <section className="space-y-4 pt-4">
-        <div className="flex items-center justify-between">
-          <h2 className="font-display text-2xl text-[#1C110E] flex items-center gap-2">
-            <span>Explore Your Space</span>
-            <span className="text-[#8E1B1B] text-lg">♡</span>
-          </h2>
-          <button
-            id="home-view-all-memories"
-            onClick={() => setCurrentView('memories')}
-            className="text-xs text-[#8E1B1B] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
-          >
-            <span>View all memories</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-
-          {/* Card: Our Wall */}
-          <div
-            id="card-our-wall"
-            onClick={() => setCurrentView('wall')}
-            className="p-6 rounded-3xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] warm-shadow transition-all cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-1.5">
-                  <span>Our Wall</span>
-                  <Heart className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                </span>
-                <span className="w-8 h-8 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-              <p className="text-xs text-[#6E5B52] leading-relaxed">
-                Collect the moments that mean the most. Polaroid pins, photo strips, and handwritten notes.
-              </p>
-            </div>
-            <div className="mt-6 flex items-center gap-2 text-xs font-medium text-[#8E1B1B]">
-              <ImageIcon className="w-4 h-4" />
-              <span>{memories.length} pinned moments</span>
-            </div>
-          </div>
-
-          {/* Card: Our Shelf */}
-          <div
-            id="card-our-shelf"
-            onClick={() => setCurrentView('shelf')}
-            className="p-6 rounded-3xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] warm-shadow transition-all cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-1.5">
-                  <span>Our Shelf</span>
-                  <Heart className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                </span>
-                <span className="w-8 h-8 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-              <p className="text-xs text-[#6E5B52] leading-relaxed">
-                Chapters of your story, in the making. Bookshelves of memory albums, dates, and milestones.
-              </p>
-            </div>
-            <div className="mt-6 flex items-center gap-2 text-xs font-medium text-[#8E1B1B]">
-              <BookOpen className="w-4 h-4" />
-              <span>{chapters.length} active chapter{chapters.length === 1 ? '' : 's'}</span>
-            </div>
-          </div>
-
-          {/* Card: Our Places */}
-          <div
-            id="card-our-places"
-            onClick={() => setCurrentView('places')}
-            className="p-6 rounded-3xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] warm-shadow transition-all cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-1.5">
-                  <span>Our Places</span>
-                  <Heart className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                </span>
-                <span className="w-8 h-8 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-              <p className="text-xs text-[#6E5B52] leading-relaxed">
-                Every place, a memory waiting to happen. Paper maps, coordinates, and parallel moments.
-              </p>
-            </div>
-            <div className="mt-6 flex items-center gap-2 text-xs font-medium text-[#8E1B1B]">
-              <MapPin className="w-4 h-4" />
-              <span>{knownPlaces.length > 0 ? knownPlaces.slice(0, 3).join(', ') : 'Add your first place'}</span>
-            </div>
-          </div>
-
-          {/* Card: The Drawer */}
-          <div
-            id="card-the-drawer"
-            onClick={() => setCurrentView('drawer')}
-            className="p-6 rounded-3xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] warm-shadow transition-all cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-1.5">
-                  <span>The Drawer</span>
-                  <Lock className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                </span>
-                <span className="w-8 h-8 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-              <p className="text-xs text-[#6E5B52] leading-relaxed">
-                Private little things only you two share. Time capsules, Open When envelopes, and secret vows.
-              </p>
-            </div>
-            <div className="mt-6 flex items-center gap-2 text-xs font-medium text-[#8E1B1B]">
-              <Lock className="w-4 h-4" />
-              <span>PIN protected & encrypted</span>
-            </div>
-          </div>
-
-          {/* Card: The Door / Reunion */}
-          <div
-            id="card-the-door"
-            onClick={() => setCurrentView('door')}
-            className="p-6 rounded-3xl bg-gradient-to-br from-[#F7EFE4] to-[#EFE4D6] border border-[#E8A33D]/50 candle-glow transition-all cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-1.5">
-                  <span>The Door</span>
-                  <Sparkles className="w-3.5 h-3.5 text-[#E8A33D]" />
-                </span>
-                <span className="w-8 h-8 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-              <p className="text-xs text-[#6E5B52] leading-relaxed">
-                Bridging {couple.distance || '7,192 km'} to our next reunion in {couple.reunionLocation || 'Ahmedabad'}. Curate songs, letters, and milestones.
-              </p>
-            </div>
-            <div className="mt-6 flex items-center justify-between text-xs font-semibold text-[#8E1B1B]">
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-[#E8A33D]" />
-                <span>{reunionCountdownLabel}</span>
-              </div>
-              <span className="text-[11px] font-mono bg-[#8E1B1B]/10 px-2.5 py-0.5 rounded-full">
-                {couple.distance || '7,192 km'} apart
-              </span>
-            </div>
-          </div>
-
-          {/* Card: Together Dashboard */}
-          <div
-            id="card-together"
-            onClick={() => setCurrentView('together')}
-            className="p-6 rounded-3xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] warm-shadow transition-all cursor-pointer group flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-1.5">
-                  <span>Together</span>
-                  <Heart className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                </span>
-                <span className="w-8 h-8 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                  <ArrowRight className="w-4 h-4" />
-                </span>
-              </div>
-              <p className="text-xs text-[#6E5B52] leading-relaxed">
-                Relationship health, shared promises, love languages, and couple milestones.
-              </p>
-            </div>
-            <div className="mt-6 flex items-center gap-2 text-xs font-medium text-[#8E1B1B]">
-              <Heart className="w-4 h-4" />
-              <span>Love Level: ∞</span>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-
 
     </div>
   );

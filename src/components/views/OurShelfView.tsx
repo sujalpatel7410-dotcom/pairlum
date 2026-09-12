@@ -107,7 +107,7 @@ export const OurShelfView: React.FC = () => {
     setEditingChapterId(null);
   };
 
-  const handleSaveChapter = () => {
+  const handleSaveChapter = async () => {
     const chapterData = {
       title: newTitle || 'Untitled Chapter',
       subtitle: newSubtitle,
@@ -121,7 +121,8 @@ export const OurShelfView: React.FC = () => {
     if (editingChapterId) {
       updateChapter(editingChapterId, chapterData);
     } else {
-      addChapter(chapterData);
+      const saved = await addChapter(chapterData);
+      if (!saved) return;
     }
     setIsCreatingChapter(false);
     setEditingChapterId(null);
