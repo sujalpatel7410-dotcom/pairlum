@@ -65,10 +65,10 @@ export const HomeView: React.FC = () => {
 
       {/* 1. HERO SECTION (Screenshot 20) */}
       <section className="relative pt-6 sm:pt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="max-w-2xl">
 
-          {/* Left Hero Content */}
-          <div className="lg:col-span-6 space-y-5">
+          {/* Hero Content */}
+          <div className="space-y-5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] text-xs font-semibold">
               <span className="w-2 h-2 rounded-full bg-[#C63A2E] animate-pulse" />
               <span>{otherPronoun} was here {couple.lastActiveTime}</span>
@@ -120,24 +120,6 @@ export const HomeView: React.FC = () => {
                 <Sparkles className="w-3.5 h-3.5 text-[#8E1B1B]" />
                 <span className="text-[#8E1B1B]"><strong>{couple.distance || '7,192 km'} apart</strong> • {reunionCountdownLabel}</span>
               </button>
-            </div>
-          </div>
-
-          {/* Right Hero Image Card */}
-          <div className="lg:col-span-6">
-            <div className="relative p-3 bg-white rounded-3xl border border-[#E7D9C9] warm-shadow-lg rotate-[1deg] hover:rotate-0 transition-transform duration-300">
-              <div className="relative rounded-2xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
-                <img
-                  src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1000&q=80"
-                  alt="Couple by candle window"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <p className="font-script text-2xl drop-shadow-sm">"So many moments, so many memories to come. ♡"</p>
-                  <p className="text-xs text-white/80 mt-1">Our shared sanctuary • Always private</p>
-                </div>
-              </div>
             </div>
           </div>
 
