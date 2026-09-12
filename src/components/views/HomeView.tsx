@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { usePairlum } from '../../context/PairlumContext';
 import {
   Heart,
-  Plus,
   Image as ImageIcon,
   BookOpen,
   MapPin,
   Lock,
-  Calendar,
   Sparkles,
   Play,
   Pause,
@@ -17,7 +15,6 @@ import {
   FileText,
   ArrowRight,
   Flame,
-  CheckCircle2,
   Camera
 } from 'lucide-react';
 import { PaperCard, HandNote } from '../common/PaperCard';
@@ -112,7 +109,7 @@ export const HomeView: React.FC = () => {
             </div>
 
             {/* Streak & Milestone pills */}
-            <div className="flex flex-wrap items-center gap-3 pt-4 text-xs text-[#6E5B52]">
+            <div className="flex flex-wrap items-center gap-2.5 pt-4 text-xs text-[#6E5B52]">
               <div className="flex items-center gap-1.5 bg-[#F7EFE4] px-3 py-1.5 rounded-full border border-[#E7D9C9]">
                 <Flame className="w-4 h-4 text-[#E8A33D] fill-[#E8A33D]" />
                 <span><strong className="text-[#1C110E]">{couple.streakCount} days</strong> streak</span>
@@ -121,13 +118,13 @@ export const HomeView: React.FC = () => {
                 <Heart className="w-4 h-4 text-[#8E1B1B] fill-[#8E1B1B]" />
                 <span>Together since <strong className="text-[#1C110E]">{togetherSinceLabel}</strong></span>
               </div>
-              <div
+              <button
                 onClick={() => setCurrentView('door')}
-                className="flex items-center gap-1.5 bg-[#8E1B1B]/10 text-[#8E1B1B] px-3 py-1.5 rounded-full border border-[#8E1B1B]/20 cursor-pointer hover:bg-[#8E1B1B]/20 transition-colors"
+                className="flex items-center gap-1.5 bg-[#F7EFE4] px-3 py-1.5 rounded-full border border-[#E7D9C9] hover:border-[#8E1B1B]/40 hover:bg-[#F0E4D3] transition-colors cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span><strong>{couple.distance || '7,192 km'} apart</strong> • {reunionCountdownLabel}</span>
-              </div>
+                <Sparkles className="w-3.5 h-3.5 text-[#8E1B1B]" />
+                <span className="text-[#8E1B1B]"><strong>{couple.distance || '7,192 km'} apart</strong> • {reunionCountdownLabel}</span>
+              </button>
             </div>
           </div>
 
@@ -153,7 +150,7 @@ export const HomeView: React.FC = () => {
       </section>
 
       {/* 2. THE WINDOW INTERACTIVE WIDGET (Screenshot 16 & Prompt 3) */}
-      <section className="pt-4">
+      <section>
         <PaperCard hasTape elevated className="p-6 sm:p-8 bg-gradient-to-br from-[#F7EFE4] to-[#FFFBF5]">
           <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
 
@@ -351,7 +348,7 @@ export const HomeView: React.FC = () => {
       </section>
 
       {/* 4. MAIN NAVIGATION CARDS BENTO (Screenshot 20) */}
-      <section className="space-y-4 pt-4">
+      <section className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-2xl text-[#1C110E] flex items-center gap-2">
             <span>Explore Your Space</span>
@@ -532,8 +529,6 @@ export const HomeView: React.FC = () => {
 
         </div>
       </section>
-
-
 
     </div>
   );
