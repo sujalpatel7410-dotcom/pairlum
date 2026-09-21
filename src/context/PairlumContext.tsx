@@ -265,31 +265,31 @@ interface PairlumContextType {
   setThemeMode: (mode: 'light' | 'dark' | 'candlelight') => void;
 
   memories: Memory[];
-  addMemory: (memory: Omit<Memory, 'id' | 'reactions' | 'replies'>) => void;
+  addMemory: (memory: Omit<Memory, 'id' | 'reactions' | 'replies'>) => Promise<boolean>;
   deleteMemory: (id: string) => void;
   updateMemory: (id: string, updates: Partial<Memory>) => void;
   toggleReaction: (memoryId: string, reactionId: string) => void;
   addReply: (memoryId: string, text: string, voiceDuration?: string, voiceUrl?: string) => void;
 
   chapters: Chapter[];
-  addChapter: (chapter: Omit<Chapter, 'id'>) => void;
+  addChapter: (chapter: Omit<Chapter, 'id'>) => Promise<boolean>;
   updateChapter: (id: string, updates: Partial<Chapter>) => void;
 
   drawerItems: DrawerItem[];
-  addDrawerItem: (item: Omit<DrawerItem, 'id' | 'createdAt'>) => void;
+  addDrawerItem: (item: Omit<DrawerItem, 'id' | 'createdAt'>) => Promise<boolean>;
   unlockDrawerWithPin: (pin: string) => boolean;
   lockDrawer: () => void;
 
   reunionPlan: ReunionStop[];
   toggleReunionStop: (id: string) => void;
-  addReunionStop: (stop: Omit<ReunionStop, 'id' | 'completed'>) => void;
+  addReunionStop: (stop: Omit<ReunionStop, 'id' | 'completed'>) => Promise<boolean>;
   doorState: DoorState;
   updateDoorState: (updates: Partial<DoorState>) => void;
   openTheDoor: () => void;
   sendHeartbeat: () => void;
 
   parallelMoments: ParallelMoment[];
-  addParallelMoment: (momentA: any, momentB: any) => void;
+  addParallelMoment: (momentA: any, momentB: any) => Promise<boolean>;
 
   dailyPrompts: DailyPrompt[];
   todayPrompt: DailyPrompt | null;
@@ -297,9 +297,9 @@ interface PairlumContextType {
 
   goals: SharedGoal[];
   promises: PromiseItem[];
-  addGoal: (goal: Omit<SharedGoal, 'id'>) => void;
+  addGoal: (goal: Omit<SharedGoal, 'id'>) => Promise<boolean>;
   updateGoal: (id: string, updates: Partial<SharedGoal>) => void;
-  addPromise: (text: string) => void;
+  addPromise: (text: string) => Promise<boolean>;
 
   activityFeed: ActivityEvent[];
 
@@ -514,7 +514,10 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if (!coupleId) return;
     setCouple((prev) => (prev ? { ...prev, ...updates } : prev));
     supabase.from('couples').update(coupleUpdatesToRow(updates)).eq('id', coupleId).then(({ error }) => {
-      if (error) console.error('Failed to save couple update', error);
+      if (error) {
+        console.error('Failed to save couple update', error);
+        showToast("Couldn't save that change — check your connection and try again.");
+      }
     });
     showToast('Changes saved to your space');
   }, [coupleId, showToast]);
@@ -527,12 +530,18 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     ));
     const column = role === 'A' ? 'answer_a' : 'answer_b';
     supabase.from('daily_prompts').update({ [column]: answer }).eq('id', promptId).then(({ error }) => {
-      if (error) console.error('Failed to save prompt answer', error);
+      if (error) {
+        console.error('Failed to save prompt answer', error);
+        showToast("Couldn't save your answer — check your connection and try again.");
+      }
     });
-  }, []);
+  }, [showToast]);
 
   const addMemory = useCallback(async (newMemData: Omit<Memory, 'id' | 'reactions' | 'replies'>) => {
-    if (!coupleId || !couple) return;
+    if (!coupleId || !couple) {
+      showToast("Couldn't save — your space isn't ready yet. Try again in a moment.");
+      return false;
+    }
     const { data, error } = await supabase.from('memories').insert({
       couple_id: coupleId,
       title: newMemData.title,
@@ -563,7 +572,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (error || !data) {
       console.error('Failed to add memory', error);
-      return;
+      showToast("Couldn't save that memory — check your connection and try again.");
+      return false;
     }
     setMemories((prev) => upsertById(prev, mapMemory(data)));
 
@@ -581,13 +591,17 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       eventType: 'memory_added', coupleId: couple.id, actorName, partnerEmail,
       title: newMemData.title, subtitle: newMemData.location,
     });
+    return true;
   }, [coupleId, couple, currentUser, actorName, partnerEmail, logActivity, updateCouple, showToast]);
 
   const deleteMemory = useCallback((id: string) => {
     setMemories((prev) => prev.filter((m) => m.id !== id));
     setActiveLightboxMemory((prev) => (prev?.id === id ? null : prev));
     supabase.from('memories').delete().eq('id', id).then(({ error }) => {
-      if (error) console.error('Failed to delete memory', error);
+      if (error) {
+        console.error('Failed to delete memory', error);
+        showToast("Couldn't delete that memory — check your connection and try again.");
+      }
     });
     showToast('Memory removed from your story');
   }, [showToast]);
@@ -607,7 +621,10 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if ('audioUrl' in updates) row.audio_url = updates.audioUrl;
 
     supabase.from('memories').update(row).eq('id', id).then(({ error }) => {
-      if (error) console.error('Failed to update memory', error);
+      if (error) {
+        console.error('Failed to update memory', error);
+        showToast("Couldn't save that change — check your connection and try again.");
+      }
     });
     showToast('Memory updated');
   }, [showToast]);
@@ -627,12 +644,15 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (nextReactions) {
       supabase.from('memories').update({ reactions: nextReactions }).eq('id', memoryId).then(({ error }) => {
-        if (error) console.error('Failed to save reaction', error);
+        if (error) {
+          console.error('Failed to save reaction', error);
+          showToast("Couldn't save that reaction — check your connection and try again.");
+        }
       });
     }
 
     confetti({ particleCount: 25, spread: 60, origin: { y: 0.8 }, colors: ['#8E1B1B', '#C63A2E', '#E8A33D'] });
-  }, []);
+  }, [showToast]);
 
   const addReply = useCallback((memoryId: string, text: string, voiceDuration?: string, voiceUrl?: string) => {
     const newReply = { id: `rep-${Date.now()}`, author: currentUser, authorName: actorName, text, time: 'Just now', voiceDuration, voiceUrl };
@@ -645,14 +665,20 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (nextReplies) {
       supabase.from('memories').update({ replies: nextReplies }).eq('id', memoryId).then(({ error }) => {
-        if (error) console.error('Failed to save reply', error);
+        if (error) {
+          console.error('Failed to save reply', error);
+          showToast("Couldn't save that reply — check your connection and try again.");
+        }
       });
     }
     showToast('Reaction & reply sent');
   }, [currentUser, actorName, showToast]);
 
   const addChapter = useCallback(async (chapterData: Omit<Chapter, 'id'>) => {
-    if (!coupleId) return;
+    if (!coupleId) {
+      showToast("Couldn't save — your space isn't ready yet. Try again in a moment.");
+      return false;
+    }
     const { data, error } = await supabase.from('chapters').insert({
       couple_id: coupleId,
       title: chapterData.title,
@@ -667,10 +693,12 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (error || !data) {
       console.error('Failed to add chapter', error);
-      return;
+      showToast("Couldn't save that chapter — check your connection and try again.");
+      return false;
     }
     setChapters((prev) => upsertById(prev, mapChapter(data)));
     showToast('Chapter created on Our Shelf');
+    return true;
   }, [coupleId, showToast]);
 
   const updateChapter = useCallback((id: string, updates: Partial<Chapter>) => {
@@ -687,13 +715,19 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if ('memoryIds' in updates) row.memory_ids = updates.memoryIds;
 
     supabase.from('chapters').update(row).eq('id', id).then(({ error }) => {
-      if (error) console.error('Failed to update chapter', error);
+      if (error) {
+        console.error('Failed to update chapter', error);
+        showToast("Couldn't save that change — check your connection and try again.");
+      }
     });
     showToast('Chapter updated');
   }, [showToast]);
 
   const addDrawerItem = useCallback(async (itemData: Omit<DrawerItem, 'id' | 'createdAt'>) => {
-    if (!coupleId || !couple) return;
+    if (!coupleId || !couple) {
+      showToast("Couldn't save — your space isn't ready yet. Try again in a moment.");
+      return false;
+    }
     const { data, error } = await supabase.from('drawer_items').insert({
       couple_id: coupleId,
       category: itemData.category,
@@ -712,7 +746,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (error || !data) {
       console.error('Failed to add drawer item', error);
-      return;
+      showToast("Couldn't save that to The Drawer — check your connection and try again.");
+      return false;
     }
     setDrawerItems((prev) => upsertById(prev, mapDrawerItem(data)));
     showToast(itemData.isLocked ? 'Sealed in The Drawer until unlock date' : 'Added to The Drawer');
@@ -722,6 +757,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       title: itemData.title,
       subtitle: itemData.isLocked ? `Sealed until ${itemData.unlockDate || 'a future date'}` : undefined,
     });
+    return true;
   }, [coupleId, couple, actorName, partnerEmail, showToast]);
 
   const unlockDrawerWithPin = useCallback((enteredPin: string) => {
@@ -747,13 +783,19 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }));
     if (nextCompleted !== null) {
       supabase.from('reunion_stops').update({ completed: nextCompleted }).eq('id', id).then(({ error }) => {
-        if (error) console.error('Failed to update reunion stop', error);
+        if (error) {
+          console.error('Failed to update reunion stop', error);
+          showToast("Couldn't save that checkmark — check your connection and try again.");
+        }
       });
     }
-  }, []);
+  }, [showToast]);
 
   const addReunionStop = useCallback(async (stopData: Omit<ReunionStop, 'id' | 'completed'>) => {
-    if (!coupleId) return;
+    if (!coupleId) {
+      showToast("Couldn't save — your space isn't ready yet. Try again in a moment.");
+      return false;
+    }
     const { data, error } = await supabase.from('reunion_stops').insert({
       couple_id: coupleId,
       time: stopData.time,
@@ -769,10 +811,12 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (error || !data) {
       console.error('Failed to add reunion stop', error);
-      return;
+      showToast("Couldn't save that milestone — check your connection and try again.");
+      return false;
     }
     setReunionPlan((prev) => upsertById(prev, mapReunionStop(data)));
     showToast('Added to your reunion roadmap');
+    return true;
   }, [coupleId, showToast]);
 
   const updateDoorState = useCallback((updates: Partial<DoorState>) => {
@@ -780,11 +824,14 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setDoorStateInternal((prev) => {
       const next = { ...prev, ...updates };
       supabase.from('couples').update({ door_state: next }).eq('id', coupleId).then(({ error }) => {
-        if (error) console.error('Failed to save door state', error);
+        if (error) {
+          console.error('Failed to save door state', error);
+          showToast("Couldn't save that change — check your connection and try again.");
+        }
       });
       return next;
     });
-  }, [coupleId]);
+  }, [coupleId, showToast]);
 
   const openTheDoor = useCallback(() => {
     if (!couple) return;
@@ -815,7 +862,10 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [coupleId, currentUser, actorName, logActivity]);
 
   const addParallelMoment = useCallback(async (momentA: any, momentB: any) => {
-    if (!coupleId) return;
+    if (!coupleId) {
+      showToast("Couldn't save — your space isn't ready yet. Try again in a moment.");
+      return false;
+    }
     const { data, error } = await supabase.from('parallel_moments').insert({
       couple_id: coupleId,
       date: 'Today',
@@ -826,14 +876,19 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (error || !data) {
       console.error('Failed to add parallel moment', error);
-      return;
+      showToast("Couldn't save that moment — check your connection and try again.");
+      return false;
     }
     setParallelMoments((prev) => upsertById(prev, mapParallelMoment(data)));
     showToast('Parallel moment captured together!');
+    return true;
   }, [coupleId, showToast]);
 
   const addGoal = useCallback(async (goalData: Omit<SharedGoal, 'id'>) => {
-    if (!coupleId) return;
+    if (!coupleId) {
+      showToast("Couldn't save — your space isn't ready yet. Try again in a moment.");
+      return false;
+    }
     const { data, error } = await supabase.from('shared_goals').insert({
       couple_id: coupleId,
       title: goalData.title, description: goalData.description,
@@ -842,10 +897,12 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (error || !data) {
       console.error('Failed to add goal', error);
-      return;
+      showToast("Couldn't save that goal — check your connection and try again.");
+      return false;
     }
     setGoals((prev) => upsertById(prev, mapGoal(data)));
     showToast('Shared goal added');
+    return true;
   }, [coupleId, showToast]);
 
   const updateGoal = useCallback((id: string, updates: Partial<SharedGoal>) => {
@@ -860,12 +917,18 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if ('cover' in updates) row.cover = updates.cover;
 
     supabase.from('shared_goals').update(row).eq('id', id).then(({ error }) => {
-      if (error) console.error('Failed to update goal', error);
+      if (error) {
+        console.error('Failed to update goal', error);
+        showToast("Couldn't save that change — check your connection and try again.");
+      }
     });
-  }, []);
+  }, [showToast]);
 
   const addPromise = useCallback(async (text: string) => {
-    if (!coupleId) return;
+    if (!coupleId) {
+      showToast("Couldn't save — your space isn't ready yet. Try again in a moment.");
+      return false;
+    }
     const madeOn = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const { data, error } = await supabase.from('promises').insert({
       couple_id: coupleId, author: currentUser, text, made_on: madeOn
@@ -873,10 +936,12 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (error || !data) {
       console.error('Failed to add promise', error);
-      return;
+      showToast("Couldn't save that promise — check your connection and try again.");
+      return false;
     }
     setPromises((prev) => upsertById(prev, mapPromise(data)));
     showToast('Promise sealed');
+    return true;
   }, [coupleId, currentUser, showToast]);
 
   const openAddMemoryModal = useCallback((defaultKind: MemoryKind = 'photo') => {

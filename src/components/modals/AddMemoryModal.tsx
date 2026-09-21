@@ -167,7 +167,7 @@ export const AddMemoryModal: React.FC = () => {
 
   const handleSaveMemory = () => {
     setStep('uploading');
-    
+
     // Simulate upload progress
     let progress = 0;
     const interval = setInterval(() => {
@@ -177,8 +177,8 @@ export const AddMemoryModal: React.FC = () => {
         setUploadProgress(100);
         clearInterval(interval);
 
-        setTimeout(() => {
-          addMemory({
+        setTimeout(async () => {
+          const saved = await addMemory({
             title: title || (selectedKind === 'voice' ? `Voice note for ${partnerName}` : 'A special moment'),
             caption: caption || 'A little moment worth keeping.',
             author: currentUser,
@@ -196,7 +196,9 @@ export const AddMemoryModal: React.FC = () => {
             isFavorite: true,
             isPrivate: false
           });
-          setStep('success');
+          // On failure addMemory already shows an error toast; stay on the
+          // details step so the user's input isn't lost and they can retry.
+          setStep(saved ? 'success' : 'details');
         }, 400);
       } else {
         setUploadProgress(progress);

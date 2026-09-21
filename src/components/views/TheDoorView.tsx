@@ -119,7 +119,7 @@ export const TheDoorView: React.FC = () => {
     }
   }, [currentView]);
 
-  const handleAddStop = (e: React.FormEvent) => {
+  const handleAddStop = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newStopTitle.trim()) return;
 
@@ -130,7 +130,7 @@ export const TheDoorView: React.FC = () => {
     else if (newStopCategory === 'surprise') icon = 'Gift';
     else if (newStopCategory === 'date') icon = 'Utensils';
 
-    addReunionStop({
+    const saved = await addReunionStop({
       title: newStopTitle,
       time: newStopTime || 'D-Day',
       daysToGo: newStopDaysToGo || `${timeLeft.days} days to go`,
@@ -140,6 +140,7 @@ export const TheDoorView: React.FC = () => {
       assignedTo: newStopAssignee,
       dueDate: newStopDueDate
     });
+    if (!saved) return;
 
     setNewStopTitle('');
     setNewStopDesc('');
