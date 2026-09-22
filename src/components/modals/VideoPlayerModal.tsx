@@ -165,7 +165,7 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ memory, onCl
                             onClick={handleSeek}
                         >
                             <div
-                                className="absolute left-0 top-0 h-full bg-[#C63A2E] rounded-full transition-none"
+                                className="absolute left-0 top-0 h-full bg-[#F59E0B] rounded-full transition-none"
                                 style={{ width: `${progress * 100}%` }}
                             />
                             {/* Scrubber thumb */}
@@ -189,7 +189,7 @@ export const VideoPlayerModal: React.FC<VideoPlayerModalProps> = ({ memory, onCl
                             {/* Play/Pause */}
                             <button
                                 onClick={togglePlay}
-                                className="w-10 h-10 rounded-full bg-[#8E1B1B] hover:bg-[#C63A2E] text-white flex items-center justify-center flex-shrink-0 cursor-pointer transition-colors shadow-lg"
+                                className="w-10 h-10 rounded-full bg-[#E11D48] hover:bg-[#F59E0B] text-white flex items-center justify-center flex-shrink-0 cursor-pointer transition-colors shadow-lg"
                             >
                                 {isPlaying
                                     ? <Pause className="w-4 h-4" />

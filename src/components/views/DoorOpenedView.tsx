@@ -27,7 +27,7 @@ export const DoorOpenedView: React.FC = () => {
     : 'MAY 16, 2024';
 
   return (
-    <div className="relative min-h-[90vh] rounded-3xl overflow-hidden bg-[#1C110E] text-white p-6 sm:p-12 border-2 border-amber-300/40 candle-glow warm-shadow-lg flex flex-col justify-between max-w-6xl mx-auto my-6">
+    <div className="relative min-h-[90vh] rounded-3xl overflow-hidden bg-[#4A0420] text-white p-6 sm:p-12 border-2 border-amber-300/40 candle-glow warm-shadow-lg flex flex-col justify-between max-w-6xl mx-auto my-6">
       
       {/* Background WebGL Light Rays streaming from the top */}
       <div className="absolute inset-0 pointer-events-none opacity-60 z-0">
@@ -75,14 +75,14 @@ export const DoorOpenedView: React.FC = () => {
         
         {/* Left Floating Polaroids & Notes */}
         <div className="lg:col-span-3 space-y-4 hidden sm:block">
-          <div className="p-3 bg-white text-[#1C110E] rounded-2xl warm-shadow rotate-[-4deg] scale-95 hover:rotate-0 transition-transform">
+          <div className="p-3 bg-white text-[#4A0420] rounded-2xl warm-shadow rotate-[-4deg] scale-95 hover:rotate-0 transition-transform">
             <img src={coverMemory?.imageUrl || "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=300&q=80"} alt="Mem" className="w-full h-28 object-cover rounded-xl mb-1.5" />
             <p className="font-script text-base text-center leading-tight">"{doorState.finalMessage || "The wait is over. You're home. ♡"}"</p>
           </div>
 
-          <div className="p-3 bg-[#FFF5E9] text-[#1C110E] rounded-2xl border border-amber-200 rotate-[3deg]">
+          <div className="p-3 bg-[#FFF5E9] text-[#4A0420] rounded-2xl border border-amber-200 rotate-[3deg]">
             <p className="font-script text-lg leading-snug">"Every plan, every moment brought us closer."</p>
-            <span className="text-xs text-[#8E1B1B] font-bold block text-right mt-1">♡</span>
+            <span className="text-xs text-[#E11D48] font-bold block text-right mt-1">♡</span>
           </div>
         </div>
 
@@ -94,15 +94,15 @@ export const DoorOpenedView: React.FC = () => {
             <div className="absolute inset-0 bg-white/25 animate-pulse pointer-events-none" />
 
             <div className="relative z-10 pt-8">
-              <span className="text-xs uppercase font-mono tracking-widest text-[#8E1B1B] font-bold">
+              <span className="text-xs uppercase font-mono tracking-widest text-[#E11D48] font-bold">
                 Countdown Complete
               </span>
-              <span className="text-xs text-[#8E1B1B] block">♡</span>
+              <span className="text-xs text-[#E11D48] block">♡</span>
             </div>
 
             <div className="relative z-10 space-y-3">
-              <h3 className="font-display text-4xl font-bold text-[#1C110E]">You made it.</h3>
-              <p className="font-script text-2xl text-[#1C110E]">
+              <h3 className="font-display text-4xl font-bold text-[#4A0420]">You made it.</h3>
+              <p className="font-script text-2xl text-[#4A0420]">
                 The rest is still unwritten.
               </p>
             </div>
@@ -111,12 +111,12 @@ export const DoorOpenedView: React.FC = () => {
               <button
                 id="step-into-our-story-btn"
                 onClick={() => setCurrentView('door_reaction')}
-                className="w-full py-3.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-bold tracking-wider uppercase shadow-xl hover:scale-105 transition-transform cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-bold tracking-wider uppercase shadow-xl hover:scale-105 transition-transform cursor-pointer flex items-center justify-center gap-2"
               >
                 <span>Step into our story</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
-              <p className="text-[10px] text-[#1C110E]/80 mt-1 font-mono">This moment is all for you two.</p>
+              <p className="text-[10px] text-[#4A0420]/80 mt-1 font-mono">This moment is all for you two.</p>
             </div>
 
           </div>
@@ -124,16 +124,16 @@ export const DoorOpenedView: React.FC = () => {
 
         {/* Right Floating Ticket Stub & Polaroids */}
         <div className="lg:col-span-3 space-y-4 hidden sm:block">
-          <div className="p-3.5 bg-amber-50 text-[#1C110E] rounded-2xl border-2 border-dashed border-amber-300 rotate-[3deg]">
-            <div className="flex items-center justify-between text-[10px] uppercase font-mono font-bold text-[#8E1B1B]">
+          <div className="p-3.5 bg-amber-50 text-[#4A0420] rounded-2xl border-2 border-dashed border-amber-300 rotate-[3deg]">
+            <div className="flex items-center justify-between text-[10px] uppercase font-mono font-bold text-[#E11D48]">
               <span>{couple.reunionLocation || 'MUSEUM OF ICE CREAM'}</span>
               <span>ADMIT ONE</span>
             </div>
             <p className="font-display text-base font-bold text-center my-1.5">{couple.initials}</p>
-            <p className="text-[10px] text-center text-[#6E5B52]">{startDateLabel}</p>
+            <p className="text-[10px] text-center text-[#8A4058]">{startDateLabel}</p>
           </div>
 
-          <div className="p-3 bg-white text-[#1C110E] rounded-2xl warm-shadow rotate-[-2deg]">
+          <div className="p-3 bg-white text-[#4A0420] rounded-2xl warm-shadow rotate-[-2deg]">
             <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80" alt="Mem" className="w-full h-28 object-cover rounded-xl mb-1.5" />
             <p className="font-script text-base text-center">"{couple.reunionTitle || "Home is wherever we're together"}. ♡"</p>
           </div>
@@ -156,9 +156,9 @@ export const DoorOpenedView: React.FC = () => {
           <button
             onClick={musicPlayer.toggle}
             disabled={!doorState.musicUrl}
-            className="w-9 h-9 rounded-full bg-amber-400 text-[#1C110E] flex items-center justify-center cursor-pointer shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-9 h-9 rounded-full bg-amber-400 text-[#4A0420] flex items-center justify-center cursor-pointer shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {musicPlayer.isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-[#1C110E] ml-0.5" />}
+            {musicPlayer.isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-[#4A0420] ml-0.5" />}
           </button>
           <div className="w-32 h-1.5 bg-white/20 rounded-full overflow-hidden">
             <div

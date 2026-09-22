@@ -1,19 +1,7 @@
-import React, { useState } from 'react';
-import { Flame, Heart } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Flame, Heart, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { PaperCard } from '../common/PaperCard';
-
-const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="min-h-screen w-full flex items-center justify-center bg-[#FFFBF5] px-4 py-10">
-    <div className="w-full max-w-sm">
-      <div className="flex items-center justify-center gap-2 mb-8">
-        <Flame className="w-6 h-6 text-[#8E1B1B]" />
-        <span className="font-serif text-2xl text-[#1C110E]">Pairlum</span>
-      </div>
-      {children}
-    </div>
-  </div>
-);
 
 const Field: React.FC<{
   label: string;
@@ -24,7 +12,7 @@ const Field: React.FC<{
   autoComplete?: string;
 }> = ({ label, type = 'text', value, onChange, placeholder, autoComplete }) => (
   <label className="block mb-4">
-    <span className="block text-xs font-medium text-[#6E5B52] mb-1.5">{label}</span>
+    <span className="block text-xs font-medium text-[#8A4058] mb-1.5">{label}</span>
     <input
       type={type}
       value={value}
@@ -32,7 +20,7 @@ const Field: React.FC<{
       placeholder={placeholder}
       autoComplete={autoComplete}
       required
-      className="w-full rounded-xl border border-[#E7D9C9] bg-white px-4 py-2.5 text-sm text-[#1C110E] outline-none focus:border-[#8E1B1B]/50 focus:ring-2 focus:ring-[#8E1B1B]/10 transition-all"
+      className="w-full rounded-xl border border-[#F4A9BF] bg-white px-4 py-2.5 text-sm text-[#4A0420] outline-none focus:border-[#E11D48]/50 focus:ring-2 focus:ring-[#E11D48]/10 transition-all"
     />
   </label>
 );
@@ -41,7 +29,7 @@ const SubmitButton: React.FC<{ label: string; loading: boolean }> = ({ label, lo
   <button
     type="submit"
     disabled={loading}
-    className="w-full rounded-xl bg-[#8E1B1B] text-white py-2.5 text-sm font-medium warm-shadow hover:bg-[#7A1717] disabled:opacity-60 transition-all"
+    className="w-full rounded-xl bg-[#E11D48] text-white py-2.5 text-sm font-medium warm-shadow hover:bg-[#C81E45] disabled:opacity-60 transition-all"
   >
     {loading ? 'Please wait…' : label}
   </button>
@@ -49,7 +37,7 @@ const SubmitButton: React.FC<{ label: string; loading: boolean }> = ({ label, lo
 
 const ErrorNote: React.FC<{ message: string | null }> = ({ message }) =>
   message ? (
-    <p className="mb-4 text-xs text-[#8E1B1B] bg-[#8E1B1B]/8 border border-[#8E1B1B]/15 rounded-lg px-3 py-2">
+    <p className="mb-4 text-xs text-[#E11D48] bg-[#E11D48]/8 border border-[#E11D48]/15 rounded-lg px-3 py-2">
       {message}
     </p>
   ) : null;
@@ -97,13 +85,13 @@ const LoginOrSignup: React.FC = () => {
   if (signedUp) {
     return (
       <PaperCard className="p-6 text-center">
-        <Heart className="w-8 h-8 text-[#8E1B1B] mx-auto mb-3" />
-        <p className="font-serif text-lg text-[#1C110E] mb-2">Check your inbox</p>
-        <p className="text-sm text-[#6E5B52]">
+        <Heart className="w-8 h-8 text-[#E11D48] mx-auto mb-3" />
+        <p className="font-display text-lg text-[#4A0420] mb-2">Check your inbox</p>
+        <p className="text-sm text-[#8A4058]">
           We sent a confirmation link to <strong>{email}</strong>. Confirm it, then come back and log in.
         </p>
         <button
-          className="mt-5 text-sm text-[#8E1B1B] font-medium"
+          className="mt-5 text-sm text-[#E11D48] font-medium"
           onClick={() => { setSignedUp(false); setMode('login'); }}
         >
           Back to login
@@ -114,20 +102,20 @@ const LoginOrSignup: React.FC = () => {
 
   return (
     <PaperCard className="p-6">
-      <p className="font-serif text-lg text-[#1C110E] mb-1">
+      <p className="font-display text-lg text-[#4A0420] mb-1">
         {mode === 'login' ? 'Welcome back' : 'Create your account'}
       </p>
-      <p className="text-xs text-[#6E5B52] mb-5">
+      <p className="text-xs text-[#8A4058] mb-5">
         {mode === 'login'
           ? 'Log in to open your shared space.'
-          : 'One account per partner — you\'ll pair up with an invite code next.'}
+          : "One account per partner — you'll pair up with an invite code next."}
       </p>
       <ErrorNote message={error} />
       <button
         type="button"
         onClick={handleGoogleSignIn}
         disabled={googleLoading || loading}
-        className="w-full rounded-xl border border-[#E7D9C9] bg-white text-[#1C110E] py-2.5 text-sm font-medium hover:bg-[#F7EFE4] disabled:opacity-60 transition-all flex items-center justify-center gap-2 mb-4"
+        className="w-full rounded-xl border border-[#F4A9BF] bg-white text-[#4A0420] py-2.5 text-sm font-medium hover:bg-[#FFF1F4] disabled:opacity-60 transition-all flex items-center justify-center gap-2 mb-4"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -138,9 +126,9 @@ const LoginOrSignup: React.FC = () => {
         {googleLoading ? 'Please wait…' : `Continue with Google`}
       </button>
       <div className="flex items-center gap-3 mb-4">
-        <div className="flex-1 h-px bg-[#E7D9C9]" />
-        <span className="text-[10px] text-[#6E5B52] uppercase tracking-wider">or with email</span>
-        <div className="flex-1 h-px bg-[#E7D9C9]" />
+        <div className="flex-1 h-px bg-[#F4A9BF]" />
+        <span className="text-[10px] text-[#8A4058] uppercase tracking-wider">or with email</span>
+        <div className="flex-1 h-px bg-[#F4A9BF]" />
       </div>
       <form onSubmit={handleSubmit}>
         <Field label="Email" type="email" value={email} onChange={setEmail} placeholder="you@example.com" autoComplete="email" />
@@ -155,11 +143,11 @@ const LoginOrSignup: React.FC = () => {
         <SubmitButton label={mode === 'login' ? 'Log in' : 'Sign up'} loading={loading} />
       </form>
       <button
-        className="mt-4 w-full text-center text-xs text-[#6E5B52]"
+        className="mt-4 w-full text-center text-xs text-[#8A4058]"
         onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); setError(null); }}
       >
         {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
-        <span className="text-[#8E1B1B] font-medium">{mode === 'login' ? 'Sign up' : 'Log in'}</span>
+        <span className="text-[#E11D48] font-medium">{mode === 'login' ? 'Sign up' : 'Log in'}</span>
       </button>
     </PaperCard>
   );
@@ -179,8 +167,6 @@ const Pairing: React.FC = () => {
     setLoading(true);
     try {
       await createCouple(name);
-      // Membership refresh happens inside createCouple; AuthGate re-renders
-      // straight to the app once it lands, so this is just a brief heads-up.
       setMode('created');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not create your space.');
@@ -205,25 +191,25 @@ const Pairing: React.FC = () => {
   if (mode === 'choose') {
     return (
       <PaperCard className="p-6">
-        <p className="font-serif text-lg text-[#1C110E] mb-1">One more step</p>
-        <p className="text-xs text-[#6E5B52] mb-5">
+        <p className="font-display text-lg text-[#4A0420] mb-1">One more step</p>
+        <p className="text-xs text-[#8A4058] mb-5">
           Signed in as {session?.user.email}. Create your shared space, or join your partner's.
         </p>
         <div className="space-y-3">
           <button
             onClick={() => setMode('create')}
-            className="w-full rounded-xl bg-[#8E1B1B] text-white py-2.5 text-sm font-medium warm-shadow hover:bg-[#7A1717] transition-all"
+            className="w-full rounded-xl bg-[#E11D48] text-white py-2.5 text-sm font-medium warm-shadow hover:bg-[#C81E45] transition-all"
           >
             Create a new space
           </button>
           <button
             onClick={() => setMode('join')}
-            className="w-full rounded-xl border border-[#E7D9C9] text-[#1C110E] py-2.5 text-sm font-medium hover:bg-[#F7EFE4] transition-all"
+            className="w-full rounded-xl border border-[#F4A9BF] text-[#4A0420] py-2.5 text-sm font-medium hover:bg-[#FFF1F4] transition-all"
           >
             Join with an invite code
           </button>
         </div>
-        <button className="mt-5 w-full text-center text-xs text-[#6E5B52]" onClick={() => signOut()}>
+        <button className="mt-5 w-full text-center text-xs text-[#8A4058]" onClick={() => signOut()}>
           Sign out
         </button>
       </PaperCard>
@@ -233,14 +219,14 @@ const Pairing: React.FC = () => {
   if (mode === 'create') {
     return (
       <PaperCard className="p-6">
-        <p className="font-serif text-lg text-[#1C110E] mb-1">Create your space</p>
-        <p className="text-xs text-[#6E5B52] mb-5">You'll get an invite code to share with your partner.</p>
+        <p className="font-display text-lg text-[#4A0420] mb-1">Create your space</p>
+        <p className="text-xs text-[#8A4058] mb-5">You'll get an invite code to share with your partner.</p>
         <ErrorNote message={error} />
         <form onSubmit={handleCreate}>
           <Field label="Your name" value={name} onChange={setName} placeholder="Emma" autoComplete="given-name" />
           <SubmitButton label="Create space" loading={loading} />
         </form>
-        <button className="mt-4 w-full text-center text-xs text-[#6E5B52]" onClick={() => setMode('choose')}>
+        <button className="mt-4 w-full text-center text-xs text-[#8A4058]" onClick={() => setMode('choose')}>
           Back
         </button>
       </PaperCard>
@@ -250,9 +236,9 @@ const Pairing: React.FC = () => {
   if (mode === 'created') {
     return (
       <PaperCard className="p-6 text-center">
-        <Heart className="w-8 h-8 text-[#8E1B1B] mx-auto mb-3" />
-        <p className="font-serif text-lg text-[#1C110E] mb-4">Your space is ready</p>
-        <p className="text-xs text-[#6E5B52] mb-4">
+        <Heart className="w-8 h-8 text-[#E11D48] mx-auto mb-3" />
+        <p className="font-display text-lg text-[#4A0420] mb-4">Your space is ready</p>
+        <p className="text-xs text-[#8A4058] mb-4">
           Loading your invite code… if this doesn't move on its own, open Settings once you're in
           and share the invite code from there.
         </p>
@@ -262,18 +248,137 @@ const Pairing: React.FC = () => {
 
   return (
     <PaperCard className="p-6">
-      <p className="font-serif text-lg text-[#1C110E] mb-1">Join your partner</p>
-      <p className="text-xs text-[#6E5B52] mb-5">Enter the invite code they shared with you.</p>
+      <p className="font-display text-lg text-[#4A0420] mb-1">Join your partner</p>
+      <p className="text-xs text-[#8A4058] mb-5">Enter the invite code they shared with you.</p>
       <ErrorNote message={error} />
       <form onSubmit={handleJoin}>
         <Field label="Your name" value={name} onChange={setName} placeholder="Liam" autoComplete="given-name" />
         <Field label="Invite code" value={inviteCode} onChange={setInviteCode} placeholder="ab12cd34" />
         <SubmitButton label="Join space" loading={loading} />
       </form>
-      <button className="mt-4 w-full text-center text-xs text-[#6E5B52]" onClick={() => setMode('choose')}>
+      <button className="mt-4 w-full text-center text-xs text-[#8A4058]" onClick={() => setMode('choose')}>
         Back
       </button>
     </PaperCard>
+  );
+};
+
+const FEATURES = [
+  { label: 'Together', title: 'Every couple has a story', body: 'Pairlum gives yours a place to live, grow and be revisited.' },
+  { label: 'Moments', title: 'Small days become memories', body: 'Save the detour, the dinner, the inside joke: the moments that never make it into a photo album.' },
+  { label: 'Shared', title: 'Built for two', body: 'One space, two people. Add together, look back together.' },
+  { label: 'Private', title: 'Just yours', body: 'Kept between the two of you, so you can be as honest and as silly as you like.' },
+];
+
+const SERVICES = [
+  'Shared Timeline', 'Photo & Video Albums', 'Voice Notes', 'Anniversary Reminders',
+  'Date Night Ideas', 'Shared Bucket List', 'Love Letters', 'Milestone Cards',
+  'Travel Journals', 'Playlists for Two', 'Memory Capsules', 'Yearly Recap Books',
+];
+
+const Landing: React.FC = () => {
+  const authRef = useRef<HTMLDivElement>(null);
+  const scrollToAuth = () => authRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const { session, membership } = useAuth();
+
+  return (
+    <div className="min-h-screen w-full bg-[#FFD3DE]">
+      <header className="sticky top-0 z-20 flex items-center justify-between px-5 sm:px-10 py-5 bg-[#FFD3DE]/85 backdrop-blur-sm border-b border-[#F4A9BF]/60">
+        <div className="flex items-center gap-2">
+          <Flame className="w-5 h-5 text-[#E11D48]" />
+          <span className="font-display font-bold text-xl text-[#4A0420]">Pairlum</span>
+        </div>
+        <nav className="hidden sm:flex items-center gap-8 text-sm text-[#4A0420]">
+          <a href="#about" className="hover:text-[#E11D48] transition-colors">About</a>
+          <a href="#services" className="hover:text-[#E11D48] transition-colors">Memories</a>
+        </nav>
+        <button
+          onClick={scrollToAuth}
+          className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#E11D48] text-white text-sm font-semibold hover:-translate-y-0.5 transition-transform warm-shadow"
+        >
+          Start together
+        </button>
+      </header>
+
+      <main>
+        {/* Hero */}
+        <section className="relative px-5 sm:px-10 pt-20 pb-10 overflow-hidden">
+          <div className="pointer-events-none absolute -top-20 -right-20 w-96 h-96 rounded-full bg-[#E11D48]/20 blur-3xl" />
+          <div className="pointer-events-none absolute top-40 -left-20 w-72 h-72 rounded-full bg-[#F59E0B]/20 blur-3xl" />
+          <p className="relative max-w-[30ch] text-lg text-[#8A4058] mb-4">
+            A private space for two, made to keep what matters
+          </p>
+          <h1 className="relative font-display font-semibold text-[clamp(2.6rem,9vw,7rem)] leading-[0.92] tracking-[-0.045em] text-[#4A0420]">
+            Where two people
+            <br />make memories
+            <br />worth keeping
+          </h1>
+          <div className="relative mt-10 -mx-5 sm:-mx-10 px-5 sm:px-10 py-8 bg-[#9F1239] text-[#FFF1F4] flex flex-wrap gap-6 items-center justify-between">
+            <p className="max-w-[36ch] text-lg">Scroll to see how Pairlum works, then sign up in a minute</p>
+            <button
+              onClick={scrollToAuth}
+              className="inline-flex items-center px-6 py-3 rounded-full bg-[#FFF1F4] text-[#9F1239] text-sm font-semibold hover:-translate-y-0.5 transition-transform"
+            >
+              Enter your world
+            </button>
+          </div>
+        </section>
+
+        {/* Feature blocks */}
+        <section id="about" className="px-5 sm:px-10 py-16 grid gap-10 md:grid-cols-2">
+          {FEATURES.map((f) => (
+            <div key={f.label} className="rounded-3xl bg-[#FFB8CB]/60 border border-[#F4A9BF] p-8">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#4A0420]/30 text-xs mb-5 text-[#4A0420]">
+                <span className="w-2 h-2 rounded-full bg-[#E11D48]" />
+                {f.label}
+              </span>
+              <h2 className="font-display font-semibold text-[clamp(1.8rem,4vw,2.6rem)] leading-[0.95] tracking-[-0.03em] text-[#4A0420] mb-4 max-w-[11ch]">
+                {f.title}
+              </h2>
+              <p className="max-w-[34ch] text-[#8A4058]">{f.body}</p>
+            </div>
+          ))}
+        </section>
+
+        {/* Services / what Pairlum includes */}
+        <section id="services" className="px-5 sm:px-10 py-16 border-t border-[#4A0420]/15">
+          <p className="max-w-[30ch] font-display font-medium text-[clamp(1.5rem,3.4vw,3rem)] leading-[1.15] tracking-[-0.025em] text-[#4A0420] mb-8">
+            Pairlum turns everyday moments into a shared timeline, from first dates to whole decades.
+          </p>
+          <ol className="list-none p-0 m-0">
+            {SERVICES.map((s, i) => (
+              <li
+                key={s}
+                className="flex gap-6 items-baseline py-4 border-t last:border-b border-[#4A0420]/15 font-display font-medium text-[clamp(1.2rem,3vw,2rem)] tracking-[-0.02em] text-[#4A0420] hover:pl-4 transition-[padding]"
+              >
+                <span className="min-w-[3.5rem] text-sm font-sans text-[#8A4058]">({String(i + 1).padStart(3, '0')})</span>
+                {s}
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* Auth section */}
+        <section ref={authRef} className="px-5 sm:px-10 py-20 flex flex-col items-center gap-6 border-t border-[#4A0420]/15">
+          <div className="flex items-center gap-2 text-[#8A4058] text-sm">
+            <Sparkles className="w-4 h-4 text-[#F59E0B]" />
+            <span>{!session ? 'Sign in or create an account to begin' : 'Almost there'}</span>
+          </div>
+          <div className="w-full max-w-sm">
+            {!session ? <LoginOrSignup /> : !membership ? <Pairing /> : null}
+          </div>
+        </section>
+      </main>
+
+      <footer className="py-6 text-center text-xs text-[#8A4058]">
+        <div className="flex items-center justify-center gap-2">
+          <Flame className="w-3.5 h-3.5 text-[#E11D48]" />
+          <span className="font-display font-medium text-[#4A0420]">Pairlum</span>
+          <span>•</span>
+          <span className="font-script text-base text-[#E11D48]">a private space for two</span>
+        </div>
+      </footer>
+    </div>
   );
 };
 
@@ -282,41 +387,31 @@ export const AuthGate: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
   if (!configured) {
     return (
-      <Shell>
-        <PaperCard className="p-6 text-center">
-          <p className="font-serif text-lg text-[#1C110E] mb-2">Backend not configured</p>
-          <p className="text-sm text-[#6E5B52]">
-            Set <code className="text-xs">VITE_SUPABASE_URL</code> and{' '}
-            <code className="text-xs">VITE_SUPABASE_ANON_KEY</code> in your environment (see{' '}
-            <code className="text-xs">.env.example</code>) to enable accounts and shared data.
-          </p>
-        </PaperCard>
-      </Shell>
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#FFD3DE] px-4 py-10">
+        <div className="w-full max-w-sm">
+          <PaperCard className="p-6 text-center">
+            <p className="font-display text-lg text-[#4A0420] mb-2">Backend not configured</p>
+            <p className="text-sm text-[#8A4058]">
+              Set <code className="text-xs">VITE_SUPABASE_URL</code> and{' '}
+              <code className="text-xs">VITE_SUPABASE_ANON_KEY</code> in your environment (see{' '}
+              <code className="text-xs">.env.example</code>) to enable accounts and shared data.
+            </p>
+          </PaperCard>
+        </div>
+      </div>
     );
   }
 
   if (authLoading || (session && membershipLoading)) {
     return (
-      <Shell>
-        <div className="text-center text-sm text-[#6E5B52]">Loading your space…</div>
-      </Shell>
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#FFD3DE] px-4 py-10">
+        <div className="text-center text-sm text-[#8A4058]">Loading your space…</div>
+      </div>
     );
   }
 
-  if (!session) {
-    return (
-      <Shell>
-        <LoginOrSignup />
-      </Shell>
-    );
-  }
-
-  if (!membership) {
-    return (
-      <Shell>
-        <Pairing />
-      </Shell>
-    );
+  if (!session || !membership) {
+    return <Landing />;
   }
 
   return <>{children}</>;

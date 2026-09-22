@@ -159,7 +159,7 @@ const mapChapter = (row: any): Chapter => ({
   startDate: row.start_date ?? '',
   endDate: row.end_date ?? '',
   theme: row.theme ?? '',
-  spineColor: row.spine_color ?? '#8E1B1B',
+  spineColor: row.spine_color ?? '#E11D48',
   memoryIds: row.memory_ids ?? []
 });
 
@@ -651,7 +651,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       });
     }
 
-    confetti({ particleCount: 25, spread: 60, origin: { y: 0.8 }, colors: ['#8E1B1B', '#C63A2E', '#E8A33D'] });
+    confetti({ particleCount: 25, spread: 60, origin: { y: 0.8 }, colors: ['#E11D48', '#F59E0B', '#FFC145'] });
   }, [showToast]);
 
   const addReply = useCallback((memoryId: string, text: string, voiceDuration?: string, voiceUrl?: string) => {
@@ -838,7 +838,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const alreadyOpened = doorState.isOpened;
     updateDoorState({ isOpened: true });
     setCurrentView('door_opened');
-    confetti({ particleCount: 100, spread: 120, origin: { y: 0.6 }, colors: ['#E8A33D', '#8E1B1B', '#C63A2E', '#FFFBF5'] });
+    confetti({ particleCount: 100, spread: 120, origin: { y: 0.6 }, colors: ['#FFC145', '#E11D48', '#F59E0B', '#FFD3DE'] });
 
     // Only notify the partner the first time the door is truly opened —
     // this button doubles as a "relive it" replay, and re-notifying "the
@@ -955,8 +955,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   if (!couple) {
     return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-[#FFFBF5]">
-        <p className="text-sm text-[#6E5B52]">{dataLoading ? 'Opening your space…' : 'No shared space found.'}</p>
+      <div className="min-h-screen w-full flex items-center justify-center bg-[#FFD3DE]">
+        <p className="text-sm text-[#8A4058]">{dataLoading ? 'Opening your space…' : 'No shared space found.'}</p>
       </div>
     );
   }

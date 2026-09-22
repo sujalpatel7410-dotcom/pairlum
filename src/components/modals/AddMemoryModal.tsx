@@ -215,15 +215,15 @@ export const AddMemoryModal: React.FC = () => {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C110E]/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#4A0420]/60 backdrop-blur-xs animate-in fade-in duration-200">
       
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#FFFBF5] border border-[#E7D9C9] warm-shadow-lg p-6 sm:p-8">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#FFD3DE] border border-[#F4A9BF] warm-shadow-lg p-6 sm:p-8">
         
         {/* Close Button */}
         {step !== 'uploading' && (
           <button
             onClick={closeAddMemoryModal}
-            className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F7EFE4] hover:bg-[#E7D9C9] flex items-center justify-center text-[#6E5B52] transition-colors cursor-pointer"
+            className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FFB8CB] hover:bg-[#F4A9BF] flex items-center justify-center text-[#8A4058] transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -233,71 +233,71 @@ export const AddMemoryModal: React.FC = () => {
         {step === 'format' && (
           <div>
             <div className="text-center mb-8">
-              <h2 className="font-display text-3xl font-medium text-[#1C110E]">Choose a format</h2>
-              <p className="text-sm text-[#6E5B52] mt-1">Everything becomes part of your story.</p>
+              <h2 className="font-display text-3xl font-medium text-[#4A0420]">Choose a format</h2>
+              <p className="text-sm text-[#8A4058] mt-1">Everything becomes part of your story.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-4">
               <button
                 onClick={() => { setSelectedKind('photo'); setStep('media'); }}
-                className="p-5 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] text-left transition-all group cursor-pointer"
+                className="p-5 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] text-left transition-all group cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 flex items-center justify-center text-[#8E1B1B] mb-3 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 flex items-center justify-center text-[#E11D48] mb-3 group-hover:scale-110 transition-transform">
                   <Camera className="w-5 h-5" />
                 </div>
-                <div className="text-[11px] font-bold text-[#8E1B1B] uppercase tracking-wider mb-1">PHOTO</div>
-                <h4 className="font-display text-base font-semibold text-[#1C110E]">Capture a moment</h4>
-                <p className="text-xs text-[#6E5B52] mt-0.5">Private by default</p>
+                <div className="text-[11px] font-bold text-[#E11D48] uppercase tracking-wider mb-1">PHOTO</div>
+                <h4 className="font-display text-base font-semibold text-[#4A0420]">Capture a moment</h4>
+                <p className="text-xs text-[#8A4058] mt-0.5">Private by default</p>
               </button>
 
               <button
                 onClick={() => { setSelectedKind('video'); setStep('media'); }}
-                className="p-5 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] text-left transition-all group cursor-pointer"
+                className="p-5 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] text-left transition-all group cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 flex items-center justify-center text-[#8E1B1B] mb-3 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 flex items-center justify-center text-[#E11D48] mb-3 group-hover:scale-110 transition-transform">
                   <Video className="w-5 h-5" />
                 </div>
-                <div className="text-[11px] font-bold text-[#8E1B1B] uppercase tracking-wider mb-1">VIDEO</div>
-                <h4 className="font-display text-base font-semibold text-[#1C110E]">Record or upload</h4>
-                <p className="text-xs text-[#6E5B52] mt-0.5">Private by default</p>
+                <div className="text-[11px] font-bold text-[#E11D48] uppercase tracking-wider mb-1">VIDEO</div>
+                <h4 className="font-display text-base font-semibold text-[#4A0420]">Record or upload</h4>
+                <p className="text-xs text-[#8A4058] mt-0.5">Private by default</p>
               </button>
 
               <button
                 onClick={() => { setSelectedKind('voice'); setStep('media'); }}
-                className="p-5 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] text-left transition-all group cursor-pointer"
+                className="p-5 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] text-left transition-all group cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 flex items-center justify-center text-[#8E1B1B] mb-3 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 flex items-center justify-center text-[#E11D48] mb-3 group-hover:scale-110 transition-transform">
                   <Mic className="w-5 h-5" />
                 </div>
-                <div className="text-[11px] font-bold text-[#8E1B1B] uppercase tracking-wider mb-1">VOICE</div>
-                <h4 className="font-display text-base font-semibold text-[#1C110E]">Say it in your voice</h4>
-                <p className="text-xs text-[#6E5B52] mt-0.5">Private by default</p>
+                <div className="text-[11px] font-bold text-[#E11D48] uppercase tracking-wider mb-1">VOICE</div>
+                <h4 className="font-display text-base font-semibold text-[#4A0420]">Say it in your voice</h4>
+                <p className="text-xs text-[#8A4058] mt-0.5">Private by default</p>
               </button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <button
                 onClick={() => { setSelectedKind('note'); setStep('media'); }}
-                className="p-5 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] text-left transition-all group cursor-pointer"
+                className="p-5 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] text-left transition-all group cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 flex items-center justify-center text-[#8E1B1B] mb-3 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 flex items-center justify-center text-[#E11D48] mb-3 group-hover:scale-110 transition-transform">
                   <FileText className="w-5 h-5" />
                 </div>
-                <div className="text-[11px] font-bold text-[#8E1B1B] uppercase tracking-wider mb-1">NOTE</div>
-                <h4 className="font-display text-base font-semibold text-[#1C110E]">Write from the heart</h4>
-                <p className="text-xs text-[#6E5B52] mt-0.5">Private by default</p>
+                <div className="text-[11px] font-bold text-[#E11D48] uppercase tracking-wider mb-1">NOTE</div>
+                <h4 className="font-display text-base font-semibold text-[#4A0420]">Write from the heart</h4>
+                <p className="text-xs text-[#8A4058] mt-0.5">Private by default</p>
               </button>
 
               <button
                 onClick={() => { setSelectedKind('moment'); setStep('media'); }}
-                className="p-5 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] text-left transition-all group cursor-pointer"
+                className="p-5 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] text-left transition-all group cursor-pointer"
               >
-                <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 flex items-center justify-center text-[#8E1B1B] mb-3 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 flex items-center justify-center text-[#E11D48] mb-3 group-hover:scale-110 transition-transform">
                   <Sparkles className="w-5 h-5" />
                 </div>
-                <div className="text-[11px] font-bold text-[#8E1B1B] uppercase tracking-wider mb-1">MOMENT</div>
-                <h4 className="font-display text-base font-semibold text-[#1C110E]">Quick everyday memory</h4>
-                <p className="text-xs text-[#6E5B52] mt-0.5">Private by default</p>
+                <div className="text-[11px] font-bold text-[#E11D48] uppercase tracking-wider mb-1">MOMENT</div>
+                <h4 className="font-display text-base font-semibold text-[#4A0420]">Quick everyday memory</h4>
+                <p className="text-xs text-[#8A4058] mt-0.5">Private by default</p>
               </button>
             </div>
           </div>
@@ -306,14 +306,14 @@ export const AddMemoryModal: React.FC = () => {
         {/* STEP: MEDIA CAPTURE / PICKER */}
         {step === 'media' && (
           <div>
-            <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#E7D9C9]">
+            <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#F4A9BF]">
               <button
                 onClick={() => setStep('format')}
-                className="text-xs text-[#8E1B1B] hover:underline font-medium cursor-pointer"
+                className="text-xs text-[#E11D48] hover:underline font-medium cursor-pointer"
               >
                 ← Change format ({selectedKind})
               </button>
-              <span className="text-xs text-[#6E5B52]">Step 1 of 2</span>
+              <span className="text-xs text-[#8A4058]">Step 1 of 2</span>
             </div>
 
             {/* PHOTO OPTION */}
@@ -321,7 +321,7 @@ export const AddMemoryModal: React.FC = () => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                   <div className="md:col-span-7">
-                    <div className="relative rounded-2xl overflow-hidden border border-[#E7D9C9] warm-shadow aspect-4/3 bg-[#F7EFE4]">
+                    <div className="relative rounded-2xl overflow-hidden border border-[#F4A9BF] warm-shadow aspect-4/3 bg-[#FFB8CB]">
                       <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
                       <div className="absolute bottom-3 left-3 bg-black/50 backdrop-blur-xs text-white text-xs px-3 py-1 rounded-full flex items-center gap-1.5">
                         <Camera className="w-3.5 h-3.5" />
@@ -331,9 +331,9 @@ export const AddMemoryModal: React.FC = () => {
                   </div>
 
                   <div className="md:col-span-5 space-y-4">
-                    <h3 className="font-display text-2xl text-[#1C110E]">Photo options</h3>
+                    <h3 className="font-display text-2xl text-[#4A0420]">Photo options</h3>
 
-                    <label className="w-full py-3 px-4 rounded-full bg-[#FFFBF5] border border-[#8E1B1B] text-[#8E1B1B] hover:bg-[#8E1B1B]/10 text-sm font-medium transition-all cursor-pointer flex items-center justify-center gap-2">
+                    <label className="w-full py-3 px-4 rounded-full bg-[#FFD3DE] border border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48]/10 text-sm font-medium transition-all cursor-pointer flex items-center justify-center gap-2">
                       <UploadCloud className="w-4 h-4" />
                       <span>{isUploading ? `Uploading... ${uploadPercent}%` : 'Upload your own photo'}</span>
                       <input
@@ -345,26 +345,26 @@ export const AddMemoryModal: React.FC = () => {
                       />
                     </label>
                     {uploadError && (
-                      <p className="text-xs text-[#8E1B1B]">{uploadError}</p>
+                      <p className="text-xs text-[#E11D48]">{uploadError}</p>
                     )}
 
                     <button
                       onClick={() => setStep('details')}
                       disabled={isUploading}
-                      className="w-full py-3 px-4 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-medium transition-all shadow-sm cursor-pointer disabled:opacity-50"
+                      className="w-full py-3 px-4 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-sm font-medium transition-all shadow-sm cursor-pointer disabled:opacity-50"
                     >
                       Use This Photo
                     </button>
 
                     <div className="pt-2">
-                      <label className="text-xs font-semibold text-[#6E5B52] block mb-2">Or choose a cozy photo:</label>
+                      <label className="text-xs font-semibold text-[#8A4058] block mb-2">Or choose a cozy photo:</label>
                       <div className="flex gap-2 overflow-x-auto pb-2">
                         {samplePhotos.map((url, idx) => (
                           <button
                             key={idx}
                             onClick={() => setImageUrl(url)}
                             className={`w-14 h-14 rounded-xl overflow-hidden border-2 flex-shrink-0 transition-transform ${
-                              imageUrl === url ? 'border-[#8E1B1B] scale-105' : 'border-transparent opacity-70 hover:opacity-100'
+                              imageUrl === url ? 'border-[#E11D48] scale-105' : 'border-transparent opacity-70 hover:opacity-100'
                             }`}
                           >
                             <img src={url} alt="Option" className="w-full h-full object-cover" />
@@ -381,13 +381,13 @@ export const AddMemoryModal: React.FC = () => {
             {selectedKind === 'voice' && (
               <div className="py-4">
                 <div className="text-center mb-6">
-                  <span className="text-[11px] font-bold text-[#8E1B1B] tracking-wider uppercase">STEP 03 / VOICE</span>
-                  <h3 className="font-display text-3xl text-[#1C110E] mt-1">Record a voice note</h3>
-                  <p className="text-sm text-[#6E5B52] mt-1">Sometimes hearing you says more than typing ever could.</p>
+                  <span className="text-[11px] font-bold text-[#E11D48] tracking-wider uppercase">STEP 03 / VOICE</span>
+                  <h3 className="font-display text-3xl text-[#4A0420] mt-1">Record a voice note</h3>
+                  <p className="text-sm text-[#8A4058] mt-1">Sometimes hearing you says more than typing ever could.</p>
                 </div>
 
-                <div className="p-8 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow text-center">
-                  <h4 className="font-display text-xl text-[#1C110E] mb-6">
+                <div className="p-8 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] warm-shadow text-center">
+                  <h4 className="font-display text-xl text-[#4A0420] mb-6">
                     Say something for {partnerName}
                   </h4>
 
@@ -402,17 +402,17 @@ export const AddMemoryModal: React.FC = () => {
                           key={i}
                           style={{ height: `${height}px` }}
                           className={`w-1.5 sm:w-2 rounded-full transition-all duration-150 ${
-                            voiceRecorder.isRecording ? 'bg-[#8E1B1B]' : 'bg-[#C63A2E]/70'
+                            voiceRecorder.isRecording ? 'bg-[#E11D48]' : 'bg-[#F59E0B]/70'
                           }`}
                         />
                       );
                     })}
                   </div>
 
-                  <div className="font-display text-2xl text-[#1C110E] mb-1 font-semibold">
+                  <div className="font-display text-2xl text-[#4A0420] mb-1 font-semibold">
                     {formatDuration(voiceRecorder.seconds)}
                   </div>
-                  <p className="text-xs text-[#6E5B52] mb-6">
+                  <p className="text-xs text-[#8A4058] mb-6">
                     {voiceRecorder.isRecording
                       ? 'Listening to your voice...'
                       : isUploading
@@ -422,17 +422,17 @@ export const AddMemoryModal: React.FC = () => {
                           : 'Tap record to speak or done to save'}
                   </p>
                   {voiceRecorder.error && (
-                    <p className="text-xs text-[#8E1B1B] mb-4">{voiceRecorder.error}</p>
+                    <p className="text-xs text-[#E11D48] mb-4">{voiceRecorder.error}</p>
                   )}
                   {uploadError && (
-                    <p className="text-xs text-[#8E1B1B] mb-4">{uploadError}</p>
+                    <p className="text-xs text-[#E11D48] mb-4">{uploadError}</p>
                   )}
 
                   <div className="flex items-center justify-center gap-6">
                     <button
                       onClick={handleDeleteRecording}
                       disabled={isUploading}
-                      className="px-6 py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#6E5B52] hover:text-[#1C110E] cursor-pointer disabled:opacity-50"
+                      className="px-6 py-2.5 rounded-full bg-[#FFD3DE] border border-[#F4A9BF] text-xs font-medium text-[#8A4058] hover:text-[#4A0420] cursor-pointer disabled:opacity-50"
                     >
                       Delete
                     </button>
@@ -442,7 +442,7 @@ export const AddMemoryModal: React.FC = () => {
                       onClick={handleToggleRecording}
                       disabled={isUploading}
                       className={`w-16 h-16 rounded-full flex items-center justify-center text-white shadow-md transition-transform hover:scale-105 cursor-pointer disabled:opacity-50 ${
-                        voiceRecorder.isRecording ? 'bg-[#8E1B1B] animate-pulse ring-4 ring-[#8E1B1B]/20' : 'bg-[#8E1B1B]'
+                        voiceRecorder.isRecording ? 'bg-[#E11D48] animate-pulse ring-4 ring-[#E11D48]/20' : 'bg-[#E11D48]'
                       }`}
                     >
                       {voiceRecorder.isRecording ? <Pause className="w-7 h-7" /> : <Mic className="w-7 h-7" />}
@@ -451,7 +451,7 @@ export const AddMemoryModal: React.FC = () => {
                     <button
                       onClick={handleDoneRecording}
                       disabled={isUploading}
-                      className="px-6 py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] hover:border-[#8E1B1B] cursor-pointer disabled:opacity-50"
+                      className="px-6 py-2.5 rounded-full bg-[#FFD3DE] border border-[#F4A9BF] text-xs font-medium text-[#4A0420] hover:border-[#E11D48] cursor-pointer disabled:opacity-50"
                     >
                       Done
                     </button>
@@ -464,26 +464,26 @@ export const AddMemoryModal: React.FC = () => {
             {selectedKind === 'note' && (
               <div className="py-2">
                 <div className="mb-4">
-                  <h3 className="font-display text-2xl text-[#1C110E]">Write from your heart</h3>
-                  <p className="text-xs text-[#6E5B52]">Leave warm stationery words for {partnerName}.</p>
+                  <h3 className="font-display text-2xl text-[#4A0420]">Write from your heart</h3>
+                  <p className="text-xs text-[#8A4058]">Leave warm stationery words for {partnerName}.</p>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-[#FFFBF5] border border-[#E7D9C9] stationery-lines warm-shadow mb-6">
+                <div className="p-6 rounded-2xl bg-[#FFD3DE] border border-[#F4A9BF] stationery-lines warm-shadow mb-6">
                   <textarea
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
                     placeholder="Just wanted to remind you how amazing you are. Missing you a little extra today. Can't wait to see you soon. ♡"
                     rows={6}
-                    className="w-full bg-transparent font-script text-2xl text-[#1C110E] placeholder:text-[#6E5B52]/50 focus:outline-hidden resize-none leading-[28px]"
+                    className="w-full bg-transparent font-script text-2xl text-[#4A0420] placeholder:text-[#8A4058]/50 focus:outline-hidden resize-none leading-[28px]"
                   />
-                  <div className="text-right text-xs text-[#6E5B52] pt-2">
+                  <div className="text-right text-xs text-[#8A4058] pt-2">
                     {caption.length} / 1000
                   </div>
                 </div>
 
                 <button
                   onClick={() => setStep('details')}
-                  className="w-full py-3.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-medium shadow-sm cursor-pointer"
+                  className="w-full py-3.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-sm font-medium shadow-sm cursor-pointer"
                 >
                   Next: Add Details
                 </button>
@@ -495,14 +495,14 @@ export const AddMemoryModal: React.FC = () => {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                   <div className="md:col-span-7">
-                    <div className="relative rounded-2xl overflow-hidden border border-[#E7D9C9] warm-shadow aspect-4/3 bg-black">
+                    <div className="relative rounded-2xl overflow-hidden border border-[#F4A9BF] warm-shadow aspect-4/3 bg-black">
                       {videoUrl ? (
                         <video src={videoUrl} poster={imageUrl} controls className="w-full h-full object-cover" />
                       ) : (
                         <>
                           <img src={imageUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80"} alt="Video" className="w-full h-full object-cover opacity-80" />
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-14 h-14 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center shadow-lg">
+                            <div className="w-14 h-14 rounded-full bg-[#E11D48] text-white flex items-center justify-center shadow-lg">
                               <Play className="w-6 h-6 fill-white ml-0.5" />
                             </div>
                           </div>
@@ -512,9 +512,9 @@ export const AddMemoryModal: React.FC = () => {
                   </div>
 
                   <div className="md:col-span-5 space-y-4">
-                    <h3 className="font-display text-2xl text-[#1C110E]">Video options</h3>
+                    <h3 className="font-display text-2xl text-[#4A0420]">Video options</h3>
 
-                    <label className="w-full py-3 px-4 rounded-full bg-[#FFFBF5] border border-[#8E1B1B] text-[#8E1B1B] hover:bg-[#8E1B1B]/10 text-sm font-medium transition-all cursor-pointer flex items-center justify-center gap-2">
+                    <label className="w-full py-3 px-4 rounded-full bg-[#FFD3DE] border border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48]/10 text-sm font-medium transition-all cursor-pointer flex items-center justify-center gap-2">
                       <UploadCloud className="w-4 h-4" />
                       <span>{isUploading ? `Uploading... ${uploadPercent}%` : 'Upload your own video'}</span>
                       <input
@@ -526,17 +526,17 @@ export const AddMemoryModal: React.FC = () => {
                       />
                     </label>
                     {uploadError && (
-                      <p className="text-xs text-[#8E1B1B]">{uploadError}</p>
+                      <p className="text-xs text-[#E11D48]">{uploadError}</p>
                     )}
 
                     <button
                       onClick={() => setStep('details')}
                       disabled={isUploading || !videoUrl}
-                      className="w-full py-3 px-4 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-medium transition-all shadow-sm cursor-pointer disabled:opacity-50"
+                      className="w-full py-3 px-4 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-sm font-medium transition-all shadow-sm cursor-pointer disabled:opacity-50"
                     >
                       Use This Video
                     </button>
-                    <div className="text-xs text-[#6E5B52] space-y-2 pt-2 border-t border-[#E7D9C9]">
+                    <div className="text-xs text-[#8A4058] space-y-2 pt-2 border-t border-[#F4A9BF]">
                       <p className="flex items-center gap-2">✓ Uploaded to Cloudinary</p>
                       <p className="flex items-center gap-2">✓ Auto cover frame</p>
                       <p className="flex items-center gap-2">✓ High quality streaming</p>
@@ -550,19 +550,19 @@ export const AddMemoryModal: React.FC = () => {
             {selectedKind === 'moment' && (
               <div className="space-y-6">
                 <div className="text-center py-4">
-                  <h3 className="font-display text-2xl text-[#1C110E]">Everyday Moment</h3>
-                  <p className="text-xs text-[#6E5B52] mt-1">A quick thought, feeling, or micro-memory from right now.</p>
+                  <h3 className="font-display text-2xl text-[#4A0420]">Everyday Moment</h3>
+                  <p className="text-xs text-[#8A4058] mt-1">A quick thought, feeling, or micro-memory from right now.</p>
                 </div>
                 <textarea
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
                   placeholder="Thinking about our walk yesterday. The sky was so calm."
                   rows={4}
-                  className="w-full p-4 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] text-[#1C110E] text-base focus:outline-hidden focus:border-[#8E1B1B]"
+                  className="w-full p-4 rounded-2xl bg-[#FFB8CB] border border-[#F4A9BF] text-[#4A0420] text-base focus:outline-hidden focus:border-[#E11D48]"
                 />
                 <button
                   onClick={() => setStep('details')}
-                  className="w-full py-3.5 rounded-full bg-[#8E1B1B] text-white text-sm font-medium cursor-pointer"
+                  className="w-full py-3.5 rounded-full bg-[#E11D48] text-white text-sm font-medium cursor-pointer"
                 >
                   Next
                 </button>
@@ -574,32 +574,32 @@ export const AddMemoryModal: React.FC = () => {
         {/* STEP: DETAILS (Caption, Date, Location, Chapter, Visibility) */}
         {step === 'details' && (
           <div>
-            <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#E7D9C9]">
+            <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#F4A9BF]">
               <button
                 onClick={() => setStep('media')}
-                className="text-xs text-[#8E1B1B] hover:underline font-medium cursor-pointer"
+                className="text-xs text-[#E11D48] hover:underline font-medium cursor-pointer"
               >
                 ← Back to media
               </button>
-              <span className="text-xs text-[#6E5B52]">Step 2 of 2</span>
+              <span className="text-xs text-[#8A4058]">Step 2 of 2</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
               
               {/* Left preview polaroid */}
               <div className="md:col-span-5">
-                <div className="p-3 bg-white rounded-2xl border border-[#E7D9C9] warm-shadow rotate-[-1deg]">
+                <div className="p-3 bg-white rounded-2xl border border-[#F4A9BF] warm-shadow rotate-[-1deg]">
                   {selectedKind !== 'note' ? (
                     <img src={imageUrl} alt="Selected" className="w-full h-44 object-cover rounded-xl" />
                   ) : (
-                    <div className="h-44 bg-[#F7EFE4] p-3 rounded-xl flex items-center justify-center text-center">
-                      <p className="font-script text-lg text-[#1C110E]">"{caption || 'A handwritten note'}"</p>
+                    <div className="h-44 bg-[#FFB8CB] p-3 rounded-xl flex items-center justify-center text-center">
+                      <p className="font-script text-lg text-[#4A0420]">"{caption || 'A handwritten note'}"</p>
                     </div>
                   )}
-                  <p className="font-script text-base text-[#1C110E] mt-2.5 text-center truncate">
+                  <p className="font-script text-base text-[#4A0420] mt-2.5 text-center truncate">
                     {title || 'Sunset date by the beach'} ♡
                   </p>
-                  <p className="text-[11px] text-[#6E5B52] text-center">{date} • {location}</p>
+                  <p className="text-[11px] text-[#8A4058] text-center">{date} • {location}</p>
                 </div>
               </div>
 
@@ -608,60 +608,60 @@ export const AddMemoryModal: React.FC = () => {
                 
                 {/* Caption */}
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Caption / Title</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Caption / Title</label>
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Sunset date by the beach"
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-sm text-[#1C110E] focus:outline-hidden focus:border-[#8E1B1B]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-sm text-[#4A0420] focus:outline-hidden focus:border-[#E11D48]"
                   />
                 </div>
 
                 {/* Subtitle / note */}
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Heart Note (optional)</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Heart Note (optional)</label>
                   <input
                     type="text"
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
                     placeholder="Missing you a little extra today."
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-sm text-[#1C110E] focus:outline-hidden focus:border-[#8E1B1B]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-sm text-[#4A0420] focus:outline-hidden focus:border-[#E11D48]"
                   />
                 </div>
 
                 {/* Date & Time */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-[#1C110E] mb-1.5 flex items-center gap-1">
-                      <Calendar className="w-3 h-3 text-[#8E1B1B]" />
+                    <label className="block text-xs font-semibold text-[#4A0420] mb-1.5 flex items-center gap-1">
+                      <Calendar className="w-3 h-3 text-[#E11D48]" />
                       <span>Date</span>
                     </label>
                     <input
                       type="text"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-hidden"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-xs text-[#4A0420] focus:outline-hidden"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#1C110E] mb-1.5 flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-[#8E1B1B]" />
+                    <label className="block text-xs font-semibold text-[#4A0420] mb-1.5 flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-[#E11D48]" />
                       <span>Time</span>
                     </label>
                     <input
                       type="text"
                       value={time}
                       onChange={(e) => setTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-hidden"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-xs text-[#4A0420] focus:outline-hidden"
                     />
                   </div>
                 </div>
 
                 {/* Location */}
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5 flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-[#8E1B1B]" />
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5 flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-[#E11D48]" />
                     <span>Location (optional)</span>
                   </label>
                   <input
@@ -669,21 +669,21 @@ export const AddMemoryModal: React.FC = () => {
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     placeholder="Goa, India"
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-hidden"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-xs text-[#4A0420] focus:outline-hidden"
                   />
                 </div>
 
                 {/* Chapter & Visibility */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-[#1C110E] mb-1.5 flex items-center gap-1">
-                      <BookOpen className="w-3 h-3 text-[#8E1B1B]" />
+                    <label className="block text-xs font-semibold text-[#4A0420] mb-1.5 flex items-center gap-1">
+                      <BookOpen className="w-3 h-3 text-[#E11D48]" />
                       <span>Add to chapter</span>
                     </label>
                     <select
                       value={chapterId}
                       onChange={(e) => setChapterId(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-hidden"
+                      className="w-full px-3 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-xs text-[#4A0420] focus:outline-hidden"
                     >
                       {chapters.map(ch => (
                         <option key={ch.id} value={ch.id}>{ch.title}</option>
@@ -691,11 +691,11 @@ export const AddMemoryModal: React.FC = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#1C110E] mb-1.5 flex items-center gap-1">
-                      <Lock className="w-3 h-3 text-[#8E1B1B]" />
+                    <label className="block text-xs font-semibold text-[#4A0420] mb-1.5 flex items-center gap-1">
+                      <Lock className="w-3 h-3 text-[#E11D48]" />
                       <span>Who can see this?</span>
                     </label>
-                    <div className="px-3.5 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#1C110E] font-medium flex items-center gap-1.5">
+                    <div className="px-3.5 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-xs text-[#4A0420] font-medium flex items-center gap-1.5">
                       <span>Only us (Private)</span>
                     </div>
                   </div>
@@ -705,7 +705,7 @@ export const AddMemoryModal: React.FC = () => {
                 <button
                   id="save-memory-button"
                   onClick={handleSaveMemory}
-                  className="w-full mt-4 py-3.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-semibold tracking-wide transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full mt-4 py-3.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-sm font-semibold tracking-wide transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
                 >
                   <Heart className="w-4 h-4 fill-white" />
                   <span>Save Memory</span>
@@ -719,8 +719,8 @@ export const AddMemoryModal: React.FC = () => {
         {/* STEP: UPLOADING PROGRESS RING (Screenshot 40) */}
         {step === 'uploading' && (
           <div className="py-12 text-center">
-            <h3 className="font-display text-3xl text-[#1C110E] font-medium">Saving your memory</h3>
-            <p className="text-sm text-[#6E5B52] mt-1">Keep this window open for just a moment.</p>
+            <h3 className="font-display text-3xl text-[#4A0420] font-medium">Saving your memory</h3>
+            <p className="text-sm text-[#8A4058] mt-1">Keep this window open for just a moment.</p>
 
             <div className="my-10 flex justify-center">
               <div className="relative w-36 h-36 flex items-center justify-center">
@@ -730,7 +730,7 @@ export const AddMemoryModal: React.FC = () => {
                     cx="50"
                     cy="50"
                     r="40"
-                    stroke="#F7EFE4"
+                    stroke="#FFB8CB"
                     strokeWidth="8"
                     fill="none"
                   />
@@ -738,7 +738,7 @@ export const AddMemoryModal: React.FC = () => {
                     cx="50"
                     cy="50"
                     r="40"
-                    stroke="#8E1B1B"
+                    stroke="#E11D48"
                     strokeWidth="8"
                     strokeDasharray="251.2"
                     strokeDashoffset={251.2 - (251.2 * uploadProgress) / 100}
@@ -747,18 +747,18 @@ export const AddMemoryModal: React.FC = () => {
                     className="transition-all duration-200"
                   />
                 </svg>
-                <div className="absolute font-display text-3xl font-bold text-[#1C110E]">
+                <div className="absolute font-display text-3xl font-bold text-[#4A0420]">
                   {uploadProgress}%
                 </div>
               </div>
             </div>
 
-            <h4 className="font-display text-xl font-semibold text-[#1C110E]">Uploading your memory...</h4>
-            <p className="text-xs text-[#6E5B52] mt-1">Please don't close this page.</p>
+            <h4 className="font-display text-xl font-semibold text-[#4A0420]">Uploading your memory...</h4>
+            <p className="text-xs text-[#8A4058] mt-1">Please don't close this page.</p>
 
             <button
               onClick={closeAddMemoryModal}
-              className="mt-6 px-6 py-2 rounded-full border border-[#E7D9C9] text-xs text-[#6E5B52] hover:text-[#1C110E]"
+              className="mt-6 px-6 py-2 rounded-full border border-[#F4A9BF] text-xs text-[#8A4058] hover:text-[#4A0420]"
             >
               Cancel
             </button>
@@ -768,14 +768,14 @@ export const AddMemoryModal: React.FC = () => {
         {/* STEP: SUCCESS CONFIRMATION (Screenshot 36) */}
         {step === 'success' && (
           <div className="py-10 text-center">
-            <div className="w-20 h-20 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] mx-auto flex items-center justify-center mb-6">
-              <div className="w-14 h-14 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center shadow-md">
+            <div className="w-20 h-20 rounded-full bg-[#E11D48]/10 text-[#E11D48] mx-auto flex items-center justify-center mb-6">
+              <div className="w-14 h-14 rounded-full bg-[#E11D48] text-white flex items-center justify-center shadow-md">
                 <Check className="w-7 h-7 stroke-[3]" />
               </div>
             </div>
 
-            <h3 className="font-display text-3xl font-semibold text-[#1C110E]">Saved to your story ♡</h3>
-            <p className="text-sm text-[#6E5B52] mt-2 font-script text-xl">
+            <h3 className="font-display text-3xl font-semibold text-[#4A0420]">Saved to your story ♡</h3>
+            <p className="text-sm text-[#8A4058] mt-2 font-script text-xl">
               {partnerName} will see it in The Window.
             </p>
 
@@ -787,7 +787,7 @@ export const AddMemoryModal: React.FC = () => {
                     setActiveLightboxMemory(memories[0]);
                   }
                 }}
-                className="px-6 py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide cursor-pointer"
+                className="px-6 py-3 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-semibold tracking-wide cursor-pointer"
               >
                 View Memory
               </button>
@@ -807,7 +807,7 @@ export const AddMemoryModal: React.FC = () => {
                   voiceRecorder.cancel();
                   setAudioUrl(undefined);
                 }}
-                className="px-6 py-3 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] hover:border-[#8E1B1B] cursor-pointer"
+                className="px-6 py-3 rounded-full bg-[#FFD3DE] border border-[#F4A9BF] text-xs font-medium text-[#4A0420] hover:border-[#E11D48] cursor-pointer"
               >
                 Add Another
               </button>

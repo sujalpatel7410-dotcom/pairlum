@@ -154,7 +154,7 @@ export const TheDoorView: React.FC = () => {
         particleCount: 40,
         spread: 60,
         origin: { y: 0.7 },
-        colors: ['#8E1B1B', '#E8A33D', '#F7EFE4']
+        colors: ['#E11D48', '#FFC145', '#FFB8CB']
       });
       showToast('Milestone checked off! One step closer ♡');
     }
@@ -162,13 +162,13 @@ export const TheDoorView: React.FC = () => {
 
   const getStopIcon = (name: string) => {
     switch (name) {
-      case 'Plane': return <Plane className="w-4 h-4 text-[#8E1B1B]" />;
-      case 'Coffee': return <Coffee className="w-4 h-4 text-[#8E1B1B]" />;
-      case 'Hotel': return <Hotel className="w-4 h-4 text-[#8E1B1B]" />;
-      case 'Gift': return <Gift className="w-4 h-4 text-[#8E1B1B]" />;
-      case 'Utensils': return <Utensils className="w-4 h-4 text-[#8E1B1B]" />;
-      case 'Luggage': return <Luggage className="w-4 h-4 text-[#8E1B1B]" />;
-      default: return <Heart className="w-4 h-4 text-[#8E1B1B]" />;
+      case 'Plane': return <Plane className="w-4 h-4 text-[#E11D48]" />;
+      case 'Coffee': return <Coffee className="w-4 h-4 text-[#E11D48]" />;
+      case 'Hotel': return <Hotel className="w-4 h-4 text-[#E11D48]" />;
+      case 'Gift': return <Gift className="w-4 h-4 text-[#E11D48]" />;
+      case 'Utensils': return <Utensils className="w-4 h-4 text-[#E11D48]" />;
+      case 'Luggage': return <Luggage className="w-4 h-4 text-[#E11D48]" />;
+      default: return <Heart className="w-4 h-4 text-[#E11D48]" />;
     }
   };
 
@@ -218,7 +218,7 @@ export const TheDoorView: React.FC = () => {
             id="tab-door-experience"
             onClick={() => setActiveTab('door')}
             className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-              activeTab === 'door' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+              activeTab === 'door' ? 'bg-[#E11D48] text-white' : 'text-[#8A4058] hover:bg-[#FFB8CB]'
             }`}
           >
             <span className="flex items-center gap-2">
@@ -234,7 +234,7 @@ export const TheDoorView: React.FC = () => {
             id="tab-reunion-roadmap"
             onClick={() => setActiveTab('reunion_plan')}
             className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-              activeTab === 'reunion_plan' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+              activeTab === 'reunion_plan' ? 'bg-[#E11D48] text-white' : 'text-[#8A4058] hover:bg-[#FFB8CB]'
             }`}
           >
             <span className="flex items-center gap-2">
@@ -250,7 +250,7 @@ export const TheDoorView: React.FC = () => {
             id="tab-prepare-door"
             onClick={() => setActiveTab('prepare')}
             className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
-              activeTab === 'prepare' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+              activeTab === 'prepare' ? 'bg-[#E11D48] text-white' : 'text-[#8A4058] hover:bg-[#FFB8CB]'
             }`}
           >
             <span className="flex items-center gap-2">
@@ -262,37 +262,37 @@ export const TheDoorView: React.FC = () => {
         </div>
 
         {/* Distance summary widget on rail */}
-        <div className="p-3.5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-2 mt-4 text-xs">
-          <div className="flex items-center justify-between font-semibold text-[#1C110E]">
-            <span className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-[#8E1B1B]">
+        <div className="p-3.5 rounded-2xl bg-[#FFB8CB] border border-[#F4A9BF] space-y-2 mt-4 text-xs">
+          <div className="flex items-center justify-between font-semibold text-[#4A0420]">
+            <span className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-[#E11D48]">
               <Globe2 className="w-3.5 h-3.5" />
               <span>Distance Apart</span>
             </span>
-            <span className="font-mono text-[11px] text-[#8E1B1B] font-bold">{distanceKmText}</span>
+            <span className="font-mono text-[11px] text-[#E11D48] font-bold">{distanceKmText}</span>
           </div>
-          <div className="flex items-center justify-between text-[11px] text-[#6E5B52]">
+          <div className="flex items-center justify-between text-[11px] text-[#8A4058]">
             <span>{cityA.split(',')[0]} ✈ {cityB.split(',')[0]}</span>
             <span>{flightDuration}</span>
           </div>
-          <div className="w-full bg-[#E7D9C9] h-1.5 rounded-full overflow-hidden">
-            <div className="bg-[#8E1B1B] h-full rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }} />
+          <div className="w-full bg-[#F4A9BF] h-1.5 rounded-full overflow-hidden">
+            <div className="bg-[#E11D48] h-full rounded-full transition-all duration-500" style={{ width: `${progressPercent}%` }} />
           </div>
-          <p className="text-[10px] text-[#6E5B52] text-center italic">
+          <p className="text-[10px] text-[#8A4058] text-center italic">
             {progressPercent}% of reunion preparation done
           </p>
         </div>
 
         {/* Big Reveal Simulator CTA */}
-        <div className="pt-4 border-t border-[#E7D9C9]">
+        <div className="pt-4 border-t border-[#F4A9BF]">
           <button
             id="open-the-door-cta"
             onClick={openTheDoor}
-            className="w-full py-3 rounded-full bg-gradient-to-r from-[#8E1B1B] to-[#C63A2E] text-white text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-[#8E1B1B]/20 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+            className="w-full py-3 rounded-full bg-gradient-to-r from-[#E11D48] to-[#F59E0B] text-white text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-[#E11D48]/20 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
           >
             <Sparkles className="w-4 h-4 text-amber-300" />
             <span>Open The Door Now</span>
           </button>
-          <p className="text-[10px] text-[#6E5B52] text-center mt-1.5 font-script text-sm">
+          <p className="text-[10px] text-[#8A4058] text-center mt-1.5 font-script text-sm">
             Simulate the final reunion reveal moment ♡
           </p>
         </div>
@@ -310,29 +310,29 @@ export const TheDoorView: React.FC = () => {
             {/* Header & Distance Ribbon */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-[#8E1B1B] uppercase tracking-wider flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-[#E8A33D]" />
+                <span className="text-xs font-bold text-[#E11D48] uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#FFC145]" />
                   <span>THE REUNION & DISTANCE</span>
                 </span>
-                <h2 className="font-display text-4xl sm:text-5xl text-[#1C110E] font-medium mt-1 leading-tight">
+                <h2 className="font-display text-4xl sm:text-5xl text-[#4A0420] font-medium mt-1 leading-tight">
                   The day <br />
-                  <span className="text-[#8E1B1B] italic">you meet again.</span>
+                  <span className="text-[#E11D48] italic">you meet again.</span>
                 </h2>
-                <p className="text-sm text-[#6E5B52] mt-1.5 max-w-lg">
+                <p className="text-sm text-[#8A4058] mt-1.5 max-w-lg">
                   Every mile is counting down to zero. The wait has been long, but we are turning it into something memorable.
                 </p>
               </div>
 
               {/* Distance Apart Badge */}
-              <div className="p-3.5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] text-right flex-shrink-0">
-                <div className="flex items-center gap-2 justify-end text-xs text-[#8E1B1B] font-bold uppercase tracking-wider">
+              <div className="p-3.5 rounded-2xl bg-[#FFB8CB] border border-[#F4A9BF] text-right flex-shrink-0">
+                <div className="flex items-center gap-2 justify-end text-xs text-[#E11D48] font-bold uppercase tracking-wider">
                   <Plane className="w-3.5 h-3.5 rotate-45" />
                   <span>Distance Across Ocean</span>
                 </div>
-                <div className="font-display text-2xl font-bold text-[#1C110E] mt-0.5">
+                <div className="font-display text-2xl font-bold text-[#4A0420] mt-0.5">
                   {distanceKmText}
                 </div>
-                <div className="text-[11px] text-[#6E5B52] flex items-center gap-2 justify-end mt-0.5">
+                <div className="text-[11px] text-[#8A4058] flex items-center gap-2 justify-end mt-0.5">
                   <span>{timezoneDiff}</span>
                   <span>•</span>
                   <span>{flightDuration}</span>
@@ -341,7 +341,7 @@ export const TheDoorView: React.FC = () => {
             </div>
 
             {/* Glowing Golden Arched Doorway Card with Distance & Countdown */}
-            <div className="relative rounded-3xl overflow-hidden border border-[#E8A33D]/50 candle-glow bg-[#1C110E] text-white p-8 sm:p-12 warm-shadow-lg">
+            <div className="relative rounded-3xl overflow-hidden border border-[#FFC145]/50 candle-glow bg-[#4A0420] text-white p-8 sm:p-12 warm-shadow-lg">
               
               {/* Arched Doorway Background Artwork */}
               <div className="absolute inset-0 opacity-40 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-400/40 via-amber-950/40 to-black pointer-events-none" />
@@ -358,7 +358,7 @@ export const TheDoorView: React.FC = () => {
                     </div>
 
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white/90 text-xs">
-                      <MapPin className="w-3.5 h-3.5 text-[#E8A33D]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#FFC145]" />
                       <span>Meeting in {reunionLoc}</span>
                     </div>
                   </div>
@@ -383,7 +383,7 @@ export const TheDoorView: React.FC = () => {
                         <div className="text-[10px] uppercase font-mono tracking-wider text-white/70">Mins</div>
                       </div>
                       <div className="p-3.5 rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15">
-                        <div className="font-display text-3xl sm:text-4xl font-bold text-[#E8A33D]">{timeLeft.seconds}</div>
+                        <div className="font-display text-3xl sm:text-4xl font-bold text-[#FFC145]">{timeLeft.seconds}</div>
                         <div className="text-[10px] uppercase font-mono tracking-wider text-white/70">Secs</div>
                       </div>
                     </div>
@@ -442,7 +442,7 @@ export const TheDoorView: React.FC = () => {
                   <div className="flex flex-wrap gap-3 pt-2">
                     <button
                       onClick={openTheDoor}
-                      className="px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 to-[#8E1B1B] hover:brightness-110 text-white text-xs font-bold tracking-wider uppercase shadow-md cursor-pointer flex items-center gap-2 transition-all"
+                      className="px-6 py-3 rounded-full bg-gradient-to-r from-amber-500 to-[#E11D48] hover:brightness-110 text-white text-xs font-bold tracking-wider uppercase shadow-md cursor-pointer flex items-center gap-2 transition-all"
                     >
                       <Sparkles className="w-4 h-4 text-amber-200" />
                       <span>Step Into The Door</span>
@@ -484,18 +484,18 @@ export const TheDoorView: React.FC = () => {
                       <div className="w-16 h-16 rounded-full bg-black/40 text-amber-300 mx-auto flex items-center justify-center shadow-lg border border-amber-300/40">
                         <Sparkles className="w-8 h-8 animate-spin-slow" />
                       </div>
-                      <h4 className="font-display text-2xl font-bold text-[#1C110E]">The Door is Ready</h4>
-                      <p className="text-xs text-[#1C110E]/80 font-script text-base">
+                      <h4 className="font-display text-2xl font-bold text-[#4A0420]">The Door is Ready</h4>
+                      <p className="text-xs text-[#4A0420]/80 font-script text-base">
                         Bridging {distanceKmText} with {doorMemoryCount} memor{doorMemoryCount === 1 ? 'y' : 'ies'}, soundtrack & final letter.
                       </p>
-                      <span className="text-[11px] font-mono font-bold text-[#8E1B1B] bg-white/80 px-3 py-1 rounded-full inline-block">
+                      <span className="text-[11px] font-mono font-bold text-[#E11D48] bg-white/80 px-3 py-1 rounded-full inline-block">
                         {doorState.musicTrack || 'Yellow — Coldplay'}
                       </span>
                     </div>
 
                     <button
                       onClick={openTheDoor}
-                      className="mt-6 relative z-10 px-5 py-2.5 rounded-full bg-[#8E1B1B] text-white text-xs font-bold shadow-md hover:scale-105 transition-transform cursor-pointer"
+                      className="mt-6 relative z-10 px-5 py-2.5 rounded-full bg-[#E11D48] text-white text-xs font-bold shadow-md hover:scale-105 transition-transform cursor-pointer"
                     >
                       Reveal Scene →
                     </button>
@@ -509,15 +509,15 @@ export const TheDoorView: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               {/* Days to Do Prep Overview */}
-              <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-4">
+              <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
-                    <ListTodo className="w-5 h-5 text-[#8E1B1B]" />
+                  <h3 className="font-display text-xl font-semibold text-[#4A0420] flex items-center gap-2">
+                    <ListTodo className="w-5 h-5 text-[#E11D48]" />
                     <span>Immediate Days to Do</span>
                   </h3>
                   <button 
                     onClick={() => setActiveTab('reunion_plan')}
-                    className="text-xs text-[#8E1B1B] font-semibold hover:underline cursor-pointer"
+                    className="text-xs text-[#E11D48] font-semibold hover:underline cursor-pointer"
                   >
                     View All ({totalStops}) →
                   </button>
@@ -528,27 +528,27 @@ export const TheDoorView: React.FC = () => {
                     <div 
                       key={stop.id}
                       onClick={() => handleToggle(stop.id, stop.completed)}
-                      className="p-3 rounded-2xl bg-white border border-[#E7D9C9] flex items-center justify-between gap-3 cursor-pointer hover:border-[#8E1B1B] transition-colors"
+                      className="p-3 rounded-2xl bg-white border border-[#F4A9BF] flex items-center justify-between gap-3 cursor-pointer hover:border-[#E11D48] transition-colors"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-[#8E1B1B]/10 flex items-center justify-center flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-[#E11D48]/10 flex items-center justify-center flex-shrink-0">
                           {getStopIcon(stop.iconName)}
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className={`text-xs font-semibold ${stop.completed ? 'line-through text-[#6E5B52]' : 'text-[#1C110E]'}`}>
+                            <span className={`text-xs font-semibold ${stop.completed ? 'line-through text-[#8A4058]' : 'text-[#4A0420]'}`}>
                               {stop.title}
                             </span>
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F7EFE4] text-[#8E1B1B] font-bold">
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#FFB8CB] text-[#E11D48] font-bold">
                               {stop.time}
                             </span>
                           </div>
-                          <p className="text-[11px] text-[#6E5B52] truncate max-w-xs">{stop.description}</p>
+                          <p className="text-[11px] text-[#8A4058] truncate max-w-xs">{stop.description}</p>
                         </div>
                       </div>
 
                       <div className="w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0">
-                        {stop.completed ? <CheckCircle2 className="w-5 h-5 text-[#8E1B1B] fill-[#8E1B1B]/20" /> : <Circle className="w-4 h-4 text-[#6E5B52]" />}
+                        {stop.completed ? <CheckCircle2 className="w-5 h-5 text-[#E11D48] fill-[#E11D48]/20" /> : <Circle className="w-4 h-4 text-[#8A4058]" />}
                       </div>
                     </div>
                   ))}
@@ -556,38 +556,38 @@ export const TheDoorView: React.FC = () => {
               </div>
 
               {/* Soundtrack Card */}
-              <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-4">
+              <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
-                    <Music className="w-5 h-5 text-[#8E1B1B]" />
+                  <h3 className="font-display text-xl font-semibold text-[#4A0420] flex items-center gap-2">
+                    <Music className="w-5 h-5 text-[#E11D48]" />
                     <span>Our Reunion Soundtrack</span>
                   </h3>
-                  <span className="text-xs text-[#8E1B1B]">Playing at 0 km</span>
+                  <span className="text-xs text-[#E11D48]">Playing at 0 km</span>
                 </div>
                 
-                <div className="p-4 rounded-2xl bg-white border border-[#E7D9C9] flex items-center gap-3">
+                <div className="p-4 rounded-2xl bg-white border border-[#F4A9BF] flex items-center gap-3">
                   <audio {...musicPlayer.bind} className="hidden" />
                   <button
                     onClick={musicPlayer.toggle}
                     disabled={!doorState.musicUrl}
                     title={doorState.musicUrl ? undefined : 'Upload a track in the Prepare tab first'}
-                    className="w-11 h-11 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center flex-shrink-0 cursor-pointer shadow-md hover:scale-105 transition-transform disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+                    className="w-11 h-11 rounded-full bg-[#E11D48] text-white flex items-center justify-center flex-shrink-0 cursor-pointer shadow-md hover:scale-105 transition-transform disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     {musicPlayer.isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-white ml-0.5" />}
                   </button>
                   <div className="flex-1">
-                    <h4 className="font-display text-base font-semibold text-[#1C110E]">{doorState.musicTrack || 'No track chosen yet'}</h4>
-                    <p className="text-xs text-[#6E5B52]">
+                    <h4 className="font-display text-base font-semibold text-[#4A0420]">{doorState.musicTrack || 'No track chosen yet'}</h4>
+                    <p className="text-xs text-[#8A4058]">
                       {doorState.musicUrl ? 'Will autoplay during the door reveal' : 'Add an audio file in the Prepare tab to make this playable'}
                     </p>
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-white/60 border border-[#E7D9C9] text-xs text-[#6E5B52] space-y-1">
-                  <p className="font-script text-base text-[#1C110E]">
+                <div className="p-3.5 rounded-2xl bg-white/60 border border-[#F4A9BF] text-xs text-[#8A4058] space-y-1">
+                  <p className="font-script text-base text-[#4A0420]">
                     "Look at the stars, look how they shine for you..."
                   </p>
-                  <p className="text-[11px] text-[#6E5B52]">
+                  <p className="text-[11px] text-[#8A4058]">
                     Dedicated from {currentUser === 'A' ? couple.nameA : couple.nameB} to {currentUser === 'A' ? couple.nameB : couple.nameA}
                   </p>
                 </div>
@@ -607,36 +607,36 @@ export const TheDoorView: React.FC = () => {
             {/* Header & Stats Banner */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-[#8E1B1B] uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-xs font-bold text-[#E11D48] uppercase tracking-wider flex items-center gap-1.5">
                   <ListTodo className="w-3.5 h-3.5" />
                   <span>PREPARATION & ITINERARY</span>
                 </span>
-                <h2 className="font-display text-3xl sm:text-4xl text-[#1C110E] font-medium mt-0.5">
+                <h2 className="font-display text-3xl sm:text-4xl text-[#4A0420] font-medium mt-0.5">
                   Days to Do & Reunion Roadmap ♡
                 </h2>
-                <p className="text-xs text-[#6E5B52] mt-1">
+                <p className="text-xs text-[#8A4058] mt-1">
                   Checklist of everything to pack, prepare, and celebrate as we bridge {distanceKmText}.
                 </p>
               </div>
 
               {/* Progress metric */}
-              <div className="p-3.5 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] flex items-center gap-3">
+              <div className="p-3.5 rounded-2xl bg-[#FFB8CB] border border-[#F4A9BF] flex items-center gap-3">
                 <div className="text-right">
-                  <p className="text-[10px] uppercase font-mono tracking-wider text-[#6E5B52]">Progress</p>
-                  <p className="font-display text-xl font-bold text-[#8E1B1B]">{completedCount} of {totalStops} Done</p>
+                  <p className="text-[10px] uppercase font-mono tracking-wider text-[#8A4058]">Progress</p>
+                  <p className="font-display text-xl font-bold text-[#E11D48]">{completedCount} of {totalStops} Done</p>
                 </div>
-                <div className="w-12 h-12 rounded-full border-4 border-[#8E1B1B] flex items-center justify-center font-bold text-xs text-[#1C110E]">
+                <div className="w-12 h-12 rounded-full border-4 border-[#E11D48] flex items-center justify-center font-bold text-xs text-[#4A0420]">
                   {progressPercent}%
                 </div>
               </div>
             </div>
 
             {/* Filter Pills */}
-            <div className="flex flex-wrap items-center gap-2 pt-1 border-b border-[#E7D9C9] pb-3">
+            <div className="flex flex-wrap items-center gap-2 pt-1 border-b border-[#F4A9BF] pb-3">
               <button
                 onClick={() => setFilterCategory('all')}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${
-                  filterCategory === 'all' ? 'bg-[#8E1B1B] text-white font-semibold' : 'bg-[#F7EFE4] text-[#6E5B52] hover:text-[#1C110E]'
+                  filterCategory === 'all' ? 'bg-[#E11D48] text-white font-semibold' : 'bg-[#FFB8CB] text-[#8A4058] hover:text-[#4A0420]'
                 }`}
               >
                 All Milestones ({totalStops})
@@ -644,7 +644,7 @@ export const TheDoorView: React.FC = () => {
               <button
                 onClick={() => setFilterCategory('prep')}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${
-                  filterCategory === 'prep' ? 'bg-[#8E1B1B] text-white font-semibold' : 'bg-[#F7EFE4] text-[#6E5B52] hover:text-[#1C110E]'
+                  filterCategory === 'prep' ? 'bg-[#E11D48] text-white font-semibold' : 'bg-[#FFB8CB] text-[#8A4058] hover:text-[#4A0420]'
                 }`}
               >
                 Before We Meet (Prep & Packing)
@@ -652,7 +652,7 @@ export const TheDoorView: React.FC = () => {
               <button
                 onClick={() => setFilterCategory('reunion_day')}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${
-                  filterCategory === 'reunion_day' ? 'bg-[#8E1B1B] text-white font-semibold' : 'bg-[#F7EFE4] text-[#6E5B52] hover:text-[#1C110E]'
+                  filterCategory === 'reunion_day' ? 'bg-[#E11D48] text-white font-semibold' : 'bg-[#FFB8CB] text-[#8A4058] hover:text-[#4A0420]'
                 }`}
               >
                 Reunion Days (Itinerary)
@@ -660,7 +660,7 @@ export const TheDoorView: React.FC = () => {
               <button
                 onClick={() => setFilterCategory('completed')}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer ${
-                  filterCategory === 'completed' ? 'bg-[#8E1B1B] text-white font-semibold' : 'bg-[#F7EFE4] text-[#6E5B52] hover:text-[#1C110E]'
+                  filterCategory === 'completed' ? 'bg-[#E11D48] text-white font-semibold' : 'bg-[#FFB8CB] text-[#8A4058] hover:text-[#4A0420]'
                 }`}
               >
                 Completed ({completedCount})
@@ -675,24 +675,24 @@ export const TheDoorView: React.FC = () => {
                   onClick={() => handleToggle(stop.id, stop.completed)}
                   className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                     stop.completed 
-                      ? 'bg-[#F7EFE4]/60 border-[#E7D9C9] opacity-75' 
-                      : 'bg-white border-[#E7D9C9] warm-shadow hover:border-[#8E1B1B]'
+                      ? 'bg-[#FFB8CB]/60 border-[#F4A9BF] opacity-75' 
+                      : 'bg-white border-[#F4A9BF] warm-shadow hover:border-[#E11D48]'
                   }`}
                 >
                   <div className="flex items-start sm:items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0">
+                    <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0">
                       {getStopIcon(stop.iconName)}
                     </div>
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <h4 className={`font-display text-base font-semibold ${stop.completed ? 'line-through text-[#6E5B52]' : 'text-[#1C110E]'}`}>
+                        <h4 className={`font-display text-base font-semibold ${stop.completed ? 'line-through text-[#8A4058]' : 'text-[#4A0420]'}`}>
                           {stop.title}
                         </h4>
-                        <span className="text-xs font-mono text-[#8E1B1B] font-bold bg-[#F7EFE4] px-2.5 py-0.5 rounded-full">
+                        <span className="text-xs font-mono text-[#E11D48] font-bold bg-[#FFB8CB] px-2.5 py-0.5 rounded-full">
                           {stop.time}
                         </span>
                         {stop.daysToGo && (
-                          <span className="text-[10px] font-mono text-[#6E5B52] bg-white border border-[#E7D9C9] px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] font-mono text-[#8A4058] bg-white border border-[#F4A9BF] px-2 py-0.5 rounded-full">
                             {stop.daysToGo}
                           </span>
                         )}
@@ -702,9 +702,9 @@ export const TheDoorView: React.FC = () => {
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-[#6E5B52] mt-1">{stop.description}</p>
+                      <p className="text-xs text-[#8A4058] mt-1">{stop.description}</p>
                       {stop.dueDate && (
-                        <p className="text-[11px] text-[#8E1B1B] mt-0.5 flex items-center gap-1 font-medium">
+                        <p className="text-[11px] text-[#E11D48] mt-0.5 flex items-center gap-1 font-medium">
                           <Calendar className="w-3 h-3" />
                           <span>Target: {stop.dueDate}</span>
                         </p>
@@ -714,15 +714,15 @@ export const TheDoorView: React.FC = () => {
 
                   <div className="flex items-center gap-3 self-end sm:self-center">
                     {stop.assignedTo && (
-                      <span className="text-[10px] text-[#6E5B52] bg-[#F7EFE4] px-2 py-1 rounded-md">
+                      <span className="text-[10px] text-[#8A4058] bg-[#FFB8CB] px-2 py-1 rounded-md">
                         For: {stop.assignedTo === 'both' ? 'Both of Us' : stop.assignedTo === 'A' ? couple.nameA : couple.nameB}
                       </span>
                     )}
                     <div className="w-7 h-7 rounded-full border flex items-center justify-center flex-shrink-0">
                       {stop.completed ? (
-                        <CheckCircle2 className="w-6 h-6 text-[#8E1B1B] fill-[#8E1B1B]/20" />
+                        <CheckCircle2 className="w-6 h-6 text-[#E11D48] fill-[#E11D48]/20" />
                       ) : (
-                        <Circle className="w-5 h-5 text-[#6E5B52]" />
+                        <Circle className="w-5 h-5 text-[#8A4058]" />
                       )}
                     </div>
                   </div>
@@ -731,45 +731,45 @@ export const TheDoorView: React.FC = () => {
             </div>
 
             {/* Add New Milestone / Days to Do Task Form */}
-            <form onSubmit={handleAddStop} className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-4">
+            <form onSubmit={handleAddStop} className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#1C110E] uppercase tracking-wider flex items-center gap-1.5">
-                  <Plus className="w-4 h-4 text-[#8E1B1B]" />
+                <span className="text-xs font-bold text-[#4A0420] uppercase tracking-wider flex items-center gap-1.5">
+                  <Plus className="w-4 h-4 text-[#E11D48]" />
                   <span>Add New Days-to-Do / Reunion Milestone</span>
                 </span>
-                <span className="text-[11px] text-[#6E5B52]">Counts toward your reunion roadmap</span>
+                <span className="text-[11px] text-[#8A4058]">Counts toward your reunion roadmap</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
                 <div className="sm:col-span-6">
-                  <label className="block text-[11px] font-semibold text-[#1C110E] mb-1">Title</label>
+                  <label className="block text-[11px] font-semibold text-[#4A0420] mb-1">Title</label>
                   <input
                     type="text"
                     placeholder="e.g. Midnight Rooftop Gelato or Pack Polaroid camera"
                     value={newStopTitle}
                     onChange={(e) => setNewStopTitle(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs focus:outline-[#8E1B1B]"
+                    className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs focus:outline-[#E11D48]"
                     required
                   />
                 </div>
 
                 <div className="sm:col-span-3">
-                  <label className="block text-[11px] font-semibold text-[#1C110E] mb-1">Timing / Countdown Tag</label>
+                  <label className="block text-[11px] font-semibold text-[#4A0420] mb-1">Timing / Countdown Tag</label>
                   <input
                     type="text"
                     placeholder="e.g. D-7, D-2, Day 1 • 9:00 PM"
                     value={newStopTime}
                     onChange={(e) => setNewStopTime(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs focus:outline-[#8E1B1B]"
+                    className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs focus:outline-[#E11D48]"
                   />
                 </div>
 
                 <div className="sm:col-span-3">
-                  <label className="block text-[11px] font-semibold text-[#1C110E] mb-1">Category</label>
+                  <label className="block text-[11px] font-semibold text-[#4A0420] mb-1">Category</label>
                   <select
                     value={newStopCategory}
                     onChange={(e) => setNewStopCategory(e.target.value as any)}
-                    className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs focus:outline-[#8E1B1B]"
+                    className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs focus:outline-[#E11D48]"
                   >
                     <option value="prep">Prep / Checklist</option>
                     <option value="pack">Packing</option>
@@ -782,22 +782,22 @@ export const TheDoorView: React.FC = () => {
                 </div>
 
                 <div className="sm:col-span-7">
-                  <label className="block text-[11px] font-semibold text-[#1C110E] mb-1">Notes / Description</label>
+                  <label className="block text-[11px] font-semibold text-[#4A0420] mb-1">Notes / Description</label>
                   <input
                     type="text"
                     placeholder="e.g. Don't forget the secret love letter"
                     value={newStopDesc}
                     onChange={(e) => setNewStopDesc(e.target.value)}
-                    className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs focus:outline-[#8E1B1B]"
+                    className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs focus:outline-[#E11D48]"
                   />
                 </div>
 
                 <div className="sm:col-span-3">
-                  <label className="block text-[11px] font-semibold text-[#1C110E] mb-1">Assigned Partner</label>
+                  <label className="block text-[11px] font-semibold text-[#4A0420] mb-1">Assigned Partner</label>
                   <select
                     value={newStopAssignee}
                     onChange={(e) => setNewStopAssignee(e.target.value as any)}
-                    className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs focus:outline-[#8E1B1B]"
+                    className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs focus:outline-[#E11D48]"
                   >
                     <option value="both">Both of Us</option>
                     <option value="A">{couple.nameA}</option>
@@ -808,7 +808,7 @@ export const TheDoorView: React.FC = () => {
                 <div className="sm:col-span-2 flex items-end">
                   <button
                     type="submit"
-                    className="w-full py-2.5 px-4 rounded-xl bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold shadow-sm cursor-pointer transition-colors"
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-semibold shadow-sm cursor-pointer transition-colors"
                   >
                     + Add Task
                   </button>
@@ -825,9 +825,9 @@ export const TheDoorView: React.FC = () => {
         {activeTab === 'prepare' && (
           <div className="space-y-8 animate-in fade-in duration-200">
             <div>
-              <span className="text-xs font-bold text-[#8E1B1B] uppercase tracking-wider">THE DOOR CURATION</span>
-              <h2 className="font-display text-4xl text-[#1C110E] font-medium mt-1">Prepare The Door.</h2>
-              <p className="text-xs text-[#6E5B52]">Curate the final moment when the distance turns to zero. Every detail, every memory, every lyric they will hear.</p>
+              <span className="text-xs font-bold text-[#E11D48] uppercase tracking-wider">THE DOOR CURATION</span>
+              <h2 className="font-display text-4xl text-[#4A0420] font-medium mt-1">Prepare The Door.</h2>
+              <p className="text-xs text-[#8A4058]">Curate the final moment when the distance turns to zero. Every detail, every memory, every lyric they will hear.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -835,36 +835,36 @@ export const TheDoorView: React.FC = () => {
               {/* Left Settings Form */}
               <div className="lg:col-span-7 space-y-5">
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Reveal Title</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Reveal Title</label>
                   <input
                     type="text"
                     value={couple.reunionTitle}
                     onChange={(e) => updateCouple({ reunionTitle: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-sm"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Your Final Love Message</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Your Final Love Message</label>
                   <textarea
                     value={doorState.finalMessage}
                     onChange={(e) => updateDoorState({ finalMessage: e.target.value })}
                     rows={3}
-                    className="w-full p-3 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs leading-relaxed resize-none"
+                    className="w-full p-3 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-xs leading-relaxed resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Music for the Moment</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Music for the Moment</label>
                   <input
                     type="text"
                     value={doorState.musicTrack}
                     onChange={(e) => updateDoorState({ musicTrack: e.target.value })}
                     placeholder="Song title"
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs font-medium mb-2"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-xs font-medium mb-2"
                   />
-                  <label className="w-full px-4 py-2.5 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5 hover:border-[#8E1B1B]">
-                    <UploadCloud className="w-3.5 h-3.5 text-[#8E1B1B]" />
+                  <label className="w-full px-4 py-2.5 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5 hover:border-[#E11D48]">
+                    <UploadCloud className="w-3.5 h-3.5 text-[#E11D48]" />
                     <span>
                       {isUploadingTrack ? `Uploading... ${trackProgress}%` : doorState.musicUrl ? 'Replace audio file' : 'Upload the actual track (optional)'}
                     </span>
@@ -876,16 +876,16 @@ export const TheDoorView: React.FC = () => {
                       onChange={(e) => handleTrackSelected(e.target.files?.[0])}
                     />
                   </label>
-                  {trackError && <p className="text-xs text-[#8E1B1B] mt-1.5">{trackError}</p>}
+                  {trackError && <p className="text-xs text-[#E11D48] mt-1.5">{trackError}</p>}
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-xs font-semibold text-[#1C110E]">Memories in The Door Reveal</label>
-                    <span className="text-[10px] text-[#6E5B52]">{(doorState.selectedMemoryIds || []).length} selected</span>
+                    <label className="block text-xs font-semibold text-[#4A0420]">Memories in The Door Reveal</label>
+                    <span className="text-[10px] text-[#8A4058]">{(doorState.selectedMemoryIds || []).length} selected</span>
                   </div>
                   {memories.length === 0 ? (
-                    <p className="text-xs text-[#6E5B52] italic">Pin a few memories on Our Wall first, then come back to choose which ones appear here.</p>
+                    <p className="text-xs text-[#8A4058] italic">Pin a few memories on Our Wall first, then come back to choose which ones appear here.</p>
                   ) : (
                     <div className="grid grid-cols-4 gap-2">
                       {memories.slice(0, 12).map((m) => {
@@ -903,7 +903,7 @@ export const TheDoorView: React.FC = () => {
                               updateDoorState({ selectedMemoryIds: nextSelected, coverMemoryId: nextCover });
                             }}
                             className={`relative p-1.5 rounded-xl border text-center cursor-pointer transition-all ${
-                              isSelected ? 'bg-[#F7EFE4] border-[#8E1B1B] ring-2 ring-[#8E1B1B]/30' : 'bg-white border-[#E7D9C9] opacity-60 hover:opacity-100'
+                              isSelected ? 'bg-[#FFB8CB] border-[#E11D48] ring-2 ring-[#E11D48]/30' : 'bg-white border-[#F4A9BF] opacity-60 hover:opacity-100'
                             }`}
                           >
                             <img src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=200&q=80'} alt={m.title} className="w-full h-14 object-cover rounded-lg mb-1" />
@@ -917,7 +917,7 @@ export const TheDoorView: React.FC = () => {
                                 }}
                                 title={isCover ? 'Cover photo' : 'Set as cover photo'}
                                 className={`absolute top-1 right-1 w-4 h-4 rounded-full flex items-center justify-center text-[9px] cursor-pointer ${
-                                  isCover ? 'bg-amber-400 text-[#1C110E]' : 'bg-black/40 text-white'
+                                  isCover ? 'bg-amber-400 text-[#4A0420]' : 'bg-black/40 text-white'
                                 }`}
                               >
                                 ★
@@ -932,26 +932,26 @@ export const TheDoorView: React.FC = () => {
 
                 <button
                   onClick={() => setIsPreviewOpen(true)}
-                  className="w-full py-3.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-md cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-semibold tracking-wide shadow-md cursor-pointer flex items-center justify-center gap-2"
                 >
                   <Sparkles className="w-4 h-4 text-amber-300" />
                   <span>Preview The Door Reveal →</span>
                 </button>
-                <p className="text-[10px] text-[#6E5B52] text-center -mt-3">
+                <p className="text-[10px] text-[#8A4058] text-center -mt-3">
                   This is a look-only preview — {currentUser === 'A' ? couple.nameB : couple.nameA} won't be notified.
                 </p>
               </div>
 
               {/* Right Live Preview Visual */}
-              <div className="lg:col-span-5 p-6 rounded-3xl bg-[#1C110E] text-white space-y-4">
+              <div className="lg:col-span-5 p-6 rounded-3xl bg-[#4A0420] text-white space-y-4">
                 <span className="text-[11px] font-mono uppercase tracking-widest text-amber-300">Live Preview</span>
                 
                 <div className="relative rounded-2xl overflow-hidden aspect-3/4 border-2 border-amber-300/40 bg-gradient-to-b from-amber-200 via-amber-600 to-black p-4 flex flex-col items-center justify-center text-center">
-                  <div className="w-12 h-12 rounded-full bg-white/80 text-[#8E1B1B] flex items-center justify-center mb-3 shadow-lg">
-                    <Play className="w-5 h-5 fill-[#8E1B1B] ml-0.5" />
+                  <div className="w-12 h-12 rounded-full bg-white/80 text-[#E11D48] flex items-center justify-center mb-3 shadow-lg">
+                    <Play className="w-5 h-5 fill-[#E11D48] ml-0.5" />
                   </div>
-                  <h4 className="font-display text-xl font-bold text-[#1C110E]">{couple.reunionTitle || 'The Door to Forever'}</h4>
-                  <p className="text-xs text-[#1C110E] font-script text-base">"{doorState.finalMessage || `Bridging ${distanceKmText} forever.`}"</p>
+                  <h4 className="font-display text-xl font-bold text-[#4A0420]">{couple.reunionTitle || 'The Door to Forever'}</h4>
+                  <p className="text-xs text-[#4A0420] font-script text-base">"{doorState.finalMessage || `Bridging ${distanceKmText} forever.`}"</p>
                 </div>
 
                 <div className="text-xs text-white/70 space-y-1.5 pt-2 border-t border-white/20">
@@ -975,7 +975,7 @@ export const TheDoorView: React.FC = () => {
       {/* Local-only preview — never touches doorState.isOpened or notifies anyone */}
       {isPreviewOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs">
-          <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-[#1C110E] text-white p-8 border-2 border-amber-300/40 warm-shadow-lg text-center space-y-4">
+          <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-[#4A0420] text-white p-8 border-2 border-amber-300/40 warm-shadow-lg text-center space-y-4">
             <button
               onClick={() => setIsPreviewOpen(false)}
               className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white cursor-pointer"

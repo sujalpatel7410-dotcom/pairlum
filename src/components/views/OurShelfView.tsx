@@ -38,7 +38,7 @@ export const OurShelfView: React.FC = () => {
   const [newStartDate, setNewStartDate] = useState('May 2024');
   const [newEndDate, setNewEndDate] = useState('Aug 2026');
   const [newTheme, setNewTheme] = useState('Home & Everyday');
-  const [newSpineColor, setNewSpineColor] = useState('#8E1B1B');
+  const [newSpineColor, setNewSpineColor] = useState('#E11D48');
   const [selectedMemoryIds, setSelectedMemoryIds] = useState<string[]>([]);
 
   const { upload: uploadCover, isUploading: isUploadingCover, progress: coverProgress } = useCloudinaryUpload();
@@ -79,7 +79,7 @@ export const OurShelfView: React.FC = () => {
     setNewStartDate('May 2024');
     setNewEndDate('Aug 2026');
     setNewTheme('Home & Everyday');
-    setNewSpineColor('#8E1B1B');
+    setNewSpineColor('#E11D48');
     setSelectedMemoryIds([]);
   };
 
@@ -146,7 +146,7 @@ export const OurShelfView: React.FC = () => {
         {/* Chapters list */}
         <div className="space-y-1.5 pt-2">
           {safeChapters.length === 0 ? (
-            <p className="text-xs text-[#6E5B52] italic px-1 py-2">
+            <p className="text-xs text-[#8A4058] italic px-1 py-2">
               No chapters yet. Create your first one →
             </p>
           ) : (
@@ -161,8 +161,8 @@ export const OurShelfView: React.FC = () => {
                     setEditingChapterId(null);
                   }}
                   className={`w-full p-3 rounded-2xl text-left transition-all border cursor-pointer ${isSelected && !isCreatingChapter
-                      ? 'bg-[#8E1B1B] text-white border-[#8E1B1B] shadow-sm'
-                      : 'bg-[#F7EFE4] text-[#1C110E] border-[#E7D9C9] hover:bg-[#EFE4D6]'
+                      ? 'bg-[#E11D48] text-white border-[#E11D48] shadow-sm'
+                      : 'bg-[#FFB8CB] text-[#4A0420] border-[#F4A9BF] hover:bg-[#FF9DB6]'
                     }`}
                 >
                   <div className="flex items-center justify-between text-xs mb-1">
@@ -172,7 +172,7 @@ export const OurShelfView: React.FC = () => {
                     </span>
                   </div>
                   <h4 className="font-display text-base font-medium truncate">{ch.title}</h4>
-                  <p className={`text-[11px] truncate mt-0.5 ${isSelected && !isCreatingChapter ? 'text-white/80' : 'text-[#6E5B52]'}`}>
+                  <p className={`text-[11px] truncate mt-0.5 ${isSelected && !isCreatingChapter ? 'text-white/80' : 'text-[#8A4058]'}`}>
                     {getChapterMemoryCount(ch)} memories
                   </p>
                 </button>
@@ -186,8 +186,8 @@ export const OurShelfView: React.FC = () => {
           <button
             onClick={handleStartCreateChapter}
             className={`w-full py-2.5 rounded-full text-xs font-semibold tracking-wide flex items-center justify-center gap-2 border transition-all cursor-pointer ${isCreatingChapter
-                ? 'bg-[#1C110E] text-white border-[#1C110E]'
-                : 'bg-[#FFFBF5] border-[#8E1B1B] text-[#8E1B1B] hover:bg-[#8E1B1B]/10'
+                ? 'bg-[#4A0420] text-white border-[#4A0420]'
+                : 'bg-[#FFD3DE] border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48]/10'
               }`}
           >
             <Plus className="w-3.5 h-3.5" />
@@ -203,25 +203,25 @@ export const OurShelfView: React.FC = () => {
         {isCreatingChapter ? (
           <div className="space-y-8 animate-in fade-in duration-200">
             <div>
-              <span className="text-xs font-bold text-[#8E1B1B] uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs font-bold text-[#E11D48] uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{editingChapterId ? 'Edit Chapter' : 'Create Chapter'}</span>
               </span>
-              <h2 className="font-display text-4xl text-[#1C110E] font-medium mt-1">
+              <h2 className="font-display text-4xl text-[#4A0420] font-medium mt-1">
                 {editingChapterId ? "Update this chapter's details." : 'Turn your memories into a chapter.'}
               </h2>
-              <p className="text-sm text-[#6E5B52] mt-1">
+              <p className="text-sm text-[#8A4058] mt-1">
                 A chapter is a collection of moments that tell part of your story.
               </p>
             </div>
 
             {/* Top Preview */}
-            <div className="p-6 rounded-3xl bg-[#1C110E] text-white warm-shadow-lg relative overflow-hidden">
+            <div className="p-6 rounded-3xl bg-[#4A0420] text-white warm-shadow-lg relative overflow-hidden">
               <span className="text-[11px] text-white/60 uppercase font-mono tracking-widest block mb-4">
                 Preview on Our Shelf
               </span>
               <div className="flex flex-col sm:flex-row items-center gap-6">
-                <div className="w-48 h-64 rounded-xl overflow-hidden border-2 border-white/20 shadow-2xl relative flex-shrink-0 bg-[#8E1B1B]">
+                <div className="w-48 h-64 rounded-xl overflow-hidden border-2 border-white/20 shadow-2xl relative flex-shrink-0 bg-[#E11D48]">
                   <img src={newCover} alt="Cover" className="w-full h-full object-cover opacity-75" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-4 flex flex-col justify-between">
                     <span className="text-[10px] uppercase tracking-wider text-amber-300 font-bold">Volume</span>
@@ -247,22 +247,22 @@ export const OurShelfView: React.FC = () => {
             </div>
 
             {/* Form Fields */}
-            <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-5">
+            <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Chapter Title</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Chapter Title</label>
                   <input
                     type="text"
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
                     placeholder="The Window"
-                    className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#E7D9C9] text-sm font-medium"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#F4A9BF] text-sm font-medium"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Cover Photo</label>
-                  <label className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5 hover:border-[#8E1B1B]">
-                    <UploadCloud className="w-3.5 h-3.5 text-[#8E1B1B]" />
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Cover Photo</label>
+                  <label className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5 hover:border-[#E11D48]">
+                    <UploadCloud className="w-3.5 h-3.5 text-[#E11D48]" />
                     <span>{isUploadingCover ? `Uploading... ${coverProgress}%` : 'Upload cover photo'}</span>
                     <input
                       type="file"
@@ -274,11 +274,11 @@ export const OurShelfView: React.FC = () => {
                   </label>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Chapter Theme</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Chapter Theme</label>
                   <select
                     value={newTheme}
                     onChange={(e) => setNewTheme(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs font-medium"
+                    className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs font-medium"
                   >
                     <option value="Home & Everyday">Home &amp; Everyday</option>
                     <option value="Travel & Trips">Travel &amp; Trips</option>
@@ -289,44 +289,44 @@ export const OurShelfView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Short Description</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Short Description</label>
                 <textarea
                   value={newSubtitle}
                   onChange={(e) => setNewSubtitle(e.target.value)}
                   rows={2}
-                  className="w-full p-3 rounded-xl bg-white border border-[#E7D9C9] text-xs font-medium resize-none"
+                  className="w-full p-3 rounded-xl bg-white border border-[#F4A9BF] text-xs font-medium resize-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Time Period (From – To)</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Time Period (From – To)</label>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       value={newStartDate}
                       onChange={(e) => setNewStartDate(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                       placeholder="May 2024"
                     />
                     <input
                       type="text"
                       value={newEndDate}
                       onChange={(e) => setNewEndDate(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                       placeholder="Aug 2026"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#1C110E] mb-1.5">Spine Color</label>
+                  <label className="block text-xs font-semibold text-[#4A0420] mb-1.5">Spine Color</label>
                   <div className="flex items-center gap-2 pt-1">
-                    {['#8E1B1B', '#C63A2E', '#6E5B52', '#2A4365', '#285E61'].map((c) => (
+                    {['#E11D48', '#F59E0B', '#8A4058', '#2A4365', '#285E61'].map((c) => (
                       <button
                         key={c}
                         onClick={() => setNewSpineColor(c)}
                         style={{ backgroundColor: c }}
-                        className={`w-7 h-7 rounded-full transition-transform cursor-pointer ${newSpineColor === c ? 'ring-2 ring-[#8E1B1B] scale-110' : 'opacity-80'
+                        className={`w-7 h-7 rounded-full transition-transform cursor-pointer ${newSpineColor === c ? 'ring-2 ring-[#E11D48] scale-110' : 'opacity-80'
                           }`}
                       />
                     ))}
@@ -336,10 +336,10 @@ export const OurShelfView: React.FC = () => {
 
               {/* Memory Multi-Select */}
               {safeMemories.length > 0 ? (
-                <div className="pt-4 border-t border-[#E7D9C9]">
+                <div className="pt-4 border-t border-[#F4A9BF]">
                   <div className="flex items-center justify-between mb-3">
-                    <label className="text-xs font-semibold text-[#1C110E]">Select Memories for this Chapter</label>
-                    <span className="text-xs text-[#8E1B1B] font-medium">{selectedMemoryIds.length} selected</span>
+                    <label className="text-xs font-semibold text-[#4A0420]">Select Memories for this Chapter</label>
+                    <span className="text-xs text-[#E11D48] font-medium">{selectedMemoryIds.length} selected</span>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {safeMemories.map((m) => {
@@ -348,19 +348,19 @@ export const OurShelfView: React.FC = () => {
                         <div
                           key={m.id}
                           onClick={() => handleToggleMemorySelect(m.id)}
-                          className={`relative p-2 rounded-2xl bg-white border transition-all cursor-pointer ${isSel ? 'border-[#8E1B1B] ring-2 ring-[#8E1B1B]/30' : 'border-[#E7D9C9] opacity-70'
+                          className={`relative p-2 rounded-2xl bg-white border transition-all cursor-pointer ${isSel ? 'border-[#E11D48] ring-2 ring-[#E11D48]/30' : 'border-[#F4A9BF] opacity-70'
                             }`}
                         >
-                          <div className="aspect-4/3 rounded-xl overflow-hidden bg-[#F7EFE4] mb-1.5">
+                          <div className="aspect-4/3 rounded-xl overflow-hidden bg-[#FFB8CB] mb-1.5">
                             <img
                               src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80'}
                               alt={m.title}
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <p className="font-display text-xs font-semibold text-[#1C110E] truncate">{m.title}</p>
-                          <p className="text-[10px] text-[#6E5B52]">{m.date}</p>
-                          <div className={`absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center text-xs ${isSel ? 'bg-[#8E1B1B] text-white' : 'bg-black/30 text-white'}`}>
+                          <p className="font-display text-xs font-semibold text-[#4A0420] truncate">{m.title}</p>
+                          <p className="text-[10px] text-[#8A4058]">{m.date}</p>
+                          <div className={`absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center text-xs ${isSel ? 'bg-[#E11D48] text-white' : 'bg-black/30 text-white'}`}>
                             {isSel && <Check className="w-3 h-3 stroke-[3]" />}
                           </div>
                         </div>
@@ -369,7 +369,7 @@ export const OurShelfView: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                <div className="pt-4 border-t border-[#E7D9C9] text-xs text-[#6E5B52] italic">
+                <div className="pt-4 border-t border-[#F4A9BF] text-xs text-[#8A4058] italic">
                   No memories yet — you can add them to this chapter from Our Wall later.
                 </div>
               )}
@@ -377,13 +377,13 @@ export const OurShelfView: React.FC = () => {
               <div className="pt-4 flex gap-3">
                 <button
                   onClick={handleSaveChapter}
-                  className="flex-1 py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-md cursor-pointer"
+                  className="flex-1 py-3 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-semibold tracking-wide shadow-md cursor-pointer"
                 >
                   {editingChapterId ? 'Save Changes' : 'Create Chapter (It will appear on Our Shelf)'}
                 </button>
                 <button
                   onClick={handleCancelChapterForm}
-                  className="px-6 py-3 rounded-full bg-white border border-[#E7D9C9] text-xs font-medium text-[#6E5B52] cursor-pointer"
+                  className="px-6 py-3 rounded-full bg-white border border-[#F4A9BF] text-xs font-medium text-[#8A4058] cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -400,7 +400,7 @@ export const OurShelfView: React.FC = () => {
               {/* Shelf plank */}
               <div className="h-5 bg-gradient-to-r from-[#2B1B17] via-[#3D261E] to-[#2B1B17] rounded-md shadow-lg" />
               {/* Shelf wall above */}
-              <div className="absolute -top-16 inset-x-0 h-16 bg-gradient-to-b from-[#F7EFE4] to-[#EFE4D6] rounded-t-3xl border-b-0 flex items-center justify-center gap-3 px-4">
+              <div className="absolute -top-16 inset-x-0 h-16 bg-gradient-to-b from-[#FFB8CB] to-[#FF9DB6] rounded-t-3xl border-b-0 flex items-center justify-center gap-3 px-4">
                 {/* Ghost book spines */}
                 {['#C8B8AF', '#D4C4BB', '#BFAEA5'].map((c, i) => (
                   <div
@@ -409,34 +409,34 @@ export const OurShelfView: React.FC = () => {
                     style={{ width: 32, height: 56, backgroundColor: c }}
                   />
                 ))}
-                <div className="w-8 h-14 rounded-t-lg border-2 border-dashed border-[#8E1B1B]/30 flex items-center justify-center">
-                  <Plus className="w-4 h-4 text-[#8E1B1B]/40" />
+                <div className="w-8 h-14 rounded-t-lg border-2 border-dashed border-[#E11D48]/30 flex items-center justify-center">
+                  <Plus className="w-4 h-4 text-[#E11D48]/40" />
                 </div>
               </div>
             </div>
 
-            <div className="w-16 h-16 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] flex items-center justify-center mb-4">
-              <Library className="w-7 h-7 text-[#8E1B1B]" />
+            <div className="w-16 h-16 rounded-full bg-[#FFB8CB] border border-[#F4A9BF] flex items-center justify-center mb-4">
+              <Library className="w-7 h-7 text-[#E11D48]" />
             </div>
 
-            <h3 className="font-display text-3xl text-[#1C110E] font-medium">
+            <h3 className="font-display text-3xl text-[#4A0420] font-medium">
               Your shelf is empty
             </h3>
-            <p className="mt-2 max-w-xs text-[#6E5B52] font-script text-lg leading-relaxed">
+            <p className="mt-2 max-w-xs text-[#8A4058] font-script text-lg leading-relaxed">
               Create your first chapter — a curated collection of memories that tells a part of your story.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleStartCreateChapter}
-                className="px-6 py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-semibold flex items-center gap-2 shadow-lg transition-all hover:scale-105 cursor-pointer"
+                className="px-6 py-3 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-sm font-semibold flex items-center gap-2 shadow-lg transition-all hover:scale-105 cursor-pointer"
               >
                 <BookOpen className="w-4 h-4" />
                 <span>Create First Chapter</span>
               </button>
             </div>
 
-            <p className="mt-6 text-xs text-[#6E5B52]/60 font-mono">
+            <p className="mt-6 text-xs text-[#8A4058]/60 font-mono">
               🕯️ Chapters are private to your couple space
             </p>
           </div>
@@ -447,7 +447,7 @@ export const OurShelfView: React.FC = () => {
           <div className="space-y-8">
 
             {/* Wooden Shelf Header */}
-            <div className="p-6 rounded-3xl bg-[#2B1B17] text-[#FFFBF5] shadow-xl relative">
+            <div className="p-6 rounded-3xl bg-[#2B1B17] text-[#FFD3DE] shadow-xl relative">
               <span className="text-[11px] uppercase tracking-widest text-amber-300 font-mono block mb-4">
                 The Wooden Bookshelf
               </span>
@@ -485,13 +485,13 @@ export const OurShelfView: React.FC = () => {
                 </button>
               </div>
 
-              <div className="h-4 bg-gradient-to-r from-[#1C110E] via-[#3D261E] to-[#1C110E] rounded-md shadow-inner border-t border-amber-900/40 -mx-2" />
+              <div className="h-4 bg-gradient-to-r from-[#4A0420] via-[#3D261E] to-[#4A0420] rounded-md shadow-inner border-t border-amber-900/40 -mx-2" />
             </div>
 
             {/* Active Chapter Hero Banner */}
             {activeChapter && (
               <>
-                <div className="relative rounded-3xl overflow-hidden border border-[#E7D9C9] warm-shadow-lg min-h-64 bg-[#1C110E] text-white p-6 sm:p-8 flex flex-col justify-between">
+                <div className="relative rounded-3xl overflow-hidden border border-[#F4A9BF] warm-shadow-lg min-h-64 bg-[#4A0420] text-white p-6 sm:p-8 flex flex-col justify-between">
                   <img
                     src={activeChapter.coverImage || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1200&q=80'}
                     alt={activeChapter.title}
@@ -530,21 +530,21 @@ export const OurShelfView: React.FC = () => {
                 {/* Chapter Memories Grid */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-display text-2xl text-[#1C110E] flex items-center gap-2">
+                    <h3 className="font-display text-2xl text-[#4A0420] flex items-center gap-2">
                       <span>Memories in this chapter</span>
-                      <span className="text-xs text-[#8E1B1B] font-sans font-semibold bg-[#8E1B1B]/10 px-2 py-0.5 rounded-full">
+                      <span className="text-xs text-[#E11D48] font-sans font-semibold bg-[#E11D48]/10 px-2 py-0.5 rounded-full">
                         {chapterMemories.length}
                       </span>
                     </h3>
                   </div>
 
                   {chapterMemories.length === 0 ? (
-                    <div className="py-12 text-center rounded-2xl border border-dashed border-[#E7D9C9] bg-[#F7EFE4]/50">
-                      <BookOpen className="w-10 h-10 text-[#8E1B1B]/30 mx-auto mb-3" />
-                      <p className="text-sm text-[#6E5B52] font-script text-base">
+                    <div className="py-12 text-center rounded-2xl border border-dashed border-[#F4A9BF] bg-[#FFB8CB]/50">
+                      <BookOpen className="w-10 h-10 text-[#E11D48]/30 mx-auto mb-3" />
+                      <p className="text-sm text-[#8A4058] font-script text-base">
                         No memories in this chapter yet.
                       </p>
-                      <p className="text-xs text-[#6E5B52]/70 mt-1">
+                      <p className="text-xs text-[#8A4058]/70 mt-1">
                         Pin memories on Our Wall and assign them to this chapter.
                       </p>
                     </div>
@@ -554,18 +554,18 @@ export const OurShelfView: React.FC = () => {
                         <div
                           key={m.id}
                           onClick={() => setActiveLightboxMemory(m)}
-                          className="p-3 rounded-2xl bg-white border border-[#E7D9C9] warm-shadow transition-all hover:scale-[1.02] cursor-pointer"
+                          className="p-3 rounded-2xl bg-white border border-[#F4A9BF] warm-shadow transition-all hover:scale-[1.02] cursor-pointer"
                         >
-                          <div className="aspect-4/3 rounded-xl overflow-hidden bg-[#F7EFE4] mb-2">
+                          <div className="aspect-4/3 rounded-xl overflow-hidden bg-[#FFB8CB] mb-2">
                             <img
                               src={m.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80'}
                               alt={m.title}
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <h4 className="font-display text-sm font-semibold text-[#1C110E] truncate">{m.title}</h4>
-                          <p className="font-script text-sm text-[#6E5B52] truncate">"{m.caption}"</p>
-                          <p className="text-[10px] text-[#8E1B1B] mt-1 font-medium">{m.date}</p>
+                          <h4 className="font-display text-sm font-semibold text-[#4A0420] truncate">{m.title}</h4>
+                          <p className="font-script text-sm text-[#8A4058] truncate">"{m.caption}"</p>
+                          <p className="text-[10px] text-[#E11D48] mt-1 font-medium">{m.date}</p>
                         </div>
                       ))}
                     </div>
