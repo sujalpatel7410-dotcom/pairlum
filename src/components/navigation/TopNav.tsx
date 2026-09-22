@@ -58,7 +58,7 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
   const togetherSinceLabel = formatMonthYear(couple.startDate) || couple.togetherSince || null;
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FFFBF5]/90 backdrop-blur-md border-b border-[#E7D9C9] transition-all">
+    <header className="sticky top-0 z-40 bg-[#FFD3DE]/90 backdrop-blur-md border-b border-[#F4A9BF] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {/* Left: Brand Logo & Wordmark */}
@@ -68,18 +68,18 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
             onClick={() => setCurrentView('home')}
             className="flex items-center gap-2 group text-left cursor-pointer focus:outline-hidden"
           >
-            <div className="w-8 h-8 rounded-full bg-[#8E1B1B]/10 flex items-center justify-center group-hover:bg-[#8E1B1B]/20 transition-colors">
-              <Heart className="w-4 h-4 text-[#8E1B1B] fill-[#8E1B1B]/30 group-hover:scale-110 transition-transform" />
+            <div className="w-8 h-8 rounded-full bg-[#E11D48]/10 flex items-center justify-center group-hover:bg-[#E11D48]/20 transition-colors">
+              <Heart className="w-4 h-4 text-[#E11D48] fill-[#E11D48]/30 group-hover:scale-110 transition-transform" />
             </div>
-            <span className="font-display text-2xl font-semibold tracking-tight text-[#1C110E]">
+            <span className="font-display text-2xl font-semibold tracking-tight text-[#4A0420]">
               Pairlum
             </span>
           </button>
 
           {/* Signed-in-as badge */}
-          <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] text-xs text-[#6E5B52]">
-            <span className="w-2 h-2 rounded-full bg-[#E8A33D] animate-pulse" />
-            <span>Signed in as <strong className="text-[#8E1B1B]">{currentPartnerName}</strong></span>
+          <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFB8CB] border border-[#F4A9BF] text-xs text-[#8A4058]">
+            <span className="w-2 h-2 rounded-full bg-[#FFC145] animate-pulse" />
+            <span>Signed in as <strong className="text-[#E11D48]">{currentPartnerName}</strong></span>
           </div>
         </div>
 
@@ -95,14 +95,14 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
                 className={`
                   relative px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer
                   ${isActive
-                    ? 'text-[#8E1B1B] font-semibold'
-                    : 'text-[#6E5B52] hover:text-[#1C110E]'}
+                    ? 'text-[#E11D48] font-semibold'
+                    : 'text-[#8A4058] hover:text-[#4A0420]'}
                 `}
               >
                 {item.label}
                 {isActive && (
-                  <div className="absolute -bottom-[19px] left-0 right-0 h-[2px] bg-[#8E1B1B] flex items-center justify-center">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#8E1B1B] -mt-[1px]" />
+                  <div className="absolute -bottom-[19px] left-0 right-0 h-[2px] bg-[#E11D48] flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#E11D48] -mt-[1px]" />
                   </div>
                 )}
               </button>
@@ -117,7 +117,7 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
           <button
             id="nav-quick-add"
             onClick={() => openAddMemoryModal('photo')}
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-medium tracking-wide shadow-sm hover:shadow-md transition-all cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-medium tracking-wide shadow-sm hover:shadow-md transition-all cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Memory</span>
@@ -127,13 +127,13 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
           <button
             id="nav-theme-toggle-btn"
             onClick={toggleDarkMode}
-            className="w-9 h-9 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] flex items-center justify-center text-[#6E5B52] hover:text-[#E8A33D] transition-colors relative cursor-pointer group"
+            className="w-9 h-9 rounded-full bg-[#FFB8CB] border border-[#F4A9BF] flex items-center justify-center text-[#8A4058] hover:text-[#FFC145] transition-colors relative cursor-pointer group"
             title={isDarkMode ? 'Switch to Parchment (Light Mode)' : 'Switch to Midnight Sanctuary (Dark Mode)'}
           >
             {isDarkMode ? (
-              <Sun className="w-4 h-4 text-[#E8A33D] group-hover:rotate-45 transition-transform" />
+              <Sun className="w-4 h-4 text-[#FFC145] group-hover:rotate-45 transition-transform" />
             ) : (
-              <Moon className="w-4 h-4 text-[#8E1B1B] group-hover:-rotate-12 transition-transform" />
+              <Moon className="w-4 h-4 text-[#E11D48] group-hover:-rotate-12 transition-transform" />
             )}
           </button>
 
@@ -142,24 +142,24 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
             <button
               id="nav-activity-btn"
               onClick={() => setIsActivityMenuOpen(!isActivityMenuOpen)}
-              className="w-9 h-9 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] flex items-center justify-center text-[#6E5B52] hover:text-[#8E1B1B] transition-colors relative cursor-pointer"
+              className="w-9 h-9 rounded-full bg-[#FFB8CB] border border-[#F4A9BF] flex items-center justify-center text-[#8A4058] hover:text-[#E11D48] transition-colors relative cursor-pointer"
               title="Activity Feed"
             >
               <Bell className="w-4 h-4" />
               {activityFeed.length > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C63A2E]" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#F59E0B]" />
               )}
             </button>
 
             {isActivityMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-2xl bg-[#FFFBF5] border border-[#E7D9C9] warm-shadow-lg py-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+                className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto rounded-2xl bg-[#FFD3DE] border border-[#F4A9BF] warm-shadow-lg py-2 z-50 animate-in fade-in zoom-in-95 duration-150"
               >
-                <div className="px-4 py-2 border-b border-[#E7D9C9]/60">
-                  <p className="text-xs font-semibold text-[#1C110E]">Activity</p>
+                <div className="px-4 py-2 border-b border-[#F4A9BF]/60">
+                  <p className="text-xs font-semibold text-[#4A0420]">Activity</p>
                 </div>
                 {activityFeed.length === 0 ? (
-                  <p className="px-4 py-6 text-xs text-[#6E5B52] text-center">Nothing yet — activity from you two will show up here.</p>
+                  <p className="px-4 py-6 text-xs text-[#8A4058] text-center">Nothing yet — activity from you two will show up here.</p>
                 ) : (
                   <div className="py-1">
                     {activityFeed.slice(0, 12).map((event) => (
@@ -169,15 +169,15 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
                           if (event.actionTarget) setCurrentView(event.actionTarget);
                           setIsActivityMenuOpen(false);
                         }}
-                        className="w-full px-4 py-2.5 text-left hover:bg-[#F7EFE4] flex items-start gap-2.5 cursor-pointer"
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#FFB8CB] flex items-start gap-2.5 cursor-pointer"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#8E1B1B] mt-1.5 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#E11D48] mt-1.5 flex-shrink-0" />
                         <span className="min-w-0 flex-1">
-                          <span className="block text-xs font-medium text-[#1C110E] truncate">{event.title}</span>
+                          <span className="block text-xs font-medium text-[#4A0420] truncate">{event.title}</span>
                           {event.subtitle && (
-                            <span className="block text-[11px] text-[#6E5B52] truncate">{event.subtitle}</span>
+                            <span className="block text-[11px] text-[#8A4058] truncate">{event.subtitle}</span>
                           )}
-                          <span className="block text-[10px] text-[#6E5B52]/70 mt-0.5">{event.timeAgo}</span>
+                          <span className="block text-[10px] text-[#8A4058]/70 mt-0.5">{event.timeAgo}</span>
                         </span>
                       </button>
                     ))}
@@ -191,7 +191,7 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
           {onToggleMobileSim && (
             <button
               onClick={onToggleMobileSim}
-              className={`p-2 rounded-full border text-xs transition-colors hidden md:flex items-center gap-1 cursor-pointer ${isMobileSim ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#F7EFE4] text-[#6E5B52] border-[#E7D9C9]'
+              className={`p-2 rounded-full border text-xs transition-colors hidden md:flex items-center gap-1 cursor-pointer ${isMobileSim ? 'bg-[#E11D48] text-white border-[#E11D48]' : 'bg-[#FFB8CB] text-[#8A4058] border-[#F4A9BF]'
                 }`}
               title="Toggle Mobile View Preview"
             >
@@ -205,32 +205,32 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
             <button
               id="user-profile-menu-button"
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-              className="flex items-center gap-2 p-1 pl-2 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] hover:border-[#8E1B1B]/40 transition-colors cursor-pointer"
+              className="flex items-center gap-2 p-1 pl-2 rounded-full bg-[#FFB8CB] border border-[#F4A9BF] hover:border-[#E11D48]/40 transition-colors cursor-pointer"
             >
-              <span className="text-xs font-semibold text-[#1C110E] tracking-tight">
+              <span className="text-xs font-semibold text-[#4A0420] tracking-tight">
                 {currentUser}
               </span>
-              <span className="text-[11px] text-[#6E5B52] hidden sm:inline font-medium">
+              <span className="text-[11px] text-[#8A4058] hidden sm:inline font-medium">
                 {couple.initials}
               </span>
               <img
                 src={currentAvatar || (currentUser === 'A' ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80' : 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80')}
                 alt={currentPartnerName}
-                className="w-7 h-7 rounded-full object-cover border border-[#E7D9C9]"
+                className="w-7 h-7 rounded-full object-cover border border-[#F4A9BF]"
               />
-              <ChevronDown className="w-3.5 h-3.5 text-[#6E5B52] mr-1" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#8A4058] mr-1" />
             </button>
 
             {/* Dropdown Menu */}
             {isProfileMenuOpen && (
               <div
-                className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#FFFBF5] border border-[#E7D9C9] warm-shadow-lg py-2 z-50 animate-in fade-in zoom-in-95 duration-150"
+                className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#FFD3DE] border border-[#F4A9BF] warm-shadow-lg py-2 z-50 animate-in fade-in zoom-in-95 duration-150"
                 onClick={() => setIsProfileMenuOpen(false)}
               >
-                <div className="px-4 py-3 border-b border-[#E7D9C9]/60">
-                  <p className="text-xs text-[#6E5B52]">Signed in as</p>
-                  <p className="text-sm font-semibold text-[#1C110E]">{currentPartnerName} ({currentUser})</p>
-                  <p className="text-[11px] text-[#8E1B1B] font-script text-base mt-0.5">
+                <div className="px-4 py-3 border-b border-[#F4A9BF]/60">
+                  <p className="text-xs text-[#8A4058]">Signed in as</p>
+                  <p className="text-sm font-semibold text-[#4A0420]">{currentPartnerName} ({currentUser})</p>
+                  <p className="text-[11px] text-[#E11D48] font-script text-base mt-0.5">
                     Together with {otherPartnerName}{togetherSinceLabel ? ` since ${togetherSinceLabel}` : ''}
                   </p>
                 </div>
@@ -238,36 +238,36 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
                 <div className="py-1">
                   <button
                     onClick={() => setCurrentView('settings')}
-                    className="w-full px-4 py-2 text-left text-xs text-[#1C110E] hover:bg-[#F7EFE4] flex items-center justify-between cursor-pointer"
+                    className="w-full px-4 py-2 text-left text-xs text-[#4A0420] hover:bg-[#FFB8CB] flex items-center justify-between cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
-                      <SettingsIcon className="w-3.5 h-3.5 text-[#6E5B52]" />
+                      <SettingsIcon className="w-3.5 h-3.5 text-[#8A4058]" />
                       <span>Sanctuary Settings</span>
                     </span>
-                    <span className="text-[10px] text-[#8E1B1B] bg-[#8E1B1B]/10 px-1.5 py-0.5 rounded capitalize font-medium">
+                    <span className="text-[10px] text-[#E11D48] bg-[#E11D48]/10 px-1.5 py-0.5 rounded capitalize font-medium">
                       {isDarkMode ? '🌙 Dark' : '☀️ Light'}
                     </span>
                   </button>
 
                   <button
                     onClick={toggleDarkMode}
-                    className="w-full px-4 py-2 text-left text-xs text-[#1C110E] hover:bg-[#F7EFE4] flex items-center justify-between cursor-pointer"
+                    className="w-full px-4 py-2 text-left text-xs text-[#4A0420] hover:bg-[#FFB8CB] flex items-center justify-between cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
-                      {isDarkMode ? <Sun className="w-3.5 h-3.5 text-[#E8A33D]" /> : <Moon className="w-3.5 h-3.5 text-[#8E1B1B]" />}
+                      {isDarkMode ? <Sun className="w-3.5 h-3.5 text-[#FFC145]" /> : <Moon className="w-3.5 h-3.5 text-[#E11D48]" />}
                       <span>{isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</span>
                     </span>
-                    <span className="text-[10px] text-[#6E5B52] bg-[#F7EFE4] px-1.5 py-0.5 rounded border border-[#E7D9C9]">
+                    <span className="text-[10px] text-[#8A4058] bg-[#FFB8CB] px-1.5 py-0.5 rounded border border-[#F4A9BF]">
                       Toggle
                     </span>
                   </button>
 
                   <button
                     onClick={() => setCurrentView('pricing')}
-                    className="w-full px-4 py-2 text-left text-xs text-[#1C110E] hover:bg-[#F7EFE4] flex items-center justify-between cursor-pointer"
+                    className="w-full px-4 py-2 text-left text-xs text-[#4A0420] hover:bg-[#FFB8CB] flex items-center justify-between cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
-                      <CreditCard className="w-3.5 h-3.5 text-[#E8A33D]" />
+                      <CreditCard className="w-3.5 h-3.5 text-[#FFC145]" />
                       <span>Membership & Storage</span>
                     </span>
                     <span className="text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded font-semibold uppercase">
@@ -277,25 +277,25 @@ export const TopNav: React.FC<{ onToggleMobileSim?: () => void; isMobileSim?: bo
 
                   <button
                     onClick={() => setCurrentView('invite')}
-                    className="w-full px-4 py-2 text-left text-xs text-[#1C110E] hover:bg-[#F7EFE4] flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2 text-left text-xs text-[#4A0420] hover:bg-[#FFB8CB] flex items-center gap-2 cursor-pointer"
                   >
-                    <Heart className="w-3.5 h-3.5 text-[#C63A2E]" />
+                    <Heart className="w-3.5 h-3.5 text-[#F59E0B]" />
                     <span>Partner Invite Link</span>
                   </button>
 
                   <button
                     onClick={() => setCurrentView('legal')}
-                    className="w-full px-4 py-2 text-left text-xs text-[#1C110E] hover:bg-[#F7EFE4] flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2 text-left text-xs text-[#4A0420] hover:bg-[#FFB8CB] flex items-center gap-2 cursor-pointer"
                   >
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#6E5B52]" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#8A4058]" />
                     <span>Privacy & Trust</span>
                   </button>
                 </div>
 
-                <div className="border-t border-[#E7D9C9]/60 pt-1 mt-1">
+                <div className="border-t border-[#F4A9BF]/60 pt-1 mt-1">
                   <button
                     onClick={() => signOut()}
-                    className="w-full px-4 py-2 text-left text-xs text-[#8E1B1B] hover:bg-[#8E1B1B]/5 flex items-center gap-2 cursor-pointer"
+                    className="w-full px-4 py-2 text-left text-xs text-[#E11D48] hover:bg-[#E11D48]/5 flex items-center gap-2 cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5" />
                     <span>Sign Out</span>

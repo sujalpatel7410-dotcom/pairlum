@@ -31,24 +31,24 @@ export const PageRail: React.FC<PageRailProps> = ({
       {/* Top Header info */}
       <div>
         {step && (
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] text-xs font-semibold tracking-wider mb-3">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#E11D48]/10 text-[#E11D48] text-xs font-semibold tracking-wider mb-3">
             <span>{step}</span>
           </div>
         )}
         {categoryLabel && (
-          <div className="text-[11px] uppercase tracking-widest text-[#8E1B1B] font-semibold mb-1 flex items-center gap-1.5">
+          <div className="text-[11px] uppercase tracking-widest text-[#E11D48] font-semibold mb-1 flex items-center gap-1.5">
             <span>{categoryLabel}</span>
-            <Heart className="w-3 h-3 fill-[#8E1B1B]/20 text-[#8E1B1B]" />
+            <Heart className="w-3 h-3 fill-[#E11D48]/20 text-[#E11D48]" />
           </div>
         )}
         
-        <h1 className="font-display text-3xl xl:text-4xl text-[#1C110E] font-medium leading-tight flex items-center gap-2">
+        <h1 className="font-display text-3xl xl:text-4xl text-[#4A0420] font-medium leading-tight flex items-center gap-2">
           <span>{title}</span>
-          <Heart className="w-5 h-5 text-[#8E1B1B] fill-none stroke-[1.75]" />
+          <Heart className="w-5 h-5 text-[#E11D48] fill-none stroke-[1.75]" />
         </h1>
 
         {subtitle && (
-          <p className="text-sm text-[#6E5B52] leading-relaxed mt-2.5">
+          <p className="text-sm text-[#8A4058] leading-relaxed mt-2.5">
             {subtitle}
           </p>
         )}
@@ -63,16 +63,16 @@ export const PageRail: React.FC<PageRailProps> = ({
 
       {/* Optional decorative illustration or pull-quote */}
       {(illustrationSrc || quote) && (
-        <div className="mt-auto pt-4 border-t border-[#E7D9C9]/60">
+        <div className="mt-auto pt-4 border-t border-[#F4A9BF]/60">
           {illustrationSrc && (
-            <div className="relative rounded-2xl overflow-hidden mb-3 border border-[#E7D9C9] bg-[#F7EFE4] p-1.5 warm-shadow">
+            <div className="relative rounded-2xl overflow-hidden mb-3 border border-[#F4A9BF] bg-[#FFB8CB] p-1.5 warm-shadow">
               <img 
                 src={illustrationSrc} 
                 alt="Decorative vignette" 
                 className="w-full h-32 object-cover rounded-xl"
               />
               {illustrationCaption && (
-                <p className="font-script text-base text-[#6E5B52] text-center mt-2 pb-1">
+                <p className="font-script text-base text-[#8A4058] text-center mt-2 pb-1">
                   {illustrationCaption}
                 </p>
               )}
@@ -80,18 +80,18 @@ export const PageRail: React.FC<PageRailProps> = ({
           )}
 
           {quote && (
-            <div className="p-4 rounded-2xl bg-[#F7EFE4]/80 border border-[#E7D9C9] relative">
-              <span className="text-2xl text-[#8E1B1B]/40 font-display absolute top-2 left-3">“</span>
-              <p className="font-script text-lg text-[#1C110E] pl-3 italic leading-snug">
+            <div className="p-4 rounded-2xl bg-[#FFB8CB]/80 border border-[#F4A9BF] relative">
+              <span className="text-2xl text-[#E11D48]/40 font-display absolute top-2 left-3">“</span>
+              <p className="font-script text-lg text-[#4A0420] pl-3 italic leading-snug">
                 {quote}
               </p>
               {quoteAuthor && (
-                <p className="text-xs text-[#8E1B1B] text-right mt-1 font-medium">
+                <p className="text-xs text-[#E11D48] text-right mt-1 font-medium">
                   — {quoteAuthor}
                 </p>
               )}
               <div className="flex justify-center mt-2">
-                <span className="text-[#8E1B1B] text-sm">♡</span>
+                <span className="text-[#E11D48] text-sm">♡</span>
               </div>
             </div>
           )}

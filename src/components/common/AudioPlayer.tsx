@@ -48,7 +48,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   };
 
   return (
-    <div className={`p-3 rounded-xl bg-[#F7EFE4] border border-[#E7D9C9] flex items-center gap-3 ${className}`}>
+    <div className={`p-3 rounded-xl bg-[#FFB8CB] border border-[#F4A9BF] flex items-center gap-3 ${className}`}>
       <audio
         ref={audioRef}
         src={src}
@@ -69,7 +69,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <button
         type="button"
         onClick={toggle}
-        className="w-9 h-9 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-[#751515] transition-colors shadow-sm"
+        className="w-9 h-9 rounded-full bg-[#E11D48] text-white flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-[#C81E45] transition-colors shadow-sm"
       >
         {isPlaying
           ? <Pause className="w-4 h-4" />
@@ -92,10 +92,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
                 key={i}
                 style={{ height: `${barHeight}px` }}
                 className={`flex-1 rounded-full transition-colors ${filled
-                    ? 'bg-[#8E1B1B]'
+                    ? 'bg-[#E11D48]'
                     : isPlaying
-                      ? 'bg-[#C63A2E]/40 animate-pulse'
-                      : 'bg-[#C63A2E]/30'
+                      ? 'bg-[#F59E0B]/40 animate-pulse'
+                      : 'bg-[#F59E0B]/30'
                   }`}
               />
             );
@@ -104,11 +104,11 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
         {/* Progress scrubber line */}
         <div
-          className="relative h-1 bg-[#E7D9C9] rounded-full cursor-pointer overflow-hidden"
+          className="relative h-1 bg-[#F4A9BF] rounded-full cursor-pointer overflow-hidden"
           onClick={handleSeek}
         >
           <div
-            className="absolute left-0 top-0 h-full bg-[#8E1B1B] rounded-full transition-all"
+            className="absolute left-0 top-0 h-full bg-[#E11D48] rounded-full transition-all"
             style={{ width: `${progress * 100}%` }}
           />
         </div>
@@ -118,13 +118,13 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
         {isPlaying || currentTime > 0 ? (
           <>
-            <span className="text-[11px] text-[#8E1B1B] font-mono font-semibold">{fmt(currentTime)}</span>
+            <span className="text-[11px] text-[#E11D48] font-mono font-semibold">{fmt(currentTime)}</span>
             {duration > 0 && (
-              <span className="text-[10px] text-[#6E5B52] font-mono">{fmt(duration)}</span>
+              <span className="text-[10px] text-[#8A4058] font-mono">{fmt(duration)}</span>
             )}
           </>
         ) : (
-          <span className="text-xs text-[#6E5B52] font-mono">
+          <span className="text-xs text-[#8A4058] font-mono">
             {durationLabel ?? (duration > 0 ? fmt(duration) : '—')}
           </span>
         )}

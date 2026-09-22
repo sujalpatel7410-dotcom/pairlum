@@ -55,14 +55,14 @@ export const OurWallView: React.FC = () => {
     <button
       key={value}
       onClick={() => setSelectedFilter(value)}
-      className={`w-full px-3.5 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-colors cursor-pointer ${selectedFilter === value ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-[#F7EFE4]'
+      className={`w-full px-3.5 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-colors cursor-pointer ${selectedFilter === value ? 'bg-[#E11D48] text-white' : 'text-[#8A4058] hover:bg-[#FFB8CB]'
         }`}
     >
       <span className="flex items-center gap-2">
         <Icon className="w-3.5 h-3.5" />
         <span>{label}</span>
       </span>
-      <span className={`px-2 py-0.5 rounded-full text-[10px] ${selectedFilter === value ? 'bg-white/20' : 'bg-[#E7D9C9]'}`}>
+      <span className={`px-2 py-0.5 rounded-full text-[10px] ${selectedFilter === value ? 'bg-white/20' : 'bg-[#F4A9BF]'}`}>
         {count}
       </span>
     </button>
@@ -96,7 +96,7 @@ export const OurWallView: React.FC = () => {
         <div className="pt-3">
           <button
             onClick={() => openAddMemoryModal('photo')}
-            className="w-full py-2.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+            className="w-full py-2.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-semibold tracking-wide flex items-center justify-center gap-2 shadow-sm cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Pin a New Memory</span>
@@ -108,20 +108,20 @@ export const OurWallView: React.FC = () => {
       <main className="flex-1 space-y-6">
 
         {/* Top Controls Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9]">
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#FFB8CB] border border-[#F4A9BF]">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-[#1C110E]">Showing:</span>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-white border border-[#E7D9C9] text-[#8E1B1B] font-medium capitalize">
+            <span className="text-xs font-semibold text-[#4A0420]">Showing:</span>
+            <span className="text-xs px-2.5 py-1 rounded-full bg-white border border-[#F4A9BF] text-[#E11D48] font-medium capitalize">
               {selectedFilter === 'all' ? 'All Types' : selectedFilter}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-[#6E5B52]">Year:</span>
+            <span className="text-xs text-[#8A4058]">Year:</span>
             {['2024', '2025', '2026'].map((yr) => (
               <button
                 key={yr}
                 onClick={() => setSelectedYear(yr)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${selectedYear === yr ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:bg-white'
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer ${selectedYear === yr ? 'bg-[#E11D48] text-white' : 'text-[#8A4058] hover:bg-white'
                   }`}
               >
                 {yr}
@@ -138,50 +138,50 @@ export const OurWallView: React.FC = () => {
             <div className="relative w-40 h-52 mb-10">
               {/* ghost polaroids behind */}
               <div
-                className="absolute inset-0 bg-white border border-[#E7D9C9] rounded-xl shadow-md opacity-30"
+                className="absolute inset-0 bg-white border border-[#F4A9BF] rounded-xl shadow-md opacity-30"
                 style={{ transform: 'rotate(-8deg) translate(-24px, 8px)' }}
               />
               <div
-                className="absolute inset-0 bg-white border border-[#E7D9C9] rounded-xl shadow-md opacity-30"
+                className="absolute inset-0 bg-white border border-[#F4A9BF] rounded-xl shadow-md opacity-30"
                 style={{ transform: 'rotate(6deg) translate(24px, 12px)' }}
               />
               {/* center polaroid */}
-              <div className="relative z-10 w-full h-full bg-white border border-[#E7D9C9] rounded-2xl shadow-lg flex flex-col items-center justify-center gap-3">
-                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-tr from-[#8E1B1B] to-[#C63A2E] shadow flex items-center justify-center">
+              <div className="relative z-10 w-full h-full bg-white border border-[#F4A9BF] rounded-2xl shadow-lg flex flex-col items-center justify-center gap-3">
+                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-tr from-[#E11D48] to-[#F59E0B] shadow flex items-center justify-center">
                   <div className="w-2 h-2 rounded-full bg-white/70" />
                 </div>
-                <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-[#F7EFE4] to-[#EFE4D6] flex items-center justify-center">
-                  <Camera className="w-10 h-10 text-[#8E1B1B]/50" />
+                <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-[#FFB8CB] to-[#FF9DB6] flex items-center justify-center">
+                  <Camera className="w-10 h-10 text-[#E11D48]/50" />
                 </div>
-                <span className="font-script text-sm text-[#6E5B52]">your first memory</span>
+                <span className="font-script text-sm text-[#8A4058]">your first memory</span>
               </div>
             </div>
 
-            <h3 className="font-display text-3xl text-[#1C110E] font-medium">
+            <h3 className="font-display text-3xl text-[#4A0420] font-medium">
               Your wall is empty
             </h3>
-            <p className="mt-2 max-w-xs text-[#6E5B52] font-script text-lg leading-relaxed">
+            <p className="mt-2 max-w-xs text-[#8A4058] font-script text-lg leading-relaxed">
               Pin your first polaroid — a photo, a love note, or a voice memo — and start filling this wall with your story.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => openAddMemoryModal('photo')}
-                className="px-6 py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-semibold flex items-center gap-2 shadow-lg transition-all hover:scale-105 cursor-pointer"
+                className="px-6 py-3 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-sm font-semibold flex items-center gap-2 shadow-lg transition-all hover:scale-105 cursor-pointer"
               >
                 <Camera className="w-4 h-4" />
                 <span>Pin a Photo</span>
               </button>
               <button
                 onClick={() => openAddMemoryModal('note')}
-                className="px-6 py-3 rounded-full border border-[#8E1B1B] text-[#8E1B1B] hover:bg-[#8E1B1B]/5 text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer"
+                className="px-6 py-3 rounded-full border border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48]/5 text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer"
               >
                 <FileText className="w-4 h-4" />
                 <span>Write a Love Note</span>
               </button>
             </div>
 
-            <p className="mt-6 text-xs text-[#6E5B52]/60 font-mono">
+            <p className="mt-6 text-xs text-[#8A4058]/60 font-mono">
               🕯️ Everything stays private between just the two of you
             </p>
           </div>
@@ -190,18 +190,18 @@ export const OurWallView: React.FC = () => {
 
           /* Filter empty state */
           <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-            <div className="w-16 h-16 rounded-full bg-[#F7EFE4] flex items-center justify-center mb-4">
-              <Filter className="w-7 h-7 text-[#8E1B1B]" />
+            <div className="w-16 h-16 rounded-full bg-[#FFB8CB] flex items-center justify-center mb-4">
+              <Filter className="w-7 h-7 text-[#E11D48]" />
             </div>
-            <h4 className="font-display text-xl text-[#1C110E] font-medium capitalize">
+            <h4 className="font-display text-xl text-[#4A0420] font-medium capitalize">
               No {selectedFilter} memories yet
             </h4>
-            <p className="mt-1 text-[#6E5B52] font-script text-base">
+            <p className="mt-1 text-[#8A4058] font-script text-base">
               Try a different filter or pin a new one.
             </p>
             <button
               onClick={() => setSelectedFilter('all')}
-              className="mt-4 px-5 py-2 rounded-full border border-[#8E1B1B] text-[#8E1B1B] text-xs font-semibold cursor-pointer hover:bg-[#8E1B1B]/5"
+              className="mt-4 px-5 py-2 rounded-full border border-[#E11D48] text-[#E11D48] text-xs font-semibold cursor-pointer hover:bg-[#E11D48]/5"
             >
               Show all memories
             </button>
@@ -236,15 +236,15 @@ export const OurWallView: React.FC = () => {
                   style={{ transform: `rotate(${rot}deg)` }}
                   onClick={() => setActiveLightboxMemory(mem)}
                 >
-                  <div className="relative p-3.5 bg-white rounded-2xl border border-[#E7D9C9] warm-shadow group">
+                  <div className="relative p-3.5 bg-white rounded-2xl border border-[#F4A9BF] warm-shadow group">
 
                     {/* Pushpin */}
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-tr from-[#8E1B1B] to-[#C63A2E] shadow-sm flex items-center justify-center z-10">
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-tr from-[#E11D48] to-[#F59E0B] shadow-sm flex items-center justify-center z-10">
                       <div className="w-1.5 h-1.5 rounded-full bg-white/70" />
                     </div>
 
                     {/* Media */}
-                    <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
+                    <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-[#FFB8CB]">
                       <img
                         src={mem.imageUrl || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=600&q=80'}
                         alt={mem.title}
@@ -252,13 +252,13 @@ export const OurWallView: React.FC = () => {
                       />
                       {mem.kind === 'video' && (
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                          <div className="w-10 h-10 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center shadow-md">
+                          <div className="w-10 h-10 rounded-full bg-[#E11D48] text-white flex items-center justify-center shadow-md">
                             <Play className="w-4 h-4 fill-white ml-0.5" />
                           </div>
                         </div>
                       )}
                       {mem.kind === 'voice' && (
-                        <div className="absolute bottom-2 left-2 bg-[#8E1B1B] text-white text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1 font-mono">
+                        <div className="absolute bottom-2 left-2 bg-[#E11D48] text-white text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1 font-mono">
                           <Mic className="w-3 h-3" />
                           <span>{mem.audioDuration}</span>
                         </div>
@@ -267,24 +267,24 @@ export const OurWallView: React.FC = () => {
 
                     {/* Caption */}
                     <div className="pt-3 px-1">
-                      <h4 className="font-display text-sm font-semibold text-[#1C110E] truncate">
+                      <h4 className="font-display text-sm font-semibold text-[#4A0420] truncate">
                         {mem.title}
                       </h4>
-                      <p className="font-script text-base text-[#6E5B52] line-clamp-2 mt-0.5 leading-snug">
+                      <p className="font-script text-base text-[#8A4058] line-clamp-2 mt-0.5 leading-snug">
                         "{mem.caption}"
                       </p>
-                      <div className="mt-3 pt-2 border-t border-[#E7D9C9]/50 flex items-center justify-between text-[11px] text-[#6E5B52]">
+                      <div className="mt-3 pt-2 border-t border-[#F4A9BF]/50 flex items-center justify-between text-[11px] text-[#8A4058]">
                         <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-[#8E1B1B]" />
+                          <MapPin className="w-3 h-3 text-[#E11D48]" />
                           <span className="truncate max-w-[100px]">{mem.location || 'Home'}</span>
                         </span>
                         <div className="flex items-center gap-1">
                           {mem.reactions.some((r) => r.count > 0) && (
-                            <span className="text-[#8E1B1B] font-medium flex items-center gap-0.5">
+                            <span className="text-[#E11D48] font-medium flex items-center gap-0.5">
                               ❤️ {mem.reactions.reduce((acc, r) => acc + r.count, 0)}
                             </span>
                           )}
-                          <span className="text-[10px] font-script text-xs text-[#8E1B1B]">
+                          <span className="text-[10px] font-script text-xs text-[#E11D48]">
                             — {mem.authorName}
                           </span>
                         </div>
@@ -300,8 +300,8 @@ export const OurWallView: React.FC = () => {
 
         {/* Bottom Month Scrubber (only show when there are memories) */}
         {memories.length > 0 && (
-          <div className="mt-10 p-4 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9]">
-            <div className="text-[11px] font-bold text-[#8E1B1B] uppercase tracking-wider mb-2 text-center">
+          <div className="mt-10 p-4 rounded-2xl bg-[#FFB8CB] border border-[#F4A9BF]">
+            <div className="text-[11px] font-bold text-[#E11D48] uppercase tracking-wider mb-2 text-center">
               Scrub Timeline ({selectedYear})
             </div>
             <div className="flex items-center justify-between gap-1 overflow-x-auto pb-1">
@@ -310,8 +310,8 @@ export const OurWallView: React.FC = () => {
                   key={m}
                   onClick={() => setSelectedMonth(m)}
                   className={`px-3 py-1 rounded-full text-xs font-medium transition-all cursor-pointer flex-shrink-0 ${selectedMonth === m
-                      ? 'bg-[#8E1B1B] text-white shadow-xs'
-                      : 'text-[#6E5B52] hover:bg-[#FFFBF5]'
+                      ? 'bg-[#E11D48] text-white shadow-xs'
+                      : 'text-[#8A4058] hover:bg-[#FFD3DE]'
                     }`}
                 >
                   {m}

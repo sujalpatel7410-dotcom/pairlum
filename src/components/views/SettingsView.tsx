@@ -122,9 +122,9 @@ export const SettingsView: React.FC = () => {
         quote="Protected in our little corner of the world."
         quoteAuthor="Pairlum"
       >
-        <div className="p-4 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-3 text-xs">
-          <span className="font-bold text-[#8E1B1B] uppercase tracking-wider block">Privacy Guarantee</span>
-          <p className="text-[#6E5B52]">
+        <div className="p-4 rounded-2xl bg-[#FFB8CB] border border-[#F4A9BF] space-y-3 text-xs">
+          <span className="font-bold text-[#E11D48] uppercase tracking-wider block">Privacy Guarantee</span>
+          <p className="text-[#8A4058]">
             Pairlum is an end-to-end private sanctuary. No social feeds, no public profiles, no ads. Just you two.
           </p>
         </div>
@@ -132,9 +132,9 @@ export const SettingsView: React.FC = () => {
         <div className="pt-3">
           <button
             onClick={handleExportArchive}
-            className="w-full py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-semibold text-[#1C110E] hover:border-[#8E1B1B] flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full py-2.5 rounded-full bg-[#FFD3DE] border border-[#F4A9BF] text-xs font-semibold text-[#4A0420] hover:border-[#E11D48] flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-[#8E1B1B]" />
+            <Download className="w-3.5 h-3.5 text-[#E11D48]" />
             <span>Export Memory Archive</span>
           </button>
         </div>
@@ -144,107 +144,107 @@ export const SettingsView: React.FC = () => {
       <main className="flex-1 space-y-8">
         
         <div>
-          <h2 className="font-display text-4xl text-[#1C110E] font-medium">Sanctuary Settings</h2>
-          <p className="text-xs text-[#6E5B52] mt-1">Keep your profile and shared milestones up to date.</p>
+          <h2 className="font-display text-4xl text-[#4A0420] font-medium">Sanctuary Settings</h2>
+          <p className="text-xs text-[#8A4058] mt-1">Keep your profile and shared milestones up to date.</p>
         </div>
 
         <form onSubmit={handleSaveProfile} className="space-y-6">
           
           {/* Couple Profiles */}
-          <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow space-y-4">
-            <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
-              <Heart className="w-4 h-4 text-[#8E1B1B]" />
+          <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] warm-shadow space-y-4">
+            <h3 className="font-display text-xl font-semibold text-[#4A0420] flex items-center gap-2">
+              <Heart className="w-4 h-4 text-[#E11D48]" />
               <span>Partners & Coordinates</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Partner A (Name)</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Partner A (Name)</label>
                 <input
                   type="text"
                   value={nameA}
                   onChange={(e) => setNameA(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Partner A (City)</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Partner A (City)</label>
                 <input
                   type="text"
                   value={cityA}
                   onChange={(e) => setCityA(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Partner B (Name)</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Partner B (Name)</label>
                 <input
                   type="text"
                   value={nameB}
                   onChange={(e) => setNameB(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Partner B (City)</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Partner B (City)</label>
                 <input
                   type="text"
                   value={cityB}
                   onChange={(e) => setCityB(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Distance Apart</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Distance Apart</label>
                 <input
                   type="text"
                   value={distance}
                   onChange={(e) => setDistance(e.target.value)}
                   placeholder="e.g. 7,192 km (4,469 mi)"
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Flight Duration & Timezone</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Flight Duration & Timezone</label>
                 <input
                   type="text"
                   value={flightDuration}
                   onChange={(e) => setFlightDuration(e.target.value)}
                   placeholder="e.g. 9 hrs 15 min flight"
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
             </div>
           </div>
 
           {/* Pairing & Account */}
-          <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow space-y-4">
-            <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
-              <Heart className="w-4 h-4 text-[#8E1B1B]" />
+          <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] warm-shadow space-y-4">
+            <h3 className="font-display text-xl font-semibold text-[#4A0420] flex items-center gap-2">
+              <Heart className="w-4 h-4 text-[#E11D48]" />
               <span>Invite Your Partner</span>
             </h3>
             {couple.isPartnerJoined ? (
-              <p className="text-xs text-[#6E5B52]">
+              <p className="text-xs text-[#8A4058]">
                 {couple.nameB || 'Your partner'} has already joined this space.
               </p>
             ) : (
               <div>
-                <p className="text-xs text-[#6E5B52] mb-2">
+                <p className="text-xs text-[#8A4058] mb-2">
                   Share this code so your partner can join your shared space.
                 </p>
                 <div className="flex items-center gap-2">
-                  <code className="flex-1 px-3 py-2 rounded-xl bg-white border border-[#E7D9C9] text-sm font-mono tracking-wider text-[#1C110E]">
+                  <code className="flex-1 px-3 py-2 rounded-xl bg-white border border-[#F4A9BF] text-sm font-mono tracking-wider text-[#4A0420]">
                     {couple.inviteCode}
                   </code>
                   <button
                     type="button"
                     onClick={handleCopyInviteCode}
-                    className="px-3 py-2 rounded-xl bg-[#8E1B1B] text-white text-xs font-medium flex items-center gap-1.5 hover:bg-[#7A1717] cursor-pointer"
+                    className="px-3 py-2 rounded-xl bg-[#E11D48] text-white text-xs font-medium flex items-center gap-1.5 hover:bg-[#C81E45] cursor-pointer"
                   >
                     {codeCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{codeCopied ? 'Copied' : 'Copy'}</span>
@@ -252,11 +252,11 @@ export const SettingsView: React.FC = () => {
                 </div>
               </div>
             )}
-            <div className="pt-2 border-t border-[#E7D9C9]/60">
+            <div className="pt-2 border-t border-[#F4A9BF]/60">
               <button
                 type="button"
                 onClick={() => signOut()}
-                className="text-xs font-medium text-[#8E1B1B] flex items-center gap-1.5 hover:underline cursor-pointer"
+                className="text-xs font-medium text-[#E11D48] flex items-center gap-1.5 hover:underline cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sign out</span>
@@ -265,16 +265,16 @@ export const SettingsView: React.FC = () => {
           </div>
 
           {/* Photos: Avatars & Cover */}
-          <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow space-y-4">
-            <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
-              <ImageIcon className="w-4 h-4 text-[#8E1B1B]" />
+          <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] warm-shadow space-y-4">
+            <h3 className="font-display text-xl font-semibold text-[#4A0420] flex items-center gap-2">
+              <ImageIcon className="w-4 h-4 text-[#E11D48]" />
               <span>Photos</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="text-center">
-                <img src={couple.avatarA || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'} alt={couple.nameA} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#E7D9C9]" />
-                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
+                <img src={couple.avatarA || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'} alt={couple.nameA} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#F4A9BF]" />
+                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#E11D48] cursor-pointer hover:underline">
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span>{isUploadingAvatarA ? `Uploading... ${progressAvatarA}%` : `${couple.nameA}'s photo`}</span>
                   <input
@@ -285,12 +285,12 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleAvatarSelected(e.target.files?.[0], 'A')}
                   />
                 </label>
-                {avatarAError && <p className="text-[11px] text-[#8E1B1B] mt-1">{avatarAError}</p>}
+                {avatarAError && <p className="text-[11px] text-[#E11D48] mt-1">{avatarAError}</p>}
               </div>
 
               <div className="text-center">
-                <img src={couple.avatarB || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80'} alt={couple.nameB} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#E7D9C9]" />
-                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
+                <img src={couple.avatarB || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80'} alt={couple.nameB} className="w-20 h-20 rounded-full object-cover mx-auto border border-[#F4A9BF]" />
+                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#E11D48] cursor-pointer hover:underline">
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span>{isUploadingAvatarB ? `Uploading... ${progressAvatarB}%` : `${couple.nameB}'s photo`}</span>
                   <input
@@ -301,12 +301,12 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleAvatarSelected(e.target.files?.[0], 'B')}
                   />
                 </label>
-                {avatarBError && <p className="text-[11px] text-[#8E1B1B] mt-1">{avatarBError}</p>}
+                {avatarBError && <p className="text-[11px] text-[#E11D48] mt-1">{avatarBError}</p>}
               </div>
 
               <div className="text-center">
-                <img src={couple.coverPhoto || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'} alt="Cover" className="w-full h-20 rounded-xl object-cover mx-auto border border-[#E7D9C9]" />
-                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#8E1B1B] cursor-pointer hover:underline">
+                <img src={couple.coverPhoto || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80'} alt="Cover" className="w-full h-20 rounded-xl object-cover mx-auto border border-[#F4A9BF]" />
+                <label className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-[#E11D48] cursor-pointer hover:underline">
                   <UploadCloud className="w-3.5 h-3.5" />
                   <span>{isUploadingCover ? `Uploading... ${progressCover}%` : 'Cover photo'}</span>
                   <input
@@ -317,76 +317,76 @@ export const SettingsView: React.FC = () => {
                     onChange={(e) => handleCoverSelected(e.target.files?.[0])}
                   />
                 </label>
-                {coverError && <p className="text-[11px] text-[#8E1B1B] mt-1">{coverError}</p>}
+                {coverError && <p className="text-[11px] text-[#E11D48] mt-1">{coverError}</p>}
               </div>
             </div>
           </div>
 
           {/* Dates & Milestones */}
-          <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow space-y-4">
-            <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-[#8E1B1B]" />
+          <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] warm-shadow space-y-4">
+            <h3 className="font-display text-xl font-semibold text-[#4A0420] flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-[#E11D48]" />
               <span>Milestones & Reunion</span>
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Anniversary / Since Date</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Anniversary / Since Date</label>
                 <input
                   type="text"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Next Reunion Target Date</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Next Reunion Target Date</label>
                 <input
                   type="text"
                   value={reunionDate}
                   onChange={(e) => setReunionDate(e.target.value)}
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Reunion Destination City</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Reunion Destination City</label>
                 <input
                   type="text"
                   value={reunionLocation}
                   onChange={(e) => setReunionLocation(e.target.value)}
                   placeholder="e.g. Ahmedabad, India"
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#1C110E] mb-1">Reunion Door Title</label>
+                <label className="block text-xs font-semibold text-[#4A0420] mb-1">Reunion Door Title</label>
                 <input
                   type="text"
                   value={reunionTitle}
                   onChange={(e) => setReunionTitle(e.target.value)}
                   placeholder="e.g. Home is wherever we're together"
-                  className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs"
+                  className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs"
                 />
               </div>
             </div>
           </div>
 
           {/* Theme & Sanctuary Ambiance */}
-          <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow space-y-4">
+          <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] warm-shadow space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
-                <Palette className="w-4 h-4 text-[#8E1B1B]" />
+              <h3 className="font-display text-xl font-semibold text-[#4A0420] flex items-center gap-2">
+                <Palette className="w-4 h-4 text-[#E11D48]" />
                 <span>Sanctuary Ambiance & Dark Mode</span>
               </h3>
-              <span className="text-[11px] font-medium text-[#6E5B52] bg-[#FFFBF5] px-2.5 py-1 rounded-full border border-[#E7D9C9]">
-                Active: <strong className="text-[#8E1B1B] capitalize">{themeMode}</strong>
+              <span className="text-[11px] font-medium text-[#8A4058] bg-[#FFD3DE] px-2.5 py-1 rounded-full border border-[#F4A9BF]">
+                Active: <strong className="text-[#E11D48] capitalize">{themeMode}</strong>
               </span>
             </div>
             
-            <p className="text-xs text-[#6E5B52]">
+            <p className="text-xs text-[#8A4058]">
               Choose the atmosphere for your shared sanctuary. Midnight mode offers an eye-safe, deep candlelight backdrop ideal for late-night moments together.
             </p>
 
@@ -400,8 +400,8 @@ export const SettingsView: React.FC = () => {
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer relative ${
                   themeMode === 'light'
-                    ? 'border-[#8E1B1B] bg-white ring-2 ring-[#8E1B1B]/20 shadow-md'
-                    : 'border-[#E7D9C9] bg-[#FFFBF5] hover:border-[#8E1B1B]/50'
+                    ? 'border-[#E11D48] bg-white ring-2 ring-[#E11D48]/20 shadow-md'
+                    : 'border-[#F4A9BF] bg-[#FFD3DE] hover:border-[#E11D48]/50'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -409,13 +409,13 @@ export const SettingsView: React.FC = () => {
                     <Sun className="w-4 h-4" />
                   </div>
                   {themeMode === 'light' && (
-                    <span className="text-[10px] uppercase font-bold text-white bg-[#8E1B1B] px-1.5 py-0.5 rounded-full">
+                    <span className="text-[10px] uppercase font-bold text-white bg-[#E11D48] px-1.5 py-0.5 rounded-full">
                       Active
                     </span>
                   )}
                 </div>
-                <p className="font-display text-sm font-semibold text-[#1C110E]">Daylight Parchment</p>
-                <p className="text-[11px] text-[#6E5B52] mt-0.5">Warm cream paper, crisp crimson ink & sunny nostalgia</p>
+                <p className="font-display text-sm font-semibold text-[#4A0420]">Daylight Parchment</p>
+                <p className="text-[11px] text-[#8A4058] mt-0.5">Warm cream paper, crisp crimson ink & sunny nostalgia</p>
               </button>
 
               {/* Midnight Sanctuary Dark Mode */}
@@ -427,8 +427,8 @@ export const SettingsView: React.FC = () => {
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer relative ${
                   themeMode === 'dark'
-                    ? 'border-[#C63A2E] bg-[#1C1310] ring-2 ring-[#C63A2E]/30 shadow-md'
-                    : 'border-[#E7D9C9] bg-[#241A17] hover:border-[#C63A2E]/50'
+                    ? 'border-[#F59E0B] bg-[#390C1E] ring-2 ring-[#F59E0B]/30 shadow-md'
+                    : 'border-[#F4A9BF] bg-[#241A17] hover:border-[#F59E0B]/50'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -436,12 +436,12 @@ export const SettingsView: React.FC = () => {
                     <Moon className="w-4 h-4" />
                   </div>
                   {themeMode === 'dark' && (
-                    <span className="text-[10px] uppercase font-bold text-white bg-[#C63A2E] px-1.5 py-0.5 rounded-full">
+                    <span className="text-[10px] uppercase font-bold text-white bg-[#F59E0B] px-1.5 py-0.5 rounded-full">
                       Active
                     </span>
                   )}
                 </div>
-                <p className="font-display text-sm font-semibold text-[#FAF3EC]">Midnight Sanctuary</p>
+                <p className="font-display text-sm font-semibold text-[#FFE4EA]">Midnight Sanctuary</p>
                 <p className="text-[11px] text-[#B8A699] mt-0.5">Deep charcoal velvet, amber glow & eye-safe night intimacy</p>
               </button>
 
@@ -454,49 +454,49 @@ export const SettingsView: React.FC = () => {
                 }}
                 className={`p-4 rounded-2xl border text-left transition-all cursor-pointer relative ${
                   themeMode === 'candlelight'
-                    ? 'border-[#E8A33D] bg-amber-50/50 ring-2 ring-[#E8A33D]/30 shadow-md'
-                    : 'border-[#E7D9C9] bg-[#FFFBF5] hover:border-[#E8A33D]/50'
+                    ? 'border-[#FFC145] bg-amber-50/50 ring-2 ring-[#FFC145]/30 shadow-md'
+                    : 'border-[#F4A9BF] bg-[#FFD3DE] hover:border-[#FFC145]/50'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <div className="w-7 h-7 rounded-full bg-amber-500/10 flex items-center justify-center text-[#E8A33D]">
+                  <div className="w-7 h-7 rounded-full bg-amber-500/10 flex items-center justify-center text-[#FFC145]">
                     <Flame className="w-4 h-4" />
                   </div>
                   {themeMode === 'candlelight' && (
-                    <span className="text-[10px] uppercase font-bold text-white bg-[#E8A33D] px-1.5 py-0.5 rounded-full">
+                    <span className="text-[10px] uppercase font-bold text-white bg-[#FFC145] px-1.5 py-0.5 rounded-full">
                       Active
                     </span>
                   )}
                 </div>
-                <p className="font-display text-sm font-semibold text-[#1C110E]">Candlelight Glow</p>
-                <p className="text-[11px] text-[#6E5B52] mt-0.5">Soft pulsing ambient vignette with warm fireplace warmth</p>
+                <p className="font-display text-sm font-semibold text-[#4A0420]">Candlelight Glow</p>
+                <p className="text-[11px] text-[#8A4058] mt-0.5">Soft pulsing ambient vignette with warm fireplace warmth</p>
               </button>
             </div>
           </div>
 
           {/* Security PIN */}
-          <div className="p-6 rounded-3xl bg-[#F7EFE4] border border-[#E7D9C9] warm-shadow space-y-4">
-            <h3 className="font-display text-xl font-semibold text-[#1C110E] flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#8E1B1B]" />
+          <div className="p-6 rounded-3xl bg-[#FFB8CB] border border-[#F4A9BF] warm-shadow space-y-4">
+            <h3 className="font-display text-xl font-semibold text-[#4A0420] flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-[#E11D48]" />
               <span>The Drawer Passcode</span>
             </h3>
 
             <div className="max-w-xs">
-              <label className="block text-xs font-semibold text-[#1C110E] mb-1">6-Digit Secret PIN</label>
+              <label className="block text-xs font-semibold text-[#4A0420] mb-1">6-Digit Secret PIN</label>
               <input
                 type="password"
                 maxLength={6}
                 value={drawerPin}
                 onChange={(e) => setDrawerPin(e.target.value)}
                 placeholder="Set a 6-digit PIN"
-                className="w-full p-2.5 rounded-xl bg-white border border-[#E7D9C9] text-xs font-mono text-center tracking-widest text-lg"
+                className="w-full p-2.5 rounded-xl bg-white border border-[#F4A9BF] text-xs font-mono text-center tracking-widest text-lg"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-md cursor-pointer flex items-center justify-center gap-2"
+            className="w-full py-3.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-semibold tracking-wide shadow-md cursor-pointer flex items-center justify-center gap-2"
           >
             <Save className="w-4 h-4" />
             <span>Save All Sanctuary Settings</span>

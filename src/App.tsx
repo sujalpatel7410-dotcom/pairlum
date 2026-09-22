@@ -57,7 +57,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'dark bg-[#120C0A] text-[#FAF3EC]' : 'bg-[#FFFBF5] text-[#1C110E]'} flex flex-col font-sans transition-colors duration-500 ${isCandlelit ? 'candle-glow' : ''}`}>
+    <div className={`min-h-screen ${isDarkMode ? 'dark bg-[#2A0716] text-[#FFE4EA]' : 'bg-[#FFD3DE] text-[#4A0420]'} flex flex-col font-sans transition-colors duration-500 ${isCandlelit ? 'candle-glow' : ''}`}>
 
       {/* Interactive Fluid Splash Cursor */}
       <SplashCursor
@@ -69,7 +69,7 @@ const AppContent: React.FC = () => {
         CURL={4}
         SPLAT_RADIUS={0.22}
         SPLAT_FORCE={5500}
-        COLOR={isDarkMode ? '#E8A33D' : '#8E1B1B'}
+        COLOR={isDarkMode ? '#FFC145' : '#E11D48'}
         RAINBOW_MODE={false}
       />
 
@@ -90,31 +90,31 @@ const AppContent: React.FC = () => {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full bg-[#1C110E] text-white text-xs font-medium shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-3 duration-200 border border-white/10">
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full bg-[#4A0420] text-white text-xs font-medium shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-3 duration-200 border border-white/10">
           <Sparkles className="w-3.5 h-3.5 text-amber-300" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Ambient footer candle watermark */}
-      <footer className="py-6 border-t border-[#E7D9C9]/50 text-center text-xs text-[#6E5B52] space-y-2">
+      <footer className="py-6 border-t border-[#F4A9BF]/50 text-center text-xs text-[#8A4058] space-y-2">
         <div className="flex items-center justify-center gap-2">
-          <Flame className="w-3.5 h-3.5 text-[#8E1B1B]" />
-          <span className="font-display font-medium text-[#1C110E]">Pairlum</span>
+          <Flame className="w-3.5 h-3.5 text-[#E11D48]" />
+          <span className="font-display font-medium text-[#4A0420]">Pairlum</span>
           <span>•</span>
-          <span className="font-script text-base text-[#8E1B1B]">a private candlelight sanctuary for two</span>
+          <span className="font-script text-base text-[#E11D48]">a private candlelight sanctuary for two</span>
         </div>
-        <p className="text-[11px] text-[#6E5B52]/70 font-mono">
+        <p className="text-[11px] text-[#8A4058]/70 font-mono">
           Encrypted & private to your coordinates
         </p>
         <div className="flex items-center justify-center gap-3 pt-1 flex-wrap">
-          <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#8E1B1B]/70 hover:text-[#8E1B1B] underline underline-offset-2 transition-colors">Privacy Policy</a>
-          <span className="text-[#E7D9C9]">·</span>
-          <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#8E1B1B]/70 hover:text-[#8E1B1B] underline underline-offset-2 transition-colors">Terms</a>
-          <span className="text-[#E7D9C9]">·</span>
-          <a href="/cookies.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#8E1B1B]/70 hover:text-[#8E1B1B] underline underline-offset-2 transition-colors">Cookies</a>
-          <span className="text-[#E7D9C9]">·</span>
-          <a href="mailto:privacy@pairlum.com" className="text-[11px] text-[#8E1B1B]/70 hover:text-[#8E1B1B] underline underline-offset-2 transition-colors">privacy@pairlum.com</a>
+          <a href="/privacy.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#E11D48]/70 hover:text-[#E11D48] underline underline-offset-2 transition-colors">Privacy Policy</a>
+          <span className="text-[#F4A9BF]">·</span>
+          <a href="/terms.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#E11D48]/70 hover:text-[#E11D48] underline underline-offset-2 transition-colors">Terms</a>
+          <span className="text-[#F4A9BF]">·</span>
+          <a href="/cookies.html" target="_blank" rel="noopener noreferrer" className="text-[11px] text-[#E11D48]/70 hover:text-[#E11D48] underline underline-offset-2 transition-colors">Cookies</a>
+          <span className="text-[#F4A9BF]">·</span>
+          <a href="mailto:privacy@pairlum.com" className="text-[11px] text-[#E11D48]/70 hover:text-[#E11D48] underline underline-offset-2 transition-colors">privacy@pairlum.com</a>
         </div>
       </footer>
 

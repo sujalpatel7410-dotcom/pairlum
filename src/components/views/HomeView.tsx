@@ -69,17 +69,17 @@ export const HomeView: React.FC = () => {
 
           {/* Hero Content */}
           <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-[#C63A2E] animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E11D48]/10 text-[#E11D48] text-xs font-semibold">
+              <span className="w-2 h-2 rounded-full bg-[#F59E0B] animate-pulse" />
               <span>{otherPronoun} was here {couple.lastActiveTime}</span>
             </div>
 
-            <h1 className="font-display text-4xl sm:text-6xl text-[#1C110E] font-medium leading-[1.15] tracking-tight">
+            <h1 className="font-display text-4xl sm:text-6xl text-[#4A0420] font-medium leading-[1.15] tracking-tight">
               {couple.initials}, <br />
-              <span className="text-[#8E1B1B] italic">you're home.</span> ♡
+              <span className="text-[#E11D48] italic">you're home.</span> ♡
             </h1>
 
-            <p className="text-base sm:text-lg text-[#6E5B52] leading-relaxed max-w-lg">
+            <p className="text-base sm:text-lg text-[#8A4058] leading-relaxed max-w-lg">
               This is where your story begins. Fill this space with little moments, big memories, and everything in between.
             </p>
 
@@ -87,7 +87,7 @@ export const HomeView: React.FC = () => {
               <button
                 id="hero-add-memory-button"
                 onClick={() => openAddMemoryModal('photo')}
-                className="px-6 py-3.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-semibold tracking-wide shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center gap-2"
+                className="px-6 py-3.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-sm font-semibold tracking-wide shadow-md hover:shadow-lg transition-all cursor-pointer flex items-center gap-2"
               >
                 <span>Add Your First Memory</span>
                 <Heart className="w-4 h-4 fill-white" />
@@ -96,29 +96,29 @@ export const HomeView: React.FC = () => {
               <button
                 id="hero-leave-note-button"
                 onClick={() => openAddMemoryModal('note')}
-                className="px-5 py-3.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] hover:border-[#8E1B1B] transition-colors cursor-pointer flex items-center gap-1.5"
+                className="px-5 py-3.5 rounded-full bg-[#FFD3DE] border border-[#F4A9BF] text-xs font-medium text-[#4A0420] hover:border-[#E11D48] transition-colors cursor-pointer flex items-center gap-1.5"
               >
                 <span>Leave Something for {otherPartnerName}</span>
-                <span className="text-[#8E1B1B]">✎</span>
+                <span className="text-[#E11D48]">✎</span>
               </button>
             </div>
 
             {/* Streak & Milestone pills */}
-            <div className="flex flex-wrap items-center gap-2.5 pt-4 text-xs text-[#6E5B52]">
-              <div className="flex items-center gap-1.5 bg-[#F7EFE4] px-3 py-1.5 rounded-full border border-[#E7D9C9]">
-                <Flame className="w-4 h-4 text-[#E8A33D] fill-[#E8A33D]" />
-                <span><strong className="text-[#1C110E]">{couple.streakCount} days</strong> streak</span>
+            <div className="flex flex-wrap items-center gap-2.5 pt-4 text-xs text-[#8A4058]">
+              <div className="flex items-center gap-1.5 bg-[#FFB8CB] px-3 py-1.5 rounded-full border border-[#F4A9BF]">
+                <Flame className="w-4 h-4 text-[#FFC145] fill-[#FFC145]" />
+                <span><strong className="text-[#4A0420]">{couple.streakCount} days</strong> streak</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-[#F7EFE4] px-3 py-1.5 rounded-full border border-[#E7D9C9]">
-                <Heart className="w-4 h-4 text-[#8E1B1B] fill-[#8E1B1B]" />
-                <span>Together since <strong className="text-[#1C110E]">{togetherSinceLabel}</strong></span>
+              <div className="flex items-center gap-1.5 bg-[#FFB8CB] px-3 py-1.5 rounded-full border border-[#F4A9BF]">
+                <Heart className="w-4 h-4 text-[#E11D48] fill-[#E11D48]" />
+                <span>Together since <strong className="text-[#4A0420]">{togetherSinceLabel}</strong></span>
               </div>
               <button
                 onClick={() => setCurrentView('door')}
-                className="flex items-center gap-1.5 bg-[#F7EFE4] px-3 py-1.5 rounded-full border border-[#E7D9C9] hover:border-[#8E1B1B]/40 hover:bg-[#F0E4D3] transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 bg-[#FFB8CB] px-3 py-1.5 rounded-full border border-[#F4A9BF] hover:border-[#E11D48]/40 hover:bg-[#F0E4D3] transition-colors cursor-pointer"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#8E1B1B]" />
-                <span className="text-[#8E1B1B]"><strong>{couple.distance || '7,192 km'} apart</strong> • {reunionCountdownLabel}</span>
+                <Sparkles className="w-3.5 h-3.5 text-[#E11D48]" />
+                <span className="text-[#E11D48]"><strong>{couple.distance || '7,192 km'} apart</strong> • {reunionCountdownLabel}</span>
               </button>
             </div>
           </div>
@@ -128,22 +128,22 @@ export const HomeView: React.FC = () => {
 
       {/* 2. THE WINDOW INTERACTIVE WIDGET (Screenshot 16 & Prompt 3) */}
       <section>
-        <PaperCard hasTape elevated className="p-6 sm:p-8 bg-gradient-to-br from-[#F7EFE4] to-[#FFFBF5]">
+        <PaperCard hasTape elevated className="p-6 sm:p-8 bg-gradient-to-br from-[#FFB8CB] to-[#FFD3DE]">
           <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
 
             {/* Left Notice */}
             <div className="space-y-3 max-w-md">
-              <span className="text-[11px] font-bold text-[#8E1B1B] uppercase tracking-widest flex items-center gap-1.5">
-                <Heart className="w-3.5 h-3.5 fill-[#8E1B1B]" />
+              <span className="text-[11px] font-bold text-[#E11D48] uppercase tracking-widest flex items-center gap-1.5">
+                <Heart className="w-3.5 h-3.5 fill-[#E11D48]" />
                 <span>The Window</span>
               </span>
 
-              <h2 className="font-display text-3xl sm:text-4xl text-[#1C110E] font-medium leading-snug">
+              <h2 className="font-display text-3xl sm:text-4xl text-[#4A0420] font-medium leading-snug">
                 Something changed here <br className="hidden sm:inline" />
-                <span className="text-[#8E1B1B] italic">while you were away.</span>
+                <span className="text-[#E11D48] italic">while you were away.</span>
               </h2>
 
-              <p className="text-sm text-[#6E5B52] leading-relaxed">
+              <p className="text-sm text-[#8A4058] leading-relaxed">
                 {otherPartnerName} left something for you at The Window.
               </p>
 
@@ -151,11 +151,11 @@ export const HomeView: React.FC = () => {
                 <img
                   src={currentUser === 'A' ? (couple.avatarB || 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=80') : (couple.avatarA || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80')}
                   alt={otherPartnerName}
-                  className="w-9 h-9 rounded-full object-cover border border-[#E7D9C9]"
+                  className="w-9 h-9 rounded-full object-cover border border-[#F4A9BF]"
                 />
                 <div>
-                  <p className="text-xs font-semibold text-[#1C110E]">{otherPronoun} was here</p>
-                  <p className="text-[11px] text-[#6E5B52]">{couple.lastActiveTime}</p>
+                  <p className="text-xs font-semibold text-[#4A0420]">{otherPronoun} was here</p>
+                  <p className="text-[11px] text-[#8A4058]">{couple.lastActiveTime}</p>
                 </div>
               </div>
 
@@ -164,7 +164,7 @@ export const HomeView: React.FC = () => {
                   <button
                     id="open-window-button"
                     onClick={() => setWindowOpened(true)}
-                    className="px-6 py-2.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-sm cursor-pointer flex items-center gap-1.5"
+                    className="px-6 py-2.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-semibold tracking-wide shadow-sm cursor-pointer flex items-center gap-1.5"
                   >
                     <Lock className="w-3.5 h-3.5" />
                     <span>Open it</span>
@@ -172,7 +172,7 @@ export const HomeView: React.FC = () => {
                 ) : (
                   <button
                     onClick={() => setActiveLightboxMemory(windowMemory)}
-                    className="px-6 py-2.5 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-xs font-semibold tracking-wide shadow-sm cursor-pointer flex items-center gap-1.5"
+                    className="px-6 py-2.5 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-xs font-semibold tracking-wide shadow-sm cursor-pointer flex items-center gap-1.5"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     <span>View Memory Details</span>
@@ -181,7 +181,7 @@ export const HomeView: React.FC = () => {
 
                 <button
                   onClick={() => openAddMemoryModal('note')}
-                  className="px-4 py-2.5 rounded-full bg-[#FFFBF5] border border-[#E7D9C9] text-xs font-medium text-[#1C110E] hover:border-[#8E1B1B] cursor-pointer"
+                  className="px-4 py-2.5 rounded-full bg-[#FFD3DE] border border-[#F4A9BF] text-xs font-medium text-[#4A0420] hover:border-[#E11D48] cursor-pointer"
                 >
                   Leave something back
                 </button>
@@ -196,11 +196,11 @@ export const HomeView: React.FC = () => {
                   else setWindowOpened(true);
                 }}
                 className={`
-                  p-3.5 bg-white rounded-2xl border border-[#E7D9C9] warm-shadow-lg transition-all duration-500 cursor-pointer
+                  p-3.5 bg-white rounded-2xl border border-[#F4A9BF] warm-shadow-lg transition-all duration-500 cursor-pointer
                   ${!windowOpened ? 'scale-[0.98]' : 'scale-100'}
                 `}
               >
-                <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-[#F7EFE4]">
+                <div className="relative rounded-xl overflow-hidden aspect-4/3 bg-[#FFB8CB]">
                   <img
                     src={windowMemory.imageUrl || 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80'}
                     alt="Window memory"
@@ -217,32 +217,32 @@ export const HomeView: React.FC = () => {
 
                 <div className="pt-3 px-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-[#8E1B1B] font-semibold">📍 The Window</span>
-                    <span className="text-[10px] text-[#6E5B52]">August 20, 8:14 PM</span>
+                    <span className="text-[11px] text-[#E11D48] font-semibold">📍 The Window</span>
+                    <span className="text-[10px] text-[#8A4058]">August 20, 8:14 PM</span>
                   </div>
-                  <h4 className="font-display text-base text-[#1C110E] mt-1 font-semibold">
+                  <h4 className="font-display text-base text-[#4A0420] mt-1 font-semibold">
                     {windowOpened ? windowMemory.title : '••••••••••••••••••••'}
                   </h4>
-                  <p className="font-script text-base text-[#6E5B52] truncate mt-0.5">
+                  <p className="font-script text-base text-[#8A4058] truncate mt-0.5">
                     {windowOpened ? windowMemory.caption : 'Waiting for you to open...'}
                   </p>
 
                   {/* Audio mini bar */}
                   {windowOpened && windowMemory.audioDuration && (
-                    <div className="mt-2.5 p-2 rounded-xl bg-[#F7EFE4] flex items-center gap-2 text-xs">
+                    <div className="mt-2.5 p-2 rounded-xl bg-[#FFB8CB] flex items-center gap-2 text-xs">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setIsPlayingAudio(!isPlayingAudio);
                         }}
-                        className="w-6 h-6 rounded-full bg-[#8E1B1B] text-white flex items-center justify-center"
+                        className="w-6 h-6 rounded-full bg-[#E11D48] text-white flex items-center justify-center"
                       >
                         {isPlayingAudio ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3 fill-white ml-0.5" />}
                       </button>
-                      <div className="flex-1 h-2 bg-[#E7D9C9] rounded-full overflow-hidden">
-                        <div className={`h-full bg-[#8E1B1B] ${isPlayingAudio ? 'w-2/3 animate-pulse' : 'w-1/4'}`} />
+                      <div className="flex-1 h-2 bg-[#F4A9BF] rounded-full overflow-hidden">
+                        <div className={`h-full bg-[#E11D48] ${isPlayingAudio ? 'w-2/3 animate-pulse' : 'w-1/4'}`} />
                       </div>
-                      <span className="text-[10px] text-[#6E5B52] font-mono">{windowMemory.audioDuration}</span>
+                      <span className="text-[10px] text-[#8A4058] font-mono">{windowMemory.audioDuration}</span>
                     </div>
                   )}
                 </div>
@@ -257,16 +257,16 @@ export const HomeView: React.FC = () => {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="font-display text-2xl text-[#1C110E] flex items-center gap-2">
+            <h2 className="font-display text-2xl text-[#4A0420] flex items-center gap-2">
               <span>Today</span>
-              <span className="text-[#8E1B1B] text-lg">♡</span>
+              <span className="text-[#E11D48] text-lg">♡</span>
             </h2>
-            <p className="text-xs text-[#6E5B52]">Little notes for today, tomorrow, and always.</p>
+            <p className="text-xs text-[#8A4058]">Little notes for today, tomorrow, and always.</p>
           </div>
 
           <button
             onClick={() => openAddMemoryModal('note')}
-            className="text-xs text-[#8E1B1B] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
+            className="text-xs text-[#E11D48] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
           >
             <span>Leave something for {otherPartnerName}</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -277,49 +277,49 @@ export const HomeView: React.FC = () => {
           <button
             id="today-quick-photo"
             onClick={() => openAddMemoryModal('photo')}
-            className="p-4 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] flex flex-col items-center justify-center text-center transition-all cursor-pointer group"
+            className="p-4 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] flex flex-col items-center justify-center text-center transition-all cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 text-[#E11D48] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
               <Camera className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-[#1C110E]">Photo</span>
-            <span className="text-[10px] text-[#6E5B52]">Capture visual</span>
+            <span className="text-xs font-semibold text-[#4A0420]">Photo</span>
+            <span className="text-[10px] text-[#8A4058]">Capture visual</span>
           </button>
 
           <button
             id="today-quick-video"
             onClick={() => openAddMemoryModal('video')}
-            className="p-4 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] flex flex-col items-center justify-center text-center transition-all cursor-pointer group"
+            className="p-4 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] flex flex-col items-center justify-center text-center transition-all cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 text-[#E11D48] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
               <Video className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-[#1C110E]">Video</span>
-            <span className="text-[10px] text-[#6E5B52]">Record moment</span>
+            <span className="text-xs font-semibold text-[#4A0420]">Video</span>
+            <span className="text-[10px] text-[#8A4058]">Record moment</span>
           </button>
 
           <button
             id="today-quick-voice"
             onClick={() => openAddMemoryModal('voice')}
-            className="p-4 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] flex flex-col items-center justify-center text-center transition-all cursor-pointer group"
+            className="p-4 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] flex flex-col items-center justify-center text-center transition-all cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 text-[#E11D48] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
               <Mic className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-[#1C110E]">Voice Note</span>
-            <span className="text-[10px] text-[#6E5B52]">Say it warmly</span>
+            <span className="text-xs font-semibold text-[#4A0420]">Voice Note</span>
+            <span className="text-[10px] text-[#8A4058]">Say it warmly</span>
           </button>
 
           <button
             id="today-quick-note"
             onClick={() => openAddMemoryModal('note')}
-            className="p-4 rounded-2xl bg-[#F7EFE4] hover:bg-[#EFE4D6] border border-[#E7D9C9] flex flex-col items-center justify-center text-center transition-all cursor-pointer group"
+            className="p-4 rounded-2xl bg-[#FFB8CB] hover:bg-[#FF9DB6] border border-[#F4A9BF] flex flex-col items-center justify-center text-center transition-all cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-full bg-[#E11D48]/10 text-[#E11D48] flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
               <FileText className="w-5 h-5" />
             </div>
-            <span className="text-xs font-semibold text-[#1C110E]">Heart Note</span>
-            <span className="text-[10px] text-[#6E5B52]">Stationery words</span>
+            <span className="text-xs font-semibold text-[#4A0420]">Heart Note</span>
+            <span className="text-[10px] text-[#8A4058]">Stationery words</span>
           </button>
         </div>
       </section>

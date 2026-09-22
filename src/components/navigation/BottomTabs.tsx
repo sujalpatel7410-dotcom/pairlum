@@ -14,7 +14,7 @@ export const BottomTabs: React.FC = () => {
   ];
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFBF5]/95 backdrop-blur-md border-t border-[#E7D9C9] px-2 py-1.5 pb-safe">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFD3DE]/95 backdrop-blur-md border-t border-[#F4A9BF] px-2 py-1.5 pb-safe">
       <div className="flex items-center justify-around relative max-w-md mx-auto">
 
         {/* First 2 tabs */}
@@ -25,12 +25,12 @@ export const BottomTabs: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setCurrentView(tab.id)}
-              className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${isActive ? 'text-[#8E1B1B] font-semibold' : 'text-[#6E5B52] hover:text-[#1C110E]'
+              className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${isActive ? 'text-[#E11D48] font-semibold' : 'text-[#8A4058] hover:text-[#4A0420]'
                 }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.2]' : 'stroke-[1.75]'}`} />
               <span className="text-[10px] mt-1">{tab.label}</span>
-              {isActive && <div className="w-1 h-1 rounded-full bg-[#8E1B1B] mt-0.5" />}
+              {isActive && <div className="w-1 h-1 rounded-full bg-[#E11D48] mt-0.5" />}
             </button>
           );
         })}
@@ -40,7 +40,7 @@ export const BottomTabs: React.FC = () => {
           <button
             id="mobile-add-fab"
             onClick={() => openAddMemoryModal('photo')}
-            className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#8E1B1B] to-[#C63A2E] text-white flex items-center justify-center shadow-lg shadow-[#8E1B1B]/30 hover:scale-105 active:scale-95 transition-transform cursor-pointer border-4 border-[#FFFBF5]"
+            className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#E11D48] to-[#F59E0B] text-white flex items-center justify-center shadow-lg shadow-[#E11D48]/30 hover:scale-105 active:scale-95 transition-transform cursor-pointer border-4 border-[#FFD3DE]"
             title="Add Memory"
           >
             <Plus className="w-6 h-6 stroke-[2.5]" />
@@ -56,12 +56,12 @@ export const BottomTabs: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setCurrentView(tab.id)}
-              className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${isActive ? 'text-[#8E1B1B] font-semibold' : 'text-[#6E5B52] hover:text-[#1C110E]'
+              className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all cursor-pointer ${isActive ? 'text-[#E11D48] font-semibold' : 'text-[#8A4058] hover:text-[#4A0420]'
                 }`}
             >
               <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.2]' : 'stroke-[1.75]'}`} />
               <span className="text-[10px] mt-1">{tab.label}</span>
-              {isActive && <div className="w-1 h-1 rounded-full bg-[#8E1B1B] mt-0.5" />}
+              {isActive && <div className="w-1 h-1 rounded-full bg-[#E11D48] mt-0.5" />}
             </button>
           );
         })}

@@ -137,21 +137,21 @@ export const MemoriesView: React.FC = () => {
             <section className="pt-4">
                 <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
                     <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] text-xs font-semibold mb-3">
-                            <Heart className="w-3 h-3 fill-[#8E1B1B]" />
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E11D48]/10 text-[#E11D48] text-xs font-semibold mb-3">
+                            <Heart className="w-3 h-3 fill-[#E11D48]" />
                             <span>Your shared story</span>
                         </div>
-                        <h1 className="font-display text-4xl sm:text-5xl font-medium text-[#1C110E] leading-tight tracking-tight">
-                            All Memories<span className="text-[#8E1B1B] italic"> ♡</span>
+                        <h1 className="font-display text-4xl sm:text-5xl font-medium text-[#4A0420] leading-tight tracking-tight">
+                            All Memories<span className="text-[#E11D48] italic"> ♡</span>
                         </h1>
-                        <p className="text-sm text-[#6E5B52] mt-1.5">
+                        <p className="text-sm text-[#8A4058] mt-1.5">
                             {safeMemories.length} moment{safeMemories.length !== 1 ? 's' : ''} saved between {couple.nameA} &amp; {couple.nameB}
                         </p>
                     </div>
                     <button
                         id="memories-add-btn"
                         onClick={() => openAddMemoryModal('photo')}
-                        className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#8E1B1B] hover:bg-[#751515] text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer self-start sm:self-auto flex-shrink-0"
+                        className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#E11D48] hover:bg-[#C81E45] text-white text-sm font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer self-start sm:self-auto flex-shrink-0"
                     >
                         <Plus className="w-4 h-4" />
                         <span>Add Memory</span>
@@ -163,17 +163,17 @@ export const MemoriesView: React.FC = () => {
             <section className="space-y-3">
                 <div className="flex gap-2">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6E5B52] pointer-events-none" />
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A4058] pointer-events-none" />
                         <input
                             id="memories-search"
                             type="text"
                             value={search}
                             onChange={e => setSearch(e.target.value)}
                             placeholder="Search memories, places, captions…"
-                            className="w-full pl-10 pr-10 py-2.5 rounded-full bg-[#F7EFE4] border border-[#E7D9C9] text-sm text-[#1C110E] placeholder:text-[#6E5B52]/60 focus:outline-none focus:border-[#8E1B1B] transition-colors"
+                            className="w-full pl-10 pr-10 py-2.5 rounded-full bg-[#FFB8CB] border border-[#F4A9BF] text-sm text-[#4A0420] placeholder:text-[#8A4058]/60 focus:outline-none focus:border-[#E11D48] transition-colors"
                         />
                         {search && (
-                            <button onClick={() => setSearch('')} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6E5B52] hover:text-[#1C110E] cursor-pointer">
+                            <button onClick={() => setSearch('')} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8A4058] hover:text-[#4A0420] cursor-pointer">
                                 <X className="w-3.5 h-3.5" />
                             </button>
                         )}
@@ -183,22 +183,22 @@ export const MemoriesView: React.FC = () => {
                         id="memories-filter-btn"
                         onClick={() => setShowFilters(f => !f)}
                         className={`relative flex items-center gap-1.5 px-4 py-2.5 rounded-full border text-sm font-medium cursor-pointer transition-all ${showFilters || activeFiltersCount > 0
-                            ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]'
-                            : 'bg-[#F7EFE4] border-[#E7D9C9] text-[#6E5B52] hover:border-[#8E1B1B]'
+                            ? 'bg-[#E11D48] text-white border-[#E11D48]'
+                            : 'bg-[#FFB8CB] border-[#F4A9BF] text-[#8A4058] hover:border-[#E11D48]'
                             }`}
                     >
                         <SlidersHorizontal className="w-4 h-4" />
                         <span className="hidden sm:inline">Filters</span>
                         {activeFiltersCount > 0 && (
-                            <span className="w-4 h-4 rounded-full bg-white text-[#8E1B1B] text-[10px] font-bold flex items-center justify-center">{activeFiltersCount}</span>
+                            <span className="w-4 h-4 rounded-full bg-white text-[#E11D48] text-[10px] font-bold flex items-center justify-center">{activeFiltersCount}</span>
                         )}
                     </button>
 
-                    <div className="flex rounded-full border border-[#E7D9C9] overflow-hidden bg-[#F7EFE4]">
-                        <button onClick={() => setViewMode('grid')} title="Grid view" className={`px-3 py-2.5 cursor-pointer transition-colors ${viewMode === 'grid' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:text-[#1C110E]'}`}>
+                    <div className="flex rounded-full border border-[#F4A9BF] overflow-hidden bg-[#FFB8CB]">
+                        <button onClick={() => setViewMode('grid')} title="Grid view" className={`px-3 py-2.5 cursor-pointer transition-colors ${viewMode === 'grid' ? 'bg-[#E11D48] text-white' : 'text-[#8A4058] hover:text-[#4A0420]'}`}>
                             <Grid3X3 className="w-4 h-4" />
                         </button>
-                        <button onClick={() => setViewMode('list')} title="List view" className={`px-3 py-2.5 cursor-pointer transition-colors ${viewMode === 'list' ? 'bg-[#8E1B1B] text-white' : 'text-[#6E5B52] hover:text-[#1C110E]'}`}>
+                        <button onClick={() => setViewMode('list')} title="List view" className={`px-3 py-2.5 cursor-pointer transition-colors ${viewMode === 'list' ? 'bg-[#E11D48] text-white' : 'text-[#8A4058] hover:text-[#4A0420]'}`}>
                             <List className="w-4 h-4" />
                         </button>
                     </div>
@@ -206,25 +206,25 @@ export const MemoriesView: React.FC = () => {
 
                 {/* Filter panel */}
                 {showFilters && (
-                    <div className="p-4 rounded-2xl bg-[#F7EFE4] border border-[#E7D9C9] space-y-4 animate-in slide-in-from-top-2 duration-200">
+                    <div className="p-4 rounded-2xl bg-[#FFB8CB] border border-[#F4A9BF] space-y-4 animate-in slide-in-from-top-2 duration-200">
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <label className="block text-[11px] font-bold text-[#6E5B52] uppercase tracking-wider mb-1.5">Type</label>
-                                <select value={selectedKind} onChange={e => setSelectedKind(e.target.value as MemoryKind | 'all')} className="w-full px-3 py-2 rounded-xl bg-[#FFFBF5] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-none focus:border-[#8E1B1B] cursor-pointer">
+                                <label className="block text-[11px] font-bold text-[#8A4058] uppercase tracking-wider mb-1.5">Type</label>
+                                <select value={selectedKind} onChange={e => setSelectedKind(e.target.value as MemoryKind | 'all')} className="w-full px-3 py-2 rounded-xl bg-[#FFD3DE] border border-[#F4A9BF] text-xs text-[#4A0420] focus:outline-none focus:border-[#E11D48] cursor-pointer">
                                     <option value="all">All types ({kindCounts.all})</option>
                                     {(Object.keys(KIND_LABELS) as MemoryKind[]).map(k => kindCounts[k] ? <option key={k} value={k}>{KIND_LABELS[k]} ({kindCounts[k] || 0})</option> : null)}
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-[11px] font-bold text-[#6E5B52] uppercase tracking-wider mb-1.5">Chapter</label>
-                                <select value={selectedChapter} onChange={e => setSelectedChapter(e.target.value)} className="w-full px-3 py-2 rounded-xl bg-[#FFFBF5] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-none focus:border-[#8E1B1B] cursor-pointer">
+                                <label className="block text-[11px] font-bold text-[#8A4058] uppercase tracking-wider mb-1.5">Chapter</label>
+                                <select value={selectedChapter} onChange={e => setSelectedChapter(e.target.value)} className="w-full px-3 py-2 rounded-xl bg-[#FFD3DE] border border-[#F4A9BF] text-xs text-[#4A0420] focus:outline-none focus:border-[#E11D48] cursor-pointer">
                                     <option value="all">All chapters</option>
                                     {chapters.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-[11px] font-bold text-[#6E5B52] uppercase tracking-wider mb-1.5">Sort by</label>
-                                <select value={sortBy} onChange={e => setSortBy(e.target.value as SortOption)} className="w-full px-3 py-2 rounded-xl bg-[#FFFBF5] border border-[#E7D9C9] text-xs text-[#1C110E] focus:outline-none focus:border-[#8E1B1B] cursor-pointer">
+                                <label className="block text-[11px] font-bold text-[#8A4058] uppercase tracking-wider mb-1.5">Sort by</label>
+                                <select value={sortBy} onChange={e => setSortBy(e.target.value as SortOption)} className="w-full px-3 py-2 rounded-xl bg-[#FFD3DE] border border-[#F4A9BF] text-xs text-[#4A0420] focus:outline-none focus:border-[#E11D48] cursor-pointer">
                                     <option value="newest">Newest first</option>
                                     <option value="oldest">Oldest first</option>
                                     <option value="favorites">Favorites first</option>
@@ -232,12 +232,12 @@ export const MemoriesView: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex items-center justify-between">
-                            <button onClick={() => setFavoritesOnly(f => !f)} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all ${favoritesOnly ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#FFFBF5] border-[#E7D9C9] text-[#6E5B52] hover:border-[#8E1B1B]'}`}>
+                            <button onClick={() => setFavoritesOnly(f => !f)} className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium cursor-pointer transition-all ${favoritesOnly ? 'bg-[#E11D48] text-white border-[#E11D48]' : 'bg-[#FFD3DE] border-[#F4A9BF] text-[#8A4058] hover:border-[#E11D48]'}`}>
                                 <Heart className={`w-3.5 h-3.5 ${favoritesOnly ? 'fill-white' : ''}`} />
                                 <span>Favorites only</span>
                             </button>
                             {activeFiltersCount > 0 && (
-                                <button onClick={() => { setSelectedKind('all'); setSelectedChapter('all'); setSortBy('newest'); setFavoritesOnly(false); }} className="text-xs text-[#8E1B1B] hover:underline font-medium cursor-pointer">
+                                <button onClick={() => { setSelectedKind('all'); setSelectedChapter('all'); setSortBy('newest'); setFavoritesOnly(false); }} className="text-xs text-[#E11D48] hover:underline font-medium cursor-pointer">
                                     Reset filters
                                 </button>
                             )}
@@ -247,17 +247,17 @@ export const MemoriesView: React.FC = () => {
 
                 {/* Kind pills */}
                 <div className="flex gap-2 overflow-x-auto pb-1">
-                    <button onClick={() => setSelectedKind('all')} className={`flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border cursor-pointer transition-all ${selectedKind === 'all' ? 'bg-[#1C110E] text-white border-[#1C110E]' : 'bg-[#F7EFE4] border-[#E7D9C9] text-[#6E5B52] hover:border-[#1C110E]'}`}>
+                    <button onClick={() => setSelectedKind('all')} className={`flex-shrink-0 px-4 py-1.5 rounded-full text-xs font-medium border cursor-pointer transition-all ${selectedKind === 'all' ? 'bg-[#4A0420] text-white border-[#4A0420]' : 'bg-[#FFB8CB] border-[#F4A9BF] text-[#8A4058] hover:border-[#4A0420]'}`}>
                         All ({safeMemories.length})
                     </button>
                     {(Object.keys(KIND_LABELS) as MemoryKind[]).filter(k => kindCounts[k]).map(k => {
                         const Icon = KIND_ICONS[k];
                         const active = selectedKind === k;
                         return (
-                            <button key={k} onClick={() => setSelectedKind(active ? 'all' : k)} className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium border cursor-pointer transition-all ${active ? 'bg-[#8E1B1B] text-white border-[#8E1B1B]' : 'bg-[#F7EFE4] border-[#E7D9C9] text-[#6E5B52] hover:border-[#8E1B1B]'}`}>
+                            <button key={k} onClick={() => setSelectedKind(active ? 'all' : k)} className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium border cursor-pointer transition-all ${active ? 'bg-[#E11D48] text-white border-[#E11D48]' : 'bg-[#FFB8CB] border-[#F4A9BF] text-[#8A4058] hover:border-[#E11D48]'}`}>
                                 <Icon className="w-3 h-3" />
                                 <span>{KIND_LABELS[k]}</span>
-                                <span className={`text-[10px] px-1 rounded-full ${active ? 'bg-white/20' : 'bg-[#E7D9C9]'}`}>{kindCounts[k]}</span>
+                                <span className={`text-[10px] px-1 rounded-full ${active ? 'bg-white/20' : 'bg-[#F4A9BF]'}`}>{kindCounts[k]}</span>
                             </button>
                         );
                     })}
@@ -265,35 +265,35 @@ export const MemoriesView: React.FC = () => {
             </section>
 
             {(search || activeFiltersCount > 0) && (
-                <p className="text-xs text-[#6E5B52]">Showing <strong className="text-[#1C110E]">{filtered.length}</strong> of {safeMemories.length} memories</p>
+                <p className="text-xs text-[#8A4058]">Showing <strong className="text-[#4A0420]">{filtered.length}</strong> of {safeMemories.length} memories</p>
             )}
 
             {/* ── LEGEND ── */}
-            <div className="flex flex-wrap gap-3 text-[11px] text-[#6E5B52] bg-[#F7EFE4]/60 border border-[#E7D9C9] rounded-2xl px-4 py-2.5">
-                <span className="flex items-center gap-1.5"><Mic className="w-3 h-3 text-amber-600" /> Click voice cards to <strong className="text-[#1C110E]">play inline</strong></span>
-                <span className="text-[#E7D9C9]">·</span>
-                <span className="flex items-center gap-1.5"><Video className="w-3 h-3 text-purple-600" /> Click video cards to <strong className="text-[#1C110E]">open player</strong></span>
-                <span className="text-[#E7D9C9]">·</span>
-                <span className="flex items-center gap-1.5"><ExternalLink className="w-3 h-3 text-[#8E1B1B]" /> Click others to <strong className="text-[#1C110E]">view details</strong></span>
+            <div className="flex flex-wrap gap-3 text-[11px] text-[#8A4058] bg-[#FFB8CB]/60 border border-[#F4A9BF] rounded-2xl px-4 py-2.5">
+                <span className="flex items-center gap-1.5"><Mic className="w-3 h-3 text-amber-600" /> Click voice cards to <strong className="text-[#4A0420]">play inline</strong></span>
+                <span className="text-[#F4A9BF]">·</span>
+                <span className="flex items-center gap-1.5"><Video className="w-3 h-3 text-purple-600" /> Click video cards to <strong className="text-[#4A0420]">open player</strong></span>
+                <span className="text-[#F4A9BF]">·</span>
+                <span className="flex items-center gap-1.5"><ExternalLink className="w-3 h-3 text-[#E11D48]" /> Click others to <strong className="text-[#4A0420]">view details</strong></span>
             </div>
 
             {/* ── EMPTY STATES ── */}
             {safeMemories.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-center space-y-4">
-                    <div className="w-20 h-20 rounded-full bg-[#8E1B1B]/10 text-[#8E1B1B] flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-[#E11D48]/10 text-[#E11D48] flex items-center justify-center">
                         <ImageIcon className="w-10 h-10" />
                     </div>
-                    <h3 className="font-display text-2xl text-[#1C110E]">No memories yet</h3>
-                    <p className="text-sm text-[#6E5B52] max-w-xs leading-relaxed">Start capturing your moments together.</p>
-                    <button onClick={() => openAddMemoryModal('photo')} className="mt-2 px-6 py-3 rounded-full bg-[#8E1B1B] text-white text-sm font-semibold hover:bg-[#751515] transition-colors cursor-pointer">
+                    <h3 className="font-display text-2xl text-[#4A0420]">No memories yet</h3>
+                    <p className="text-sm text-[#8A4058] max-w-xs leading-relaxed">Start capturing your moments together.</p>
+                    <button onClick={() => openAddMemoryModal('photo')} className="mt-2 px-6 py-3 rounded-full bg-[#E11D48] text-white text-sm font-semibold hover:bg-[#C81E45] transition-colors cursor-pointer">
                         Add your first memory
                     </button>
                 </div>
             ) : filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-center space-y-3">
-                    <Search className="w-10 h-10 text-[#E7D9C9]" />
-                    <p className="text-sm text-[#6E5B52]">No memories match your filters.</p>
-                    <button onClick={() => { setSearch(''); setSelectedKind('all'); setSelectedChapter('all'); setFavoritesOnly(false); }} className="text-xs text-[#8E1B1B] hover:underline font-medium cursor-pointer">Clear all filters</button>
+                    <Search className="w-10 h-10 text-[#F4A9BF]" />
+                    <p className="text-sm text-[#8A4058]">No memories match your filters.</p>
+                    <button onClick={() => { setSearch(''); setSelectedKind('all'); setSelectedChapter('all'); setFavoritesOnly(false); }} className="text-xs text-[#E11D48] hover:underline font-medium cursor-pointer">Clear all filters</button>
                 </div>
             ) : viewMode === 'grid' ? (
 
@@ -313,19 +313,19 @@ export const MemoriesView: React.FC = () => {
                                 id={`memory-card-${mem.id}`}
                                 className={`group relative bg-white rounded-2xl border overflow-hidden transition-all duration-200 ${audioExpanded
                                     ? 'border-amber-300 shadow-lg col-span-2'
-                                    : 'border-[#E7D9C9] hover:shadow-lg hover:-translate-y-0.5 cursor-pointer'
+                                    : 'border-[#F4A9BF] hover:shadow-lg hover:-translate-y-0.5 cursor-pointer'
                                     }`}
                                 style={!audioExpanded ? { transform: `rotate(${mem.rotationDeg ?? 0}deg)` } : {}}
                                 onClick={e => handleCardClick(mem, e)}
                             >
                                 {/* ── Thumbnail area ── */}
-                                <div className={`bg-[#F7EFE4] overflow-hidden relative ${audioExpanded ? 'hidden' : 'aspect-square'}`}>
+                                <div className={`bg-[#FFB8CB] overflow-hidden relative ${audioExpanded ? 'hidden' : 'aspect-square'}`}>
                                     {mem.imageUrl && !isVoice ? (
                                         <img src={mem.imageUrl} alt={mem.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                                     ) : (
                                         <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
-                                            <KindIcon className="w-8 h-8 text-[#8E1B1B]/40 mb-2" />
-                                            {mem.caption && <p className="font-script text-sm text-[#6E5B52] leading-snug line-clamp-3">"{mem.caption}"</p>}
+                                            <KindIcon className="w-8 h-8 text-[#E11D48]/40 mb-2" />
+                                            {mem.caption && <p className="font-script text-sm text-[#8A4058] leading-snug line-clamp-3">"{mem.caption}"</p>}
                                         </div>
                                     )}
 
@@ -336,7 +336,7 @@ export const MemoriesView: React.FC = () => {
 
                                     {mem.isFavorite && (
                                         <div className="absolute top-2 right-2">
-                                            <Heart className="w-4 h-4 text-[#8E1B1B] fill-[#8E1B1B] drop-shadow-sm" />
+                                            <Heart className="w-4 h-4 text-[#E11D48] fill-[#E11D48] drop-shadow-sm" />
                                         </div>
                                     )}
 
@@ -385,20 +385,20 @@ export const MemoriesView: React.FC = () => {
 
                                 {/* ── Inline Audio Player (expanded) ── */}
                                 {audioExpanded && (
-                                    <div className="p-4 space-y-3 bg-gradient-to-br from-amber-50 to-[#FFFBF5]">
+                                    <div className="p-4 space-y-3 bg-gradient-to-br from-amber-50 to-[#FFD3DE]">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
                                                 <span className="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center">
                                                     <Mic className="w-3.5 h-3.5" />
                                                 </span>
                                                 <div>
-                                                    <p className="text-sm font-semibold text-[#1C110E]">{mem.title}</p>
-                                                    <p className="text-[10px] text-[#6E5B52]">by {mem.authorName}{mem.location ? ` • ${mem.location}` : ''}</p>
+                                                    <p className="text-sm font-semibold text-[#4A0420]">{mem.title}</p>
+                                                    <p className="text-[10px] text-[#8A4058]">by {mem.authorName}{mem.location ? ` • ${mem.location}` : ''}</p>
                                                 </div>
                                             </div>
                                             <button
                                                 onClick={e => { e.stopPropagation(); setExpandedAudioId(null); }}
-                                                className="w-6 h-6 rounded-full bg-[#E7D9C9] text-[#6E5B52] hover:text-[#1C110E] flex items-center justify-center cursor-pointer"
+                                                className="w-6 h-6 rounded-full bg-[#F4A9BF] text-[#8A4058] hover:text-[#4A0420] flex items-center justify-center cursor-pointer"
                                                 title="Collapse"
                                             >
                                                 <X className="w-3 h-3" />
@@ -420,7 +420,7 @@ export const MemoriesView: React.FC = () => {
 
                                         <button
                                             onClick={e => { e.stopPropagation(); setActiveLightboxMemory(mem); }}
-                                            className="text-[11px] text-[#8E1B1B] hover:underline flex items-center gap-1 cursor-pointer"
+                                            className="text-[11px] text-[#E11D48] hover:underline flex items-center gap-1 cursor-pointer"
                                         >
                                             <ExternalLink className="w-3 h-3" />
                                             View full memory details
@@ -431,10 +431,10 @@ export const MemoriesView: React.FC = () => {
                                 {/* ── Card footer ── */}
                                 {!audioExpanded && (
                                     <div className="p-3 space-y-1">
-                                        <p className="text-[#1C110E] text-xs font-semibold truncate">{mem.title}</p>
-                                        <div className="flex items-center gap-1 text-[10px] text-[#6E5B52]">
+                                        <p className="text-[#4A0420] text-xs font-semibold truncate">{mem.title}</p>
+                                        <div className="flex items-center gap-1 text-[10px] text-[#8A4058]">
                                             {mem.location ? (
-                                                <><MapPin className="w-2.5 h-2.5 text-[#8E1B1B]" /><span className="truncate">{mem.location}</span></>
+                                                <><MapPin className="w-2.5 h-2.5 text-[#E11D48]" /><span className="truncate">{mem.location}</span></>
                                             ) : (
                                                 <><Calendar className="w-2.5 h-2.5" /><span>{mem.date}</span></>
                                             )}
@@ -460,7 +460,7 @@ export const MemoriesView: React.FC = () => {
                         const audioExpanded = expandedAudioId === mem.id;
 
                         return (
-                            <div key={mem.id} id={`memory-list-${mem.id}`} className={`bg-white rounded-2xl border transition-all ${audioExpanded ? 'border-amber-300 shadow-md' : 'border-[#E7D9C9] hover:border-[#8E1B1B]/40 hover:shadow-md cursor-pointer'}`}>
+                            <div key={mem.id} id={`memory-list-${mem.id}`} className={`bg-white rounded-2xl border transition-all ${audioExpanded ? 'border-amber-300 shadow-md' : 'border-[#F4A9BF] hover:border-[#E11D48]/40 hover:shadow-md cursor-pointer'}`}>
 
                                 {/* Main row */}
                                 <div
@@ -469,12 +469,12 @@ export const MemoriesView: React.FC = () => {
                                     onClick={e => handleCardClick(mem, e)}
                                 >
                                     {/* Thumbnail */}
-                                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#F7EFE4] flex-shrink-0 relative cursor-pointer">
+                                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#FFB8CB] flex-shrink-0 relative cursor-pointer">
                                         {mem.imageUrl ? (
                                             <img src={mem.imageUrl} alt={mem.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center">
-                                                <KindIcon className="w-6 h-6 text-[#8E1B1B]/40" />
+                                                <KindIcon className="w-6 h-6 text-[#E11D48]/40" />
                                             </div>
                                         )}
                                         {isVideo && (
@@ -492,15 +492,15 @@ export const MemoriesView: React.FC = () => {
                                     {/* Info */}
                                     <div className="flex-1 min-w-0 space-y-1">
                                         <div className="flex items-center gap-2">
-                                            <p className="text-sm font-semibold text-[#1C110E] truncate">{mem.title}</p>
-                                            {mem.isFavorite && <Heart className="w-3.5 h-3.5 text-[#8E1B1B] fill-[#8E1B1B] flex-shrink-0" />}
+                                            <p className="text-sm font-semibold text-[#4A0420] truncate">{mem.title}</p>
+                                            {mem.isFavorite && <Heart className="w-3.5 h-3.5 text-[#E11D48] fill-[#E11D48] flex-shrink-0" />}
                                         </div>
-                                        {mem.caption && <p className="text-xs text-[#6E5B52] truncate font-script text-base leading-snug">"{mem.caption}"</p>}
-                                        <div className="flex items-center gap-3 text-[10px] text-[#6E5B52]">
+                                        {mem.caption && <p className="text-xs text-[#8A4058] truncate font-script text-base leading-snug">"{mem.caption}"</p>}
+                                        <div className="flex items-center gap-3 text-[10px] text-[#8A4058]">
                                             <span className={`px-2 py-0.5 rounded-full font-semibold ${KIND_COLOURS[mem.kind]}`}>{KIND_LABELS[mem.kind]}</span>
-                                            {mem.location && <span className="flex items-center gap-1"><MapPin className="w-2.5 h-2.5 text-[#8E1B1B]" />{mem.location}</span>}
+                                            {mem.location && <span className="flex items-center gap-1"><MapPin className="w-2.5 h-2.5 text-[#E11D48]" />{mem.location}</span>}
                                             <span className="flex items-center gap-1"><Calendar className="w-2.5 h-2.5" />{mem.date}</span>
-                                            {chapterName && <span className="hidden sm:inline text-[#8E1B1B] font-medium truncate">📖 {chapterName}</span>}
+                                            {chapterName && <span className="hidden sm:inline text-[#E11D48] font-medium truncate">📖 {chapterName}</span>}
                                         </div>
                                     </div>
 
@@ -528,7 +528,7 @@ export const MemoriesView: React.FC = () => {
                                                 <Play className="w-3 h-3 fill-purple-700" />Watch
                                             </button>
                                         )}
-                                        <span className="text-[10px] text-[#8E1B1B] font-script text-sm">{mem.authorName}</span>
+                                        <span className="text-[10px] text-[#E11D48] font-script text-sm">{mem.authorName}</span>
                                         {mem.reactions.some(r => r.count > 0) && (
                                             <div className="flex gap-0.5">
                                                 {mem.reactions.filter(r => r.count > 0).slice(0, 3).map(r => (
@@ -555,7 +555,7 @@ export const MemoriesView: React.FC = () => {
                                         )}
                                         <button
                                             onClick={e => { e.stopPropagation(); setActiveLightboxMemory(mem); }}
-                                            className="text-[11px] text-[#8E1B1B] hover:underline flex items-center gap-1 cursor-pointer"
+                                            className="text-[11px] text-[#E11D48] hover:underline flex items-center gap-1 cursor-pointer"
                                         >
                                             <ExternalLink className="w-3 h-3" />
                                             View full memory details
