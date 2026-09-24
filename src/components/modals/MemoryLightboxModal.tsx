@@ -32,7 +32,9 @@ export const MemoryLightboxModal: React.FC = () => {
     updateMemory,
     currentUser,
     couple,
-    chapters
+    chapters,
+    pendingEditMemoryId,
+    clearPendingEditMemory
   } = usePairlum();
 
   const [replyText, setReplyText] = useState('');
@@ -53,9 +55,20 @@ export const MemoryLightboxModal: React.FC = () => {
 
   // Reset transient view/edit state whenever a different memory is opened (or
   // the lightbox is closed) so a stale edit/delete/audio state from the
-  // previous memory can't bleed into the next one.
+  // previous memory can't bleed into the next one. If this memory was opened
+  // via the Timeline's "Edit" action, jump straight into edit mode.
   useEffect(() => {
-    setIsEditing(false);
+    if (activeLightboxMemory && pendingEditMemoryId === activeLightboxMemory.id && activeLightboxMemory.author === currentUser) {
+      setEditTitle(activeLightboxMemory.title);
+      setEditCaption(activeLightboxMemory.caption);
+      setEditDate(activeLightboxMemory.date);
+      setEditLocation(activeLightboxMemory.location || '');
+      setEditChapterId(activeLightboxMemory.chapterId || '');
+      setIsEditing(true);
+    } else {
+      setIsEditing(false);
+    }
+    if (pendingEditMemoryId) clearPendingEditMemory();
     setIsConfirmDeleteOpen(false);
     setReplyText('');
     setReplyVoiceUrl(undefined);
@@ -66,9 +79,11 @@ export const MemoryLightboxModal: React.FC = () => {
   if (!activeLightboxMemory) return null;
 
   const mem = activeLightboxMemory;
+  const isOwner = mem.author === currentUser;
   const currentPartnerName = currentUser === 'A' ? couple.nameB : couple.nameA;
 
   const handleStartEdit = () => {
+    if (!isOwner) return;
     setEditTitle(mem.title);
     setEditCaption(mem.caption);
     setEditDate(mem.date);
@@ -78,6 +93,7 @@ export const MemoryLightboxModal: React.FC = () => {
   };
 
   const handleSaveEdit = () => {
+    if (!isOwner) return;
     updateMemory(mem.id, {
       title: editTitle,
       caption: editCaption,
@@ -86,6 +102,9 @@ export const MemoryLightboxModal: React.FC = () => {
       chapterId: editChapterId
     });
     setIsEditing(false);
+    // Close back to the Timeline (rather than the standard viewer) so the
+    // save lands the user back at roughly the same Timeline position.
+    setActiveLightboxMemory(null);
   };
 
   const handlePhotoChange = async (file: File | undefined) => {
@@ -273,16 +292,18 @@ export const MemoryLightboxModal: React.FC = () => {
                   Save Changes
                 </button>
 
-                <div className="pt-4 border-t border-[#F4A9BF]/80">
-                  <span className="text-[11px] uppercase font-bold text-[#E11D48] tracking-wider block mb-2">Danger zone</span>
-                  <button
-                    onClick={() => setIsConfirmDeleteOpen(true)}
-                    className="w-full py-2.5 rounded-full bg-[#FFD3DE] border border-[#E11D48]/40 text-[#E11D48] hover:bg-[#E11D48]/10 text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Delete Memory</span>
-                  </button>
-                </div>
+                {isOwner && (
+                  <div className="pt-4 border-t border-[#F4A9BF]/80">
+                    <span className="text-[11px] uppercase font-bold text-[#E11D48] tracking-wider block mb-2">Danger zone</span>
+                    <button
+                      onClick={() => setIsConfirmDeleteOpen(true)}
+                      className="w-full py-2.5 rounded-full bg-[#FFD3DE] border border-[#E11D48]/40 text-[#E11D48] hover:bg-[#E11D48]/10 text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Memory</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -372,13 +393,15 @@ export const MemoryLightboxModal: React.FC = () => {
                     <span className="text-[11px] uppercase font-semibold text-[#E11D48] tracking-wider">Memory details</span>
                     <p className="text-xs text-[#8A4058] mt-0.5">{mem.time} • Private between you two</p>
                   </div>
-                  <button
-                    onClick={handleStartEdit}
-                    className="p-2 rounded-full bg-[#FFB8CB] hover:bg-[#F4A9BF] text-[#8A4058] hover:text-[#4A0420] transition-colors cursor-pointer"
-                    title="Edit memory"
-                  >
-                    <Edit3 className="w-4 h-4" />
-                  </button>
+                  {isOwner && (
+                    <button
+                      onClick={handleStartEdit}
+                      className="p-2 rounded-full bg-[#FFB8CB] hover:bg-[#F4A9BF] text-[#8A4058] hover:text-[#4A0420] transition-colors cursor-pointer"
+                      title="Edit memory"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
 
                 {/* Reaction Picker (Screenshots 12, 14, 37) */}
