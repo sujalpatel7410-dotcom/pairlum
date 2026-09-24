@@ -267,9 +267,20 @@ interface PairlumContextType {
   memories: Memory[];
   addMemory: (memory: Omit<Memory, 'id' | 'reactions' | 'replies'>) => Promise<boolean>;
   deleteMemory: (id: string) => void;
-  updateMemory: (id: string, updates: Partial<Memory>) => void;
+  updateMemory: (id: string, updates: Partial<Memory>, toastText?: string | false) => void;
   toggleReaction: (memoryId: string, reactionId: string) => void;
   addReply: (memoryId: string, text: string, voiceDuration?: string, voiceUrl?: string) => void;
+
+  // Client-side "hidden from Timeline" flag. Not backed by a database column
+  // yet, so it only hides memories on this device until that is added.
+  hiddenMemoryIds: Set<string>;
+  toggleHideMemory: (id: string) => void;
+
+  // Lets a caller (e.g. the Timeline long-press action sheet) open the memory
+  // lightbox already in edit mode instead of the standard viewer.
+  pendingEditMemoryId: string | null;
+  openMemoryInEditMode: (memory: Memory) => void;
+  clearPendingEditMemory: () => void;
 
   chapters: Chapter[];
   addChapter: (chapter: Omit<Chapter, 'id'>) => Promise<boolean>;
@@ -375,6 +386,27 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [activeLightboxMemory, setActiveLightboxMemory] = useState<Memory | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [windowOpened, setWindowOpened] = useState(false);
+  const [pendingEditMemoryId, setPendingEditMemoryId] = useState<string | null>(null);
+
+  // ---- Hidden-from-Timeline memories (device-local only; see field comment above) ----
+  const [hiddenMemoryIds, setHiddenMemoryIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (!coupleId) { setHiddenMemoryIds(new Set()); return; }
+    try {
+      const raw = localStorage.getItem(`pairlum_hidden_memories_${coupleId}`);
+      setHiddenMemoryIds(new Set(raw ? (JSON.parse(raw) as string[]) : []));
+    } catch {
+      setHiddenMemoryIds(new Set());
+    }
+  }, [coupleId]);
+
+  const openMemoryInEditMode = useCallback((memory: Memory) => {
+    setPendingEditMemoryId(memory.id);
+    setActiveLightboxMemory(memory);
+  }, []);
+
+  const clearPendingEditMemory = useCallback(() => setPendingEditMemoryId(null), []);
 
   const showToast = useCallback((msg: string) => {
     setToastMessage(msg);
@@ -382,6 +414,19 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setToastMessage((current) => (current === msg ? null : current));
     }, 4000);
   }, []);
+
+  const toggleHideMemory = useCallback((id: string) => {
+    setHiddenMemoryIds((prev) => {
+      const next = new Set(prev);
+      const wasHidden = next.has(id);
+      if (wasHidden) next.delete(id); else next.add(id);
+      if (coupleId) {
+        try { localStorage.setItem(`pairlum_hidden_memories_${coupleId}`, JSON.stringify([...next])); } catch { /* ignore */ }
+      }
+      showToast(wasHidden ? 'Memory unhidden' : 'Memory hidden from your Timeline');
+      return next;
+    });
+  }, [coupleId, showToast]);
 
   // ---- Initial load + realtime subscriptions, keyed on the couple space ----
   useEffect(() => {
@@ -606,13 +651,15 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
     showToast('Memory removed from your story');
   }, [showToast]);
 
-  const updateMemory = useCallback((id: string, updates: Partial<Memory>) => {
+  const updateMemory = useCallback((id: string, updates: Partial<Memory>, toastText?: string | false) => {
     setMemories((prev) => prev.map((m) => (m.id === id ? { ...m, ...updates } : m)));
     setActiveLightboxMemory((prev) => (prev?.id === id ? { ...prev, ...updates } : prev));
 
     const row: Record<string, any> = {};
     if ('title' in updates) row.title = updates.title;
     if ('caption' in updates) row.caption = updates.caption;
+    if ('date' in updates) row.date = updates.date;
+    if ('time' in updates) row.time = updates.time;
     if ('location' in updates) row.location = updates.location;
     if ('isFavorite' in updates) row.is_favorite = updates.isFavorite;
     if ('isPrivate' in updates) row.is_private = updates.isPrivate;
@@ -626,7 +673,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
         showToast("Couldn't save that change — check your connection and try again.");
       }
     });
-    showToast('Memory updated');
+    if (toastText !== false) showToast(toastText ?? '✓ Memory updated');
   }, [showToast]);
 
   const toggleReaction = useCallback((memoryId: string, reactionId: string) => {
@@ -968,6 +1015,8 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
         couple, updateCouple, updateCoupleProfile,
         isCandlelit, toggleCandlelight, isDarkMode, toggleDarkMode, themeMode, setThemeMode,
         memories, addMemory, deleteMemory, updateMemory, toggleReaction, addReply,
+        hiddenMemoryIds, toggleHideMemory,
+        pendingEditMemoryId, openMemoryInEditMode, clearPendingEditMemory,
         chapters, addChapter, updateChapter,
         drawerItems, addDrawerItem, unlockDrawerWithPin, lockDrawer,
         reunionPlan, toggleReunionStop, addReunionStop,
