@@ -423,7 +423,7 @@ export const PairlumProvider: React.FC<{ children: React.ReactNode }> = ({ child
       if (coupleId) {
         try { localStorage.setItem(`pairlum_hidden_memories_${coupleId}`, JSON.stringify([...next])); } catch { /* ignore */ }
       }
-      showToast(wasHidden ? 'Memory unhidden' : 'Memory hidden from your Timeline');
+      showToast(wasHidden ? 'Memory unhidden on this device' : 'Hidden on this device — not synced with your partner yet');
       return next;
     });
   }, [coupleId, showToast]);

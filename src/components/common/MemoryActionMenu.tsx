@@ -48,16 +48,23 @@ export const MemoryActionMenu: React.FC<MemoryActionMenuProps> = ({
   const reduceMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Focus the sheet on open; restore focus to whatever triggered it on close.
+  // Deliberately no body scroll-lock here: the sheet is a full-viewport fixed
+  // overlay (same as MemoryLightboxModal, which doesn't lock scroll either),
+  // and locking/restoring document scroll turned out to race with itself
+  // under rapid open/close, occasionally leaving the Timeline scrolled to
+  // the top — a direct regression of "return to the same Timeline position".
+  // Not touching scroll at all is simpler and can't drift.
   useEffect(() => {
     const firstFocusable = sheetRef.current?.querySelector<HTMLElement>('button, [href], input, select, textarea, [tabindex]');
-    (firstFocusable ?? sheetRef.current)?.focus();
-
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    // preventScroll: without it, focusing a button inside this fixed-position
+    // sheet can still trigger the browser's default scroll-into-view on the
+    // underlying page, silently resetting the Timeline's scroll position.
+    (firstFocusable ?? sheetRef.current)?.focus({ preventScroll: true });
 
     return () => {
-      document.body.style.overflow = prevOverflow;
-      triggerEl?.focus?.();
+      // preventScroll: focusing the trigger (often near the top of a long
+      // Timeline) would otherwise auto-scroll it into view.
+      triggerEl?.focus?.({ preventScroll: true });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -96,9 +103,10 @@ export const MemoryActionMenu: React.FC<MemoryActionMenuProps> = ({
   const ActionRow: React.FC<{
     icon: React.ReactNode;
     label: string;
+    hint?: string;
     onClick: () => void;
     tone?: 'default' | 'danger';
-  }> = ({ icon, label, onClick, tone = 'default' }) => (
+  }> = ({ icon, label, hint, onClick, tone = 'default' }) => (
     <button
       type="button"
       onClick={onClick}
@@ -111,7 +119,10 @@ export const MemoryActionMenu: React.FC<MemoryActionMenuProps> = ({
       <span className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${tone === 'danger' ? 'bg-[#E11D48]/10' : 'bg-[#FFB8CB]'}`}>
         {icon}
       </span>
-      <span>{label}</span>
+      <span className="min-w-0">
+        <span className="block">{label}</span>
+        {hint && <span className="block text-[11px] font-normal text-[#8A4058] mt-0.5">{hint}</span>}
+      </span>
     </button>
   );
 
@@ -163,7 +174,12 @@ export const MemoryActionMenu: React.FC<MemoryActionMenuProps> = ({
                 label={memory.isFavorite ? 'Remove favorite' : 'Favorite'}
                 onClick={onToggleFavorite}
               />
-              <ActionRow icon={<EyeOff className="w-4 h-4 text-[#E11D48]" />} label="Hide" onClick={onHide} />
+              <ActionRow
+                icon={<EyeOff className="w-4 h-4 text-[#E11D48]" />}
+                label="Hide"
+                hint="This device only for now — syncing hidden memories isn't built yet"
+                onClick={onHide}
+              />
               {isOwner && (
                 <ActionRow
                   icon={<Trash2 className="w-4 h-4 text-[#E11D48]" />}
