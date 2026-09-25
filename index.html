@@ -1,22 +1,49 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pairlum — Create memories together</title>
-    <meta name="description" content="Pairlum is a private space for couples to create, keep and revisit their memories." />
-    <meta property="og:title" content="Pairlum — Create memories together" />
-    <meta property="og:description" content="A private space for two, made to keep what matters: memories, letters, and every little moment worth revisiting." />
-    <meta property="og:type" content="website" />
-    
-    <!-- Google Fonts: Bricolage Grotesque, Instrument Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:ital,wght@0,400..600;1,400..600&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-[#FFD3DE] text-[#4A0420] antialiased selection:bg-[#E11D48]/15 selection:text-[#E11D48]">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Pairlum Book Prototype</title>
+<meta name="theme-color" content="#f2ece5"/>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#f2ece5;color:#2d2729}body{min-height:100svh;overflow:hidden;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.85),rgba(255,255,255,0) 40%),linear-gradient(#f7f1eb,#eee5de)}.shell{height:100svh;display:grid;grid-template-rows:auto 1fr auto;padding:max(16px,env(safe-area-inset-top)) clamp(10px,3vw,36px) max(14px,env(safe-area-inset-bottom));gap:10px}.top{display:flex;align-items:center;justify-content:space-between;min-height:44px;border-bottom:1px solid rgba(73,51,56,.14)}.brand{font:700 12px Georgia,serif;letter-spacing:.22em;color:#6f2f3a}.sound{border:0;background:none;color:#65585b;cursor:pointer}.stage{min-height:0;display:grid;place-items:center;perspective:2600px;position:relative}.stage:after{content:"";position:absolute;width:min(74vw,980px);height:34px;bottom:4%;left:50%;transform:translateX(-50%);border-radius:50%;background:rgba(58,39,44,.14);filter:blur(22px)}.bookwrap{position:relative;z-index:1;width:min(94vw,1220px);height:min(75svh,760px);min-height:380px;display:grid;place-items:center}.flipbook{margin:auto;filter:drop-shadow(0 18px 30px rgba(57,41,45,.15));touch-action:none}.page{background:#fff;overflow:hidden}.page img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}.hard{background:#1f1b1c}.controls{min-height:56px;display:grid;grid-template-columns:46px 1fr 46px;align-items:center;max-width:650px;width:100%;justify-self:center;border-top:1px solid rgba(73,51,56,.14)}.nav{width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.6);color:#6f2f3a;font-size:20px;cursor:pointer}.status{display:flex;align-items:center;justify-content:center;gap:16px;color:#8b7d80;font-size:12px}.loading{position:absolute;text-align:center;color:#8b7d80;font-size:13px;padding:14px 18px;background:rgba(255,255,255,.7);border-radius:999px;backdrop-filter:blur(8px)}@media(max-width:700px){.bookwrap{width:100%;height:min(72svh,690px)}.status{font-size:11px}.hint{max-width:58vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="top"><div class="brand">PAIRLUM</div><button id="sound" class="sound">◒ Sound on</button></header>
+<section class="stage"><div class="bookwrap"><div id="flipbook" class="flipbook"></div><div id="loading" class="loading">Preparing the reel pages…</div></div></section>
+<footer class="controls"><button id="prev" class="nav">←</button><div class="status"><span class="hint">Grab a corner or swipe to turn the page</span><span id="count">1 / 44</span></div><button id="next" class="nav">→</button></footer>
+</main>
+<video id="src" crossorigin="anonymous" playsinline muted preload="auto" style="display:none">
+<source src="https://d2ol7oe51mr4n9.cloudfront.net/user_3JGTkwHiecHHRkRMLiPPrbtlraC/7b4d149c-3b56-4f3a-91a2-38a06f896025.mp4" type="video/mp4">
+</video>
+<script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+<script>
+const times=[5.2,6.4,7.5,8.6,9.7,10.8,11.8,13,14.2,15.3,16.5,17.6,18.8,19.8,20.8,22,23,24.2,25.4,26.6,27.4];
+const video=document.getElementById('src'),host=document.getElementById('flipbook'),loading=document.getElementById('loading');
+const canvas=document.createElement('canvas'),ctx2=canvas.getContext('2d',{willReadFrequently:true});canvas.width=720;canvas.height=1280;
+const pageW=760,pageH=1000;
+function seek(t){return new Promise((res,rej)=>{const done=()=>{video.removeEventListener('seeked',done);res()};video.addEventListener('seeked',done,{once:true});video.currentTime=t;setTimeout(()=>rej(new Error('seek timeout')),5000)})}
+function cropDataURL(x,y,w,h){const c=document.createElement('canvas');c.width=pageW;c.height=pageH;const cc=c.getContext('2d');cc.drawImage(canvas,x,y,w,h,0,0,pageW,pageH);return c.toDataURL('image/jpeg',.9)}
+async function frame(t){await seek(t);ctx2.drawImage(video,0,0,canvas.width,canvas.height)}
+async function build(){
+  await new Promise((res,rej)=>{if(video.readyState>=2)return res();video.addEventListener('loadeddata',res,{once:true});video.addEventListener('error',rej,{once:true})});
+  const pages=[];
+  await frame(3.0);
+  pages.push(cropDataURL(145,270,500,680));
+  for(let i=0;i<times.length;i++){loading.textContent='Preparing pages '+(i+1)+' / '+times.length+'…';await frame(times[i]);pages.push(cropDataURL(14,325,346,445));pages.push(cropDataURL(360,325,346,445))}
+  const back=document.createElement('canvas');back.width=pageW;back.height=pageH;const bc=back.getContext('2d');bc.fillStyle='#211d1e';bc.fillRect(0,0,pageW,pageH);pages.push(back.toDataURL('image/jpeg',.9));
+  pages.forEach((src,i)=>{const p=document.createElement('div');p.className='page '+((i===0||i===pages.length-1)?'hard':'');if(i===0||i===pages.length-1)p.dataset.density='hard';const img=document.createElement('img');img.src=src;img.draggable=false;p.appendChild(img);host.appendChild(p)});
+  const mobile=matchMedia('(max-width:700px)').matches,reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const flip=new St.PageFlip(host,{width:760,height:1000,size:'stretch',minWidth:mobile?285:360,maxWidth:mobile?540:760,minHeight:mobile?375:474,maxHeight:mobile?710:1000,maxShadowOpacity:.42,showCover:true,mobileScrollSupport:false,usePortrait:mobile,flippingTime:reduced?350:820,clickEventForward:true,useMouseEvents:true,swipeDistance:24,showPageCorners:true,disableFlipByClick:false,autoSize:true,drawShadow:true,startPage:0});
+  flip.loadFromHTML(document.querySelectorAll('.page'));
+  let soundOn=true,audio=null;const count=document.getElementById('count'),prev=document.getElementById('prev'),next=document.getElementById('next');
+  function rustle(){if(!soundOn)return;const A=window.AudioContext||window.webkitAudioContext;if(!A)return;audio=audio||new A();const len=Math.floor(audio.sampleRate*.14),b=audio.createBuffer(1,len,audio.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++){const e=Math.pow(1-i/len,2.4);d[i]=(Math.random()*2-1)*e}const s=audio.createBufferSource(),f=audio.createBiquadFilter(),g=audio.createGain();f.type='bandpass';f.frequency.value=1650;f.Q.value=.7;g.gain.value=.035;s.buffer=b;s.connect(f).connect(g).connect(audio.destination);s.start()}
+  function sync(i){count.textContent=Math.min(i+1,pages.length)+' / '+pages.length;prev.disabled=i<=0;next.disabled=i>=pages.length-1}
+  flip.on('flip',e=>{sync(e.data);rustle()});sync(0);prev.onclick=()=>flip.flipPrev('bottom');next.onclick=()=>flip.flipNext('bottom');document.getElementById('sound').onclick=e=>{soundOn=!soundOn;e.currentTarget.textContent=soundOn?'◒ Sound on':'○ Sound off'};addEventListener('keydown',e=>{if(e.key==='ArrowRight')flip.flipNext('top');if(e.key==='ArrowLeft')flip.flipPrev('top')});loading.style.display='none'
+}
+build().catch(()=>{loading.textContent='Could not prepare the reel pages in this browser.'});
+</script>
+</body>
 </html>
-
